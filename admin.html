@@ -89,10 +89,12 @@ function cardForm(c){
   '<div class="grid3"><div><label>編號</label><input data-f="no" value="'+esc(c.no)+'"></div><div><label>中文牌名</label><input data-f="name" value="'+esc(c.name)+'"></div><div><label>英文牌名</label><input data-f="en" value="'+esc(c.en)+'"></div></div>'+
   '<div class="grid2"><div><label>牌上英文短語</label><input data-f="tag" value="'+esc(c.tag)+'"></div><div><label>短語中文翻譯</label><input data-f="tag_zh" value="'+esc(c.tag_zh)+'"></div></div>'+
   '<label>關鍵字(用頓號或逗號分隔)</label><input data-f="keywords" value="'+esc(c.keywords)+'">'+
+  '<label>中文語音檔(選填;填了就播放錄音,沒填就用機器朗讀)</label><div class="row"><input data-f="audio" value="'+esc(c.audio||"")+'" placeholder="貼上網址,或按右邊上傳 mp3"><label class="btn ghost" style="margin:0;white-space:nowrap">上傳 mp3<input type="file" accept="audio/*" data-aud="f" hidden></label></div>'+
   '<label>中文牌意</label><textarea data-f="meaning">'+esc(c.meaning)+'</textarea>'+
   '<label>延伸牌意</label><textarea data-f="extended" style="min-height:150px">'+esc(c.extended)+'</textarea>'+
   CATS.map(function(k){return '<label>'+k[1]+'</label><textarea data-cat="'+k[0]+'">'+esc(cats[k[0]]||"")+'</textarea>'}).join("")+
   '<details style="margin-top:14px"><summary><b>English version 英文版</b>(英文牌意與各面向,給國外訪客看)</summary>'+
+  '<label>English audio (optional; if empty, browser voice is used)</label><div class="row"><input data-en="audio" value="'+esc(en.audio||"")+'" placeholder="paste URL or upload mp3"><label class="btn ghost" style="margin:0;white-space:nowrap">Upload mp3<input type="file" accept="audio/*" data-aud="en" hidden></label></div>'+
   '<label>Keywords (comma-separated)</label><input data-en="kw" value="'+esc(en.kw||"")+'">'+
   '<label>Meaning</label><textarea data-en="m">'+esc(en.m||"")+'</textarea>'+
   '<label>Deeper meaning</label><textarea data-en="e" style="min-height:150px">'+esc(en.e||"")+'</textarea>'+
@@ -126,6 +128,9 @@ function wire(){
   document.querySelectorAll("details.card").forEach(function(d){d.addEventListener("toggle",function(){st.open[d.dataset.id]=d.open})});
   document.querySelectorAll("[data-set]").forEach(function(i){i.onchange=async function(){var f=i.files[0];if(!f)return;toast("上傳中…",60000);
     try{var u=await upload(f,"settings");var r=await sb.from("shiva_settings").upsert({key:i.dataset.set,value:u.url});if(r.error)throw r.error;st.settings[i.dataset.set]=u.url;toast("已更新");view()}catch(e){toast("失敗:"+((e&&e.message)||"請稍後重試"),6000)}}});
+  document.querySelectorAll("[data-aud]").forEach(function(i){i.onchange=async function(){var f=i.files[0];if(!f)return;toast("上傳語音中…",120000);
+    try{var p="audio/"+Date.now().toString(36)+Math.random().toString(36).slice(2,6)+".mp3";var u=await sb.storage.from(BUCKET).upload(p,f,{contentType:f.type||"audio/mpeg",cacheControl:"31536000"});if(u.error)throw u.error;
+      var url=sb.storage.from(BUCKET).getPublicUrl(p).data.publicUrl,box=i.closest("details.card"),inp=box.querySelector(i.dataset.aud==="en"?'[data-en="audio"]':'[data-f="audio"]');inp.value=url;toast("已上傳,請按「儲存這張牌」")}catch(e){toast("上傳失敗:"+((e&&e.message)||"請稍後重試"),6000)}}});
   document.querySelectorAll("[data-img]").forEach(function(i){i.onchange=async function(){var f=i.files[0];if(!f)return;toast("上傳中…",60000);
     try{var c=st.cards.filter(function(x){return x.id===i.dataset.img})[0];var u=await upload(f,"cards");
       var r=await sb.from("shiva_cards").update({img:u.url,land:u.land}).eq("id",c.id);if(r.error)throw r.error;c.img=u.url;c.land=u.land;st.open[c.id]=true;toast("圖片已更換");view()}catch(e){toast("失敗:"+((e&&e.message)||"請稍後重試"),6000)}}});

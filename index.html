@@ -240,6 +240,8 @@ nav button:hover{color:var(--fg)}
 @media (max-width:660px){.sheet{grid-template-columns:minmax(0,1fr)}.sheet .pic{max-width:300px;margin:0 auto}.deal.n3{gap:8px}.flip.land{width:100%}}
 
 .langbtn{margin-left:10px;border:1px solid var(--line);background:transparent;color:inherit;border-radius:999px;padding:6px 14px;font:inherit;font-size:.85rem;cursor:pointer}.langbtn:hover{border-color:var(--gold);color:var(--gold)}
+.speak{margin:10px 0 2px;border:1px solid var(--gold);background:transparent;color:var(--gold);border-radius:999px;padding:7px 16px;font:inherit;font-size:.9rem;cursor:pointer;transition:background .2s,color .2s}
+.speak:hover,.speak.on{background:var(--gold);color:var(--bg)}.speak[hidden]{display:none}
 /* ---------- lively deck page ---------- */
 .rv{opacity:0;transform:translateY(26px) scale(.98);transition:opacity .8s cubic-bezier(.2,.7,.2,1),transform .8s cubic-bezier(.2,.7,.2,1);transition-delay:var(--d,0ms)}
 .rv.in{opacity:1;transform:none}
@@ -394,7 +396,7 @@ var SAMPLES=[
 
 
 /* ---------- i18n (zh / en) ---------- */
-var UI={"牌卡數量不足":"Not enough cards","牌卡介紹": "The Deck", "線上抽牌": "Online Draw", "後台管理": "Admin", "神諭卡・牌意與線上抽牌": "Oracle cards · meanings & online draw", "神 諭 卡": "O R A C L E", "以濕婆為意象的神諭卡。先靜下心來,想著此刻最在意的事,再抽一張牌,聽聽它想對你說的話。": "An oracle deck inspired by Shiva. Settle your mind, hold what matters most to you right now, then draw a card and hear what it has to say.", "開始抽牌": "Start drawing", "瀏覽牌卡": "Browse the cards", "開始線上抽牌 →": "Start the online draw →", "牌陣": "Spread", "單張指引": "Single card", "三張時間流": "Past · Present · Future", "想問的問題(選填,只留在你的畫面)": "Your question (optional; stays on your screen only)", "例如:接下來三個月,我在工作上要留意什麼?": "e.g. What should I be aware of at work over the next three months?", "想看哪個面向的解讀": "Which area would you like read?", "洗牌並抽牌": "Shuffle & draw", "洗牌中…": "Shuffling…", "全部翻開": "Reveal all", "重新抽牌": "Draw again", "點一下牌背即可翻開": "Tap a card back to reveal it", "牌卡數量不足,請改選單張,或先在後台新增牌卡。": "Not enough cards for this spread. Choose a single card or add cards in the admin.", "搜尋牌名或關鍵字": "Search card name or keyword", "例如:耐心": "e.g. patience", "找不到符合的牌卡。": "No matching cards found.", "牌意": "Meaning", "延伸意義": "Deeper meaning", "牌意整理中": "Meaning coming soon", "此面向的解讀整理中": "This reading is coming soon", "關閉": "Close", "牌卡詳情": "Card details", "主選單": "Main menu", "解讀面向": "Reading areas", "牌卡一覽": "All cards", "封底": "Back cover", "關於這副牌": "About this deck", "三大神卡": "The Three Great Gods", "In Shiva's Eyes Oracle 牌組封面": "In Shiva's Eyes Oracle box cover", "本站只收錄牌卡內容": "", "四十張牌": "Forty cards", "從「本源」「潛能」到「宇宙之音」,四十張牌各有主題,涵蓋覺察、放下、勇氣、陪伴與靜心。": "From “Origin” and “Potential” to “AUM,” each of the forty cards has its own theme, covering awareness, letting go, courage, companionship and stillness.", "以濕婆的視角": "Through Shiva’s eyes", "濕婆是毀滅與重生、靜止與舞動的象徵。牌面以他的眼光,提醒你看見表象之下真正的自己。": "Shiva stands for destruction and rebirth, stillness and dance. The cards look through his eyes, reminding you to see the true self beneath appearances.", "七個生活面向": "Seven areas of life", "每張牌除了牌意與延伸意義,另有工作、健康、感情、家庭、人際、金錢、成長的分別解讀。": "Besides its meaning and deeper meaning, every card has separate readings for work, health, love, family, relationships, money and personal growth.", "不預言,只陪伴": "No predictions, just company", "神諭卡不是宿命的宣判,而是一面鏡子,幫助你整理心緒、提出好問題。": "An oracle deck is not a verdict of fate but a mirror that helps you sort your thoughts and ask better questions.", "如何使用這副牌": "How to use the deck", "靜下來": "Settle", "深呼吸幾次,帶著一個你想了解的問題或心情。": "Take a few deep breaths and hold a question or feeling you want to understand.", "抽牌": "Draw", "單張牌看今日指引,三張牌看過去、現在、未來。": "One card for today’s guidance; three cards for past, present and future.", "對照解讀": "Read", "先看直覺的感受,再讀牌意;依問題選擇對應的面向。": "Notice your gut feeling first, then read the meaning; pick the area that fits your question.", "帶一句話走": "Take one line with you", "選一句最有共鳴的話,放在今天的生活裡實踐。": "Choose the sentence that resonates most and put it into practice today.", "梵天 Brahma": "Brahma", "創造者 The Creator": "The Creator", "象徵創造、起始與知識。當你想開啟新的計畫或方向,梵天提醒你,一切從清楚的意念開始。": "Symbolizes creation, beginnings and knowledge. When you want to start a new plan or direction, Brahma reminds you that everything begins with a clear intention.", "毗濕奴 Vishnu": "Vishnu", "守護者 The Preserver": "The Preserver", "象徵維繫、守護與秩序。當你需要穩住現狀、照顧所愛,毗濕奴代表持續而溫柔的守護。": "Symbolizes sustaining, protecting and order. When you need to hold steady and care for those you love, Vishnu stands for continuous, gentle protection.", "濕婆 Shiva": "Shiva", "毀滅者 The Destroyer": "The Destroyer", "象徵破除、轉化與釋放。放下不再需要的,才能為新的生命騰出空間,這是濕婆舞蹈的意義。": "Symbolizes breaking through, transformation and release. Letting go of what is no longer needed makes room for new life; this is the meaning of Shiva’s dance.", "牌組附贈的三張神明卡:創造、守護、轉化,是生命運行的三個面向。": "The three deity cards that come with the deck: creation, preservation and transformation, the three aspects of how life moves.", "目前顯示的是範例牌卡。": "Sample cards are shown.", "牌卡內容整理中,敬請期待。": "Card content is on its way. Please check back soon."};
+var UI={"🔊 朗讀":"🔊 Listen","⏹ 停止":"⏹ Stop","牌卡數量不足":"Not enough cards","牌卡介紹": "The Deck", "線上抽牌": "Online Draw", "後台管理": "Admin", "神諭卡・牌意與線上抽牌": "Oracle cards · meanings & online draw", "神 諭 卡": "O R A C L E", "以濕婆為意象的神諭卡。先靜下心來,想著此刻最在意的事,再抽一張牌,聽聽它想對你說的話。": "An oracle deck inspired by Shiva. Settle your mind, hold what matters most to you right now, then draw a card and hear what it has to say.", "開始抽牌": "Start drawing", "瀏覽牌卡": "Browse the cards", "開始線上抽牌 →": "Start the online draw →", "牌陣": "Spread", "單張指引": "Single card", "三張時間流": "Past · Present · Future", "想問的問題(選填,只留在你的畫面)": "Your question (optional; stays on your screen only)", "例如:接下來三個月,我在工作上要留意什麼?": "e.g. What should I be aware of at work over the next three months?", "想看哪個面向的解讀": "Which area would you like read?", "洗牌並抽牌": "Shuffle & draw", "洗牌中…": "Shuffling…", "全部翻開": "Reveal all", "重新抽牌": "Draw again", "點一下牌背即可翻開": "Tap a card back to reveal it", "牌卡數量不足,請改選單張,或先在後台新增牌卡。": "Not enough cards for this spread. Choose a single card or add cards in the admin.", "搜尋牌名或關鍵字": "Search card name or keyword", "例如:耐心": "e.g. patience", "找不到符合的牌卡。": "No matching cards found.", "牌意": "Meaning", "延伸意義": "Deeper meaning", "牌意整理中": "Meaning coming soon", "此面向的解讀整理中": "This reading is coming soon", "關閉": "Close", "牌卡詳情": "Card details", "主選單": "Main menu", "解讀面向": "Reading areas", "牌卡一覽": "All cards", "封底": "Back cover", "關於這副牌": "About this deck", "三大神卡": "The Three Great Gods", "In Shiva's Eyes Oracle 牌組封面": "In Shiva's Eyes Oracle box cover", "本站只收錄牌卡內容": "", "四十張牌": "Forty cards", "從「本源」「潛能」到「宇宙之音」,四十張牌各有主題,涵蓋覺察、放下、勇氣、陪伴與靜心。": "From “Origin” and “Potential” to “AUM,” each of the forty cards has its own theme, covering awareness, letting go, courage, companionship and stillness.", "以濕婆的視角": "Through Shiva’s eyes", "濕婆是毀滅與重生、靜止與舞動的象徵。牌面以他的眼光,提醒你看見表象之下真正的自己。": "Shiva stands for destruction and rebirth, stillness and dance. The cards look through his eyes, reminding you to see the true self beneath appearances.", "七個生活面向": "Seven areas of life", "每張牌除了牌意與延伸意義,另有工作、健康、感情、家庭、人際、金錢、成長的分別解讀。": "Besides its meaning and deeper meaning, every card has separate readings for work, health, love, family, relationships, money and personal growth.", "不預言,只陪伴": "No predictions, just company", "神諭卡不是宿命的宣判,而是一面鏡子,幫助你整理心緒、提出好問題。": "An oracle deck is not a verdict of fate but a mirror that helps you sort your thoughts and ask better questions.", "如何使用這副牌": "How to use the deck", "靜下來": "Settle", "深呼吸幾次,帶著一個你想了解的問題或心情。": "Take a few deep breaths and hold a question or feeling you want to understand.", "抽牌": "Draw", "單張牌看今日指引,三張牌看過去、現在、未來。": "One card for today’s guidance; three cards for past, present and future.", "對照解讀": "Read", "先看直覺的感受,再讀牌意;依問題選擇對應的面向。": "Notice your gut feeling first, then read the meaning; pick the area that fits your question.", "帶一句話走": "Take one line with you", "選一句最有共鳴的話,放在今天的生活裡實踐。": "Choose the sentence that resonates most and put it into practice today.", "梵天 Brahma": "Brahma", "創造者 The Creator": "The Creator", "象徵創造、起始與知識。當你想開啟新的計畫或方向,梵天提醒你,一切從清楚的意念開始。": "Symbolizes creation, beginnings and knowledge. When you want to start a new plan or direction, Brahma reminds you that everything begins with a clear intention.", "毗濕奴 Vishnu": "Vishnu", "守護者 The Preserver": "The Preserver", "象徵維繫、守護與秩序。當你需要穩住現狀、照顧所愛,毗濕奴代表持續而溫柔的守護。": "Symbolizes sustaining, protecting and order. When you need to hold steady and care for those you love, Vishnu stands for continuous, gentle protection.", "濕婆 Shiva": "Shiva", "毀滅者 The Destroyer": "The Destroyer", "象徵破除、轉化與釋放。放下不再需要的,才能為新的生命騰出空間,這是濕婆舞蹈的意義。": "Symbolizes breaking through, transformation and release. Letting go of what is no longer needed makes room for new life; this is the meaning of Shiva’s dance.", "牌組附贈的三張神明卡:創造、守護、轉化,是生命運行的三個面向。": "The three deity cards that come with the deck: creation, preservation and transformation, the three aspects of how life moves.", "目前顯示的是範例牌卡。": "Sample cards are shown.", "牌卡內容整理中,敬請期待。": "Card content is on its way. Please check back soon."};
 var LANG="zh";
 try{var sl=localStorage.getItem("lang");LANG=(sl==="en"||sl==="zh")?sl:(/^zh/i.test(navigator.language||"")?"zh":"en")}catch(e){}
 var ZH_CATS=CATS.slice(),ZH_NOTES=NOTES,ZH_SPREADS=SPREADS;
@@ -417,7 +419,7 @@ function trHTML(h){
 function loc(c){
   if(LANG!=="en")return c;
   var o=Object.assign({},c),x=c.i18n&&c.i18n.en;
-  if(c.en)o.name=c.en;o.en="";o.tagZh="";
+  if(c.en)o.name=c.en;o.en="";o.tagZh="";o.audio=(c.i18n&&c.i18n.en&&c.i18n.en.audio)||"";
   if(x){if(x.kw)o.keywords=x.kw;if(x.m)o.meaning=x.m;o.extended=x.e||"";o.cats=x.cats||{}}
   else{o.extended=c.extended}
   return o;
@@ -465,6 +467,7 @@ function detailHTML(c,pos,tag,key,scope){
    (c.en?'<div class="en">'+esc(c.en)+'</div>':'')+
    (kw(c.keywords).length?'<div class="chips">'+kw(c.keywords).map(function(k){return '<span class="chip">'+esc(k)+'</span>'}).join("")+'</div>':'')+
    ((c.tag||c.tagZh)?'<p class="quote">'+esc(c.tag||"")+(c.tagZh?'<small>'+esc(c.tagZh)+'</small>':'')+'</p>':'')+
+   '<button class="speak" data-act="speak" data-id="'+esc(c.id)+'" data-key="'+esc(key)+'" hidden>🔊 朗讀</button>'+
    tabsHTML(key,scope)+focusHTML(c,key)+
    '<div class="blk"><h4>牌意</h4><p class="txt">'+(c.meaning?esc(c.meaning):'牌意整理中')+'</p></div>'+
    (c.extended?'<div class="blk"><h4>延伸意義</h4><p class="txt">'+esc(c.extended)+'</p></div>':'');
@@ -656,9 +659,9 @@ function adminRow(c,i){
   return '<article class="arow" data-row="'+id+'"><div class="th">'+img(c)+'<span class="muted" style="font-size:.8rem">第 '+(i+1)+' 張</span></div>'+
    '<div class="af">'+f("name","牌名(中文)",c.name)+f("en","英文牌名",c.en)+f("no","編號",c.no)+f("keywords","關鍵字(用頓號分隔)",c.keywords)+
    f("tag","牌上英文句",c.tag,true)+f("tagZh","牌上句子中文",c.tagZh,true)+
-   f("meaning","中文牌意",c.meaning,true,5)+f("extended","延伸意義",c.extended,true,5)+
+   f("audio","語音檔網址(選填;填了就播放真人/AI錄音,沒填就用機器朗讀)",c.audio||"",true)+f("meaning","中文牌意",c.meaning,true,5)+f("extended","延伸意義",c.extended,true,5)+
    '<details><summary>各面向解讀(工作、健康、感情…)</summary><div class="af">'+ZH_CATS.slice(1).map(function(k){return f("cats."+k[0],k[1],cats[k[0]]||"",true,3)}).join("")+'</div></details>'+
-   '<details><summary>English version 英文版(牌意與各面向)</summary><div class="af">'+f("i18n.en.kw","Keywords (comma-separated)",en_.kw||"",true)+f("i18n.en.m","Meaning",en_.m||"",true,4)+f("i18n.en.e","Deeper meaning",en_.e||"",true,5)+
+   '<details><summary>English version 英文版(牌意與各面向)</summary><div class="af">'+f("i18n.en.audio","English audio URL (optional; if empty, browser voice is used)",en_.audio||"",true)+f("i18n.en.kw","Keywords (comma-separated)",en_.kw||"",true)+f("i18n.en.m","Meaning",en_.m||"",true,4)+f("i18n.en.e","Deeper meaning",en_.e||"",true,5)+
    ZH_CATS.slice(1).map(function(k){return f("i18n.en.cats."+k[0],EN_CATS[ZH_CATS.indexOf(k)][1],(en_.cats||{})[k[0]]||"",true,3)}).join("")+'</div></details>'+
    '<div class="acts">'+(state.canUpload?'<span class="btn ghost small fileb">換圖片<input type="file" accept="image/*" data-act="replace" data-id="'+id+'" aria-label="更換圖片"></span>':'')+
    '<button class="btn ghost small" data-act="up" data-id="'+id+'"'+(i===0?' disabled':'')+'>上移</button>'+
@@ -677,9 +680,51 @@ function render(){
   var v=state.tab==="gallery"?galleryView():state.tab==="admin"&&state.admin?adminView():drawView();
   $("#app").innerHTML=trHTML(header()+'<main>'+v+'</main>');
   if(state.tab==="draw")$("#reading").innerHTML=readingHTML();
-  revealInit();
+  stopSpeak();showSpeakBtns();revealInit();
   if(state.tab==="admin"&&state.admin)updateBar();
   renderOverlay();
+}
+/* ---------- read aloud: recorded audio if provided, otherwise browser speech ---------- */
+var SPK={audio:null,btn:null,q:[]};
+function canSpeak(){return !!(window.speechSynthesis&&window.SpeechSynthesisUtterance)}
+function stopSpeak(){
+  try{if(SPK.audio){SPK.audio.pause();SPK.audio=null}}catch(e){}
+  SPK.q=[];try{if(window.speechSynthesis)speechSynthesis.cancel()}catch(e){}
+  if(SPK.btn){SPK.btn.textContent=T("🔊 朗讀");SPK.btn.classList.remove("on")}SPK.btn=null;
+}
+function speakText(c,key){
+  var tx=(key&&key!=="all"&&c.cats&&c.cats[key])?c.cats[key]:[c.meaning,c.extended].filter(Boolean).join("\n");
+  return (c.name?c.name+(LANG==="en"?".\n":"。\n"):"")+tx;
+}
+function pickVoice(lang){
+  var vs=speechSynthesis.getVoices()||[],pre=lang==="en"?["en-US","en-GB","en"]:["zh-TW","zh-HK","zh-CN","zh"];
+  for(var i=0;i<pre.length;i++){var v=vs.filter(function(x){return x.lang&&x.lang.replace("_","-").indexOf(pre[i])===0})[0];if(v)return v}
+  return null;
+}
+function startSpeak(btn){
+  var c=byId(btn.dataset.id);if(!c)return;
+  var was=SPK.btn===btn;stopSpeak();if(was)return;
+  SPK.btn=btn;btn.textContent=T("⏹ 停止");btn.classList.add("on");
+  if(c.audio){
+    var a=new Audio(src(c.audio));SPK.audio=a;a.onended=a.onerror=function(){if(SPK.audio===a)stopSpeak()};
+    a.play().catch(function(){stopSpeak()});return;
+  }
+  if(!canSpeak()){stopSpeak();return}
+  var lang=LANG==="en"?"en":"zh",parts=speakText(c,btn.dataset.key).split(/(?<=[。!?!?.\n])/).map(function(s){return s.trim()}).filter(Boolean);
+  SPK.q=parts;
+  (function next(){
+    if(SPK.btn!==btn)return;
+    var s=SPK.q.shift();if(!s){stopSpeak();return}
+    var u=new SpeechSynthesisUtterance(s);u.lang=lang==="en"?"en-US":"zh-TW";u.rate=.92;
+    var v=pickVoice(lang);if(v)u.voice=v;
+    u.onend=next;u.onerror=function(){stopSpeak()};
+    speechSynthesis.speak(u);
+  })();
+}
+function showSpeakBtns(root){
+  (root||document).querySelectorAll(".speak").forEach(function(b){
+    var c=byId(b.dataset.id);b.hidden=!(c&&(c.audio||canSpeak()))
+  });
 }
 var revIO=null;
 function revealInit(){
@@ -696,13 +741,14 @@ function revealInit(){
 }
 function renderOverlay(){
   var o=$("#overlay"),c=state.open&&byId(state.open);
+  stopSpeak();
   if(!c){o.innerHTML="";return}
   var pic=c.img?'<img src="'+esc(src(c.img))+'" alt="'+esc(c.name)+'">':'<svg viewBox="0 0 200 300" role="img" aria-label="'+esc(c.name)+'"><use href="#back"/></svg>';
-  o.innerHTML=trHTML('<div class="sheet"><button class="btn ghost small x" data-act="close" aria-label="關閉">關閉</button><div class="pic">'+pic+'</div><div class="body">'+detailHTML(c,c.no?"NO. "+c.no:"","h2",state.openTab,"open")+'</div></div>');
+  o.innerHTML=trHTML('<div class="sheet"><button class="btn ghost small x" data-act="close" aria-label="關閉">關閉</button><div class="pic">'+pic+'</div><div class="body">'+detailHTML(c,c.no?"NO. "+c.no:"","h2",state.openTab,"open")+'</div></div>');showSpeakBtns(o);
 }
 function refreshFocus(){
   document.querySelectorAll('[data-act="cat"][data-scope="draw"]').forEach(function(b){b.setAttribute("aria-pressed",String(b.dataset.v===state.focus))});
-  var r=$("#reading");if(r)r.innerHTML=readingHTML();
+  var r=$("#reading");if(r){stopSpeak();r.innerHTML=readingHTML();showSpeakBtns(r)}
 }
 
 /* ---------- draw ---------- */
@@ -735,7 +781,8 @@ document.addEventListener("click",function(e){
   var t=e.target.closest("[data-act]");
   if(!t){if(e.target.id==="overlay"){state.open=null;renderOverlay()}return}
   var a=t.dataset.act;
-  if(a==="lang"){setLang(LANG==="en"?"zh":"en")}
+  if(a==="speak"){startSpeak(t)}
+  else if(a==="lang"){setLang(LANG==="en"?"zh":"en")}
   else if(a==="tab"){state.tab=t.dataset.v;try{sessionStorage.setItem("tab",state.tab)}catch(x){};state.open=null;render();window.scrollTo(0,0)}
   else if(a==="gotodraw"){var an=$("#draw-anchor");if(an)an.scrollIntoView({behavior:"smooth"})}
   else if(a==="spread"){state.draw.spread=+t.dataset.v;state.draw.phase="idle";state.draw.picks=[];state.draw.flipped=[];render()}
@@ -901,7 +948,7 @@ render();
   var H={apikey:C.key,Authorization:"Bearer "+C.key};
   function get(p){return fetch(C.url+"/rest/v1/"+p,{headers:H}).then(function(r){if(!r.ok)throw 0;return r.json()})}
   Promise.all([get("shiva_cards?select=*&published=eq.true&order=sort.asc,no.asc"),get("shiva_settings?select=*")]).then(function(r){
-    if(r[0].length)state.cards=r[0].map(function(x){return {id:x.id,no:String(x.no||""),name:x.name||"",en:x.en||"",tag:x.tag||"",tagZh:x.tag_zh||"",keywords:x.keywords||"",meaning:x.meaning||"",extended:x.extended||"",cats:x.cats||{},i18n:x.i18n||{},img:x.img||"",land:!!x.land}});
+    if(r[0].length)state.cards=r[0].map(function(x){return {id:x.id,no:String(x.no||""),name:x.name||"",en:x.en||"",tag:x.tag||"",tagZh:x.tag_zh||"",keywords:x.keywords||"",meaning:x.meaning||"",extended:x.extended||"",cats:x.cats||{},i18n:x.i18n||{},audio:x.audio||"",img:x.img||"",land:!!x.land}});
     r[1].forEach(function(s){if(s.value)state.settings[s.key]=s.value});
     var ae=document.activeElement;if(!(ae&&ae.matches&&ae.matches("input,textarea")))render();
   }).catch(function(){});
