@@ -84,7 +84,7 @@ function view(){
   root.innerHTML=h;wire();
 }
 function cardForm(c){
-  var cats=c.cats||{};
+  var cats=c.cats||{},en=(c.i18n&&c.i18n.en)||{},ec=en.cats||{};
   return '<details class="card" data-id="'+esc(c.id)+'"'+(st.open[c.id]?' open':'')+'><summary><img class="thumb" src="'+esc(src(c.img))+'" alt=""><div style="flex:1"><b>'+esc(c.no)+'. '+esc(c.name||"未命名")+'</b> <span class="muted">'+esc(c.en)+'</span><br>'+(c.published===false?'<span class="pill">已隱藏</span>':'<span class="pill">顯示中</span>')+'</div></summary>'+
   '<div class="grid3"><div><label>編號</label><input data-f="no" value="'+esc(c.no)+'"></div><div><label>中文牌名</label><input data-f="name" value="'+esc(c.name)+'"></div><div><label>英文牌名</label><input data-f="en" value="'+esc(c.en)+'"></div></div>'+
   '<div class="grid2"><div><label>牌上英文短語</label><input data-f="tag" value="'+esc(c.tag)+'"></div><div><label>短語中文翻譯</label><input data-f="tag_zh" value="'+esc(c.tag_zh)+'"></div></div>'+
@@ -92,6 +92,11 @@ function cardForm(c){
   '<label>中文牌意</label><textarea data-f="meaning">'+esc(c.meaning)+'</textarea>'+
   '<label>延伸牌意</label><textarea data-f="extended" style="min-height:150px">'+esc(c.extended)+'</textarea>'+
   CATS.map(function(k){return '<label>'+k[1]+'</label><textarea data-cat="'+k[0]+'">'+esc(cats[k[0]]||"")+'</textarea>'}).join("")+
+  '<details style="margin-top:14px"><summary><b>English version 英文版</b>(英文牌意與各面向,給國外訪客看)</summary>'+
+  '<label>Keywords (comma-separated)</label><input data-en="kw" value="'+esc(en.kw||"")+'">'+
+  '<label>Meaning</label><textarea data-en="m">'+esc(en.m||"")+'</textarea>'+
+  '<label>Deeper meaning</label><textarea data-en="e" style="min-height:150px">'+esc(en.e||"")+'</textarea>'+
+  CATS.map(function(k){return '<label>'+k[1]+' (English)</label><textarea data-encat="'+k[0]+'">'+esc(ec[k[0]]||"")+'</textarea>'}).join("")+'</details>'+
   '<div class="grid2"><div><label>排序(數字小的在前)</label><input data-f="sort" type="number" value="'+esc(c.sort==null?0:c.sort)+'"></div><div><label>是否顯示在網站</label><select data-f="published"><option value="true"'+(c.published!==false?' selected':'')+'>顯示</option><option value="false"'+(c.published===false?' selected':'')+'>隱藏</option></select></div></div>'+
   '<div class="row" style="margin-top:16px"><button data-act="save">儲存這張牌</button><label class="btn ghost" style="margin:0">更換圖片<input type="file" accept="image/*" data-img="'+esc(c.id)+'" hidden></label><span style="flex:1"></span><button class="danger" data-act="del">刪除</button></div></details>';
 }
@@ -112,6 +117,7 @@ function rowOf(el){
   var c=st.cards.filter(function(x){return x.id===el.dataset.id})[0],o={id:c.id,img:c.img,land:c.land,cats:{}};
   el.querySelectorAll("[data-f]").forEach(function(i){var k=i.dataset.f,v=i.value;if(k==="sort")v=parseInt(v,10)||0;if(k==="published")v=v==="true";o[k]=v});
   el.querySelectorAll("[data-cat]").forEach(function(i){o.cats[i.dataset.cat]=i.value});
+  var en={cats:{}};el.querySelectorAll("[data-en]").forEach(function(i){en[i.dataset.en]=i.value});el.querySelectorAll("[data-encat]").forEach(function(i){en.cats[i.dataset.encat]=i.value});o.i18n={en:en};
   return o;
 }
 function wire(){
