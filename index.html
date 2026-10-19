@@ -194,6 +194,8 @@ nav button:hover{color:var(--fg)}
 .hint{font-size:.86rem;color:var(--muted)}
 .stage-actions{display:flex;gap:10px;flex-wrap:wrap;justify-content:center;margin-top:22px}
 .reading{display:grid;gap:20px}
+.overall{border:1px solid var(--gold);border-radius:16px;padding:24px;background:linear-gradient(160deg,var(--surface),transparent);box-shadow:0 0 40px var(--neb1);display:grid;gap:12px;animation:rise .9s both}
+.overall h3{font-size:1.35rem}.overall ul{margin:0;padding-left:1.2em;display:grid;gap:8px}.overall .small{font-size:.85rem}
 .rd{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:26px 26px 28px;display:grid;gap:14px;animation:rise .6s both}
 .rd .pos{font-size:.78rem;letter-spacing:.22em;color:var(--skin);font-weight:500}
 .rd h2,.rd h3{font-size:1.6rem}
@@ -246,6 +248,13 @@ nav button:hover{color:var(--fg)}
 .gods{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,300px),1fr));gap:22px}
 .god{margin:0;display:grid;gap:12px}.god img{display:block;width:100%;height:auto;border-radius:12px;box-shadow:0 16px 44px rgba(0,0,0,.45),0 0 0 1px var(--line)}
 .god b{font:700 1.15rem var(--f-display)}.god .rl{color:var(--gold);font-size:.9rem;margin-left:8px}.god p{color:var(--muted);font-size:.95rem;margin-top:4px}
+.about .sm{font-size:.9rem;margin-top:10px}
+.intro{padding:0 0 26px}.feats{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,230px),1fr));gap:14px}
+.feat{padding:16px 18px;border:1px solid var(--line);border-radius:14px;background:var(--veil)}.feat b{font:700 1.05rem var(--f-display);color:var(--gold)}.feat p{color:var(--muted);font-size:.93rem;margin-top:6px}
+.ihow{font:700 1.3rem var(--f-display);margin:28px 0 12px}
+.steps{list-style:none;padding:0;display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,230px),1fr));gap:14px}
+.steps li{display:flex;gap:12px;align-items:flex-start}.steps .num{flex:none;width:30px;height:30px;border-radius:50%;border:1px solid var(--gold);color:var(--gold);display:grid;place-items:center;font-weight:700}
+.steps b{display:block}.steps p{color:var(--muted);font-size:.92rem;margin-top:2px}
 @media (max-width:660px){.about{grid-template-columns:minmax(0,1fr)}.about .cv{max-width:300px;margin:0 auto}}
 /* back page (封底) */
 .coverpage{position:relative;margin:56px 0 0;display:grid;justify-items:center;gap:16px}
@@ -418,7 +427,14 @@ function coverHTML(){
 
 function aboutHTML(){
   var s=state.settings;if(!s.cover)return "";
-  return '<section class="about" aria-label="關於這副牌"><div class="cv"><img src="'+esc(src(s.cover))+'" alt="In Shiva\'s Eyes Oracle 牌組封面"></div><div><div class="eyebrow">ABOUT THE DECK</div><h2>In Shiva\'s Eyes Oracle</h2><p>由 Divinye Studio 創作的神諭卡。每張牌以濕婆的視角,陪你看見內在的聲音。本站收錄 '+pool().length+' 張牌卡,每張都有中文牌意、延伸意義,並依工作、健康、感情、家庭、人際、金錢與成長分別解讀。</p></div></section>';
+  var n=pool().length;
+  var feats=[["四十張牌","從「本源」「潛能」到「宇宙之音」,四十張牌各有主題,涵蓋覺察、放下、勇氣、陪伴與靜心。"],
+   ["以濕婆的視角","濕婆是毀滅與重生、靜止與舞動的象徵。牌面以他的眼光,提醒你看見表象之下真正的自己。"],
+   ["七個生活面向","每張牌除了牌意與延伸意義,另有工作、健康、感情、家庭、人際、金錢、成長的分別解讀。"],
+   ["不預言,只陪伴","神諭卡不是宿命的宣判,而是一面鏡子,幫助你整理心緒、提出好問題。"]];
+  var steps=[["靜下來","深呼吸幾次,帶著一個你想了解的問題或心情。"],["抽牌","單張牌看今日指引,三張牌看過去、現在、未來。"],["對照解讀","先看直覺的感受,再讀牌意;依問題選擇對應的面向。"],["帶一句話走","選一句最有共鳴的話,放在今天的生活裡實踐。"]];
+  return '<section class="about" aria-label="關於這副牌"><div class="cv"><img src="'+esc(src(s.cover))+'" alt="In Shiva\'s Eyes Oracle 牌組封面"></div><div><div class="eyebrow">ABOUT THE DECK</div><h2>In Shiva\'s Eyes Oracle</h2><p>由 Divinye Studio 創作的神諭卡。每張牌以濕婆的視角,陪你看見內在的聲音。本站收錄 '+n+' 張牌卡,每張都有中文牌意、延伸意義,並依工作、健康、感情、家庭、人際、金錢與成長分別解讀。</p><p class="sm">牌卡的英文箴言保留原文,例如「You\'re STRONG enough &amp; You\'re NOT ALONE.」,中文則是對其意涵的詮釋,讓不同語言的讀者都能親近。</p></div></section>'
+   +'<section class="intro" aria-label="牌卡介紹"><div class="feats">'+feats.map(function(f){return '<div class="feat"><b>'+f[0]+'</b><p>'+f[1]+'</p></div>'}).join("")+'</div><h3 class="ihow">如何使用這副牌</h3><ol class="steps">'+steps.map(function(f,i){return '<li><span class="num">'+(i+1)+'</span><div><b>'+f[0]+'</b><p>'+f[1]+'</p></div></li>'}).join("")+'</ol></section>';
 }
 var GODS=[["god1","梵天 Brahma","創造者 The Creator","象徵創造、起始與知識。當你想開啟新的計畫或方向,梵天提醒你,一切從清楚的意念開始。"],
  ["god2","毗濕奴 Vishnu","守護者 The Preserver","象徵維繫、守護與秩序。當你需要穩住現狀、照顧所愛,毗濕奴代表持續而溫柔的守護。"],
@@ -468,7 +484,24 @@ function readingHTML(){
     var c=byId(id);if(!c)return;
     out+='<article class="rd">'+detailHTML(c,pos[i],"h3",state.focus,"draw")+'</article>';
   });
-  return out;
+  return out+overallHTML();
+}
+function firstS(s){s=String(s||"").replace(/\s+/g," ").trim();var m=s.match(/^[^。!?!?]*[。!?!?]/);return m?m[0]:s}
+function overallHTML(){
+  var d=state.draw;if(d.spread!==3)return "";
+  var cs=d.picks.map(byId);
+  if(cs.length<3||cs.some(function(c){return !c})||!d.flipped.every(Boolean))return "";
+  var f=state.focus,pos=SPREADS[3];
+  var k=function(c){var w=kw(c.keywords).slice(0,3).join("、");return w?"("+esc(w)+")":""};
+  var txt=function(c){return f==="all"?c.meaning:((c.cats&&c.cats[f])||c.meaning)};
+  var h='<article class="overall"><div class="eyebrow">OVERALL READING</div><h3>三張牌的整體解讀'+(f==="all"?"":"・"+esc(catName(f)))+'</h3>'+
+   '<p>從「'+esc(cs[0].name)+'」'+k(cs[0])+'走到「'+esc(cs[1].name)+'」'+k(cs[1])+',正朝向「'+esc(cs[2].name)+'」'+k(cs[2])+'。過去為現在鋪了底,現在的選擇又影響未來的走向,三張牌連起來,就是你這段時間完整的脈絡。</p><ul>'+
+   cs.map(function(c,i){return '<li><b>'+pos[i]+'・'+esc(c.name)+'</b>:'+esc(firstS(txt(c)))+'</li>'}).join("")+'</ul>';
+  var tags=cs.filter(function(c){return c.tagZh});
+  if(tags.length)h+='<p class="muted">牌上的話:'+tags.map(function(c){return '「'+esc(c.tagZh.replace(/[。.]$/,""))+'」'}).join(" ・ ")+'</p>';
+  h+='<p>帶著走的提醒:'+(cs[2].tagZh?'把「'+esc(cs[2].tagZh.replace(/[。.]$/,""))+'」當成接下來的方向,':'')+'不必一次做到全部,先從現在這張「'+esc(cs[1].name)+'」開始,做一件你此刻做得到的小事。</p>'+
+   '<p class="muted small">整體解讀由三張牌的牌意組合而成,僅供自我探索與參考;健康、財務等重大決定,請依你的判斷與專業意見。</p></article>';
+  return h;
 }
 function galleryView(){
   var q=state.q.trim().toLowerCase();
