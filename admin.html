@@ -1,0 +1,147 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<title>In Shiva's Eyes 後台管理</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=LXGW+WenKai+TC:wght@300;400;700&display=swap">
+<script src="config.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script>
+<style>
+:root{--bg:#0c0a1f;--s:#1b1540;--s2:#261e55;--line:rgba(167,157,230,.3);--fg:#ece8f8;--mu:#a8a1c9;--gold:#e0ae4c;--ok:#7fd6a0;--bad:#ff9d89}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--fg);font:15px/1.7 "Microsoft JhengHei","微軟正黑體","PingFang TC",system-ui,sans-serif;padding:0 16px 80px}
+.wrap{max-width:980px;margin:0 auto}
+h1,h2,h3{font-family:"LXGW WenKai TC","Kaiti TC",serif;margin:0}
+h1{font-size:1.6rem;padding:24px 0 6px}h2{font-size:1.2rem;margin:30px 0 12px;color:var(--gold)}
+.muted{color:var(--mu)}
+input,textarea,select{width:100%;background:#120e2e;color:var(--fg);border:1px solid var(--line);border-radius:8px;padding:9px 11px;font:inherit}
+textarea{min-height:90px;resize:vertical}
+label{display:block;font-size:.85rem;color:var(--mu);margin:10px 0 4px}
+button,.btn{background:var(--gold);color:#150f30;border:0;border-radius:8px;padding:9px 16px;font:inherit;font-weight:700;cursor:pointer;display:inline-block}
+button.ghost,.btn.ghost{background:transparent;color:var(--fg);border:1px solid var(--line);font-weight:400}
+button.danger{background:transparent;color:var(--bad);border:1px solid var(--bad);font-weight:400}
+button:disabled{opacity:.5;cursor:default}
+.card{background:var(--s);border:1px solid var(--line);border-radius:12px;padding:16px;margin:12px 0}
+.row{display:flex;gap:12px;flex-wrap:wrap;align-items:center}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:0 14px}.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:0 14px}
+@media(max-width:640px){.grid2,.grid3{grid-template-columns:1fr}}
+.thumb{width:62px;height:90px;object-fit:cover;border-radius:6px;background:var(--s2);flex:none}
+.setbox{display:flex;gap:12px;align-items:center;background:var(--s);border:1px solid var(--line);border-radius:12px;padding:10px;margin:8px 0}
+.setbox img{width:72px;height:72px;object-fit:cover;border-radius:8px;background:var(--s2)}
+details.card>summary{list-style:none;display:flex;gap:14px;align-items:center;cursor:pointer}
+details.card>summary::-webkit-details-marker{display:none}
+details.card[open]>summary{margin-bottom:10px}
+.pill{font-size:.78rem;border:1px solid var(--line);border-radius:99px;padding:1px 9px;color:var(--mu)}
+#toast{position:fixed;left:50%;bottom:24px;transform:translateX(-50%);background:#000c;border:1px solid var(--line);padding:10px 18px;border-radius:99px;z-index:9;display:none}
+.login{max-width:380px;margin:12vh auto}
+.bar{position:sticky;top:0;background:var(--bg);padding:10px 0;display:flex;gap:10px;flex-wrap:wrap;align-items:center;border-bottom:1px solid var(--line);z-index:5}
+</style>
+</head>
+<body>
+<div class="wrap" id="root"></div>
+<div id="toast" role="status"></div>
+<script>
+(function(){
+var C=window.SHIVA||{},BUCKET="shiva";
+var root=document.getElementById("root");
+var esc=function(s){return String(s==null?"":s).replace(/[&<>"']/g,function(c){return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]})};
+var CATS=[["work","工作事業"],["health","健康身心"],["love","感情"],["family","家庭"],["social","人際關係"],["money","金錢財富"],["growth","個人成長"]];
+var SETS=[["bg","網頁背景圖"],["back","牌背圖(抽牌用)"],["cover","牌盒封面"],["god1","三神卡:梵天"],["god2","三神卡:毗濕奴"],["god3","三神卡:濕婆"]];
+var st={cards:[],settings:{},q:"",open:{}};
+function toast(m,ms){var t=document.getElementById("toast");t.textContent=m;t.style.display="block";clearTimeout(toast.t);toast.t=setTimeout(function(){t.style.display="none"},ms||2800)}
+if(!C.url||!C.key||/你的/.test(C.url+C.key)){root.innerHTML='<div class="login"><h1>尚未設定</h1><p class="muted">請先編輯 config.js,填入 Supabase 的 Project URL 與 anon public key,再重新整理。</p></div>';return}
+var sb=supabase.createClient(C.url,C.key);
+var src=function(v){return !v?"":(/^(https?:|data:|images\/|\/)/.test(v)?v:v)};
+
+function loginView(msg){
+  root.innerHTML='<form class="login card" id="lf"><h1>後台登入</h1><p class="muted">In Shiva\'s Eyes 牌卡站</p><label>Email</label><input type="email" id="em" required autocomplete="username"><label>密碼</label><input type="password" id="pw" required autocomplete="current-password"><p style="color:var(--bad);min-height:1.6em">'+esc(msg||"")+'</p><button>登入</button></form>';
+  document.getElementById("lf").onsubmit=async function(e){e.preventDefault();
+    var r=await sb.auth.signInWithPassword({email:document.getElementById("em").value.trim(),password:document.getElementById("pw").value});
+    if(r.error)return loginView("登入失敗:Email 或密碼不正確");
+    start()};
+}
+async function start(){
+  var s=await sb.auth.getSession();
+  if(!s.data.session)return loginView();
+  var a=await sb.from("shiva_admins").select("email").limit(1);
+  if(a.error||!a.data||!a.data.length){await sb.auth.signOut();return loginView("這個帳號沒有管理權限(請確認已把 Email 加入 shiva_admins)")}
+  await load();view();
+}
+async function load(){
+  var r=await sb.from("shiva_cards").select("*").order("sort",{ascending:true}).order("no",{ascending:true});
+  st.cards=r.data||[];if(r.error)toast("讀取失敗:"+r.error.message,5000);
+  var s=await sb.from("shiva_settings").select("*");st.settings={};(s.data||[]).forEach(function(x){st.settings[x.key]=x.value});
+}
+function view(){
+  var q=st.q.trim().toLowerCase();
+  var list=st.cards.filter(function(c){return !q||[c.no,c.name,c.en,c.keywords].join(" ").toLowerCase().indexOf(q)>-1});
+  var h='<div class="bar"><h1 style="padding:0;font-size:1.2rem">牌卡後台</h1><span class="muted">共 '+st.cards.length+' 張</span><span style="flex:1"></span><a class="btn ghost" href="index.html" target="_blank">查看網站</a><button class="ghost" id="lo">登出</button></div>';
+  h+='<h2>網站圖片</h2>'+SETS.map(function(s){return '<div class="setbox"><img src="'+esc(src(st.settings[s[0]]))+'" alt=""><div style="flex:1"><div>'+s[1]+'</div></div><label class="btn ghost" style="margin:0">更換圖片<input type="file" accept="image/*" data-set="'+s[0]+'" hidden></label></div>'}).join("");
+  h+='<h2>牌卡</h2><div class="row"><input id="q" placeholder="搜尋編號、牌名或關鍵字" value="'+esc(st.q)+'" style="max-width:320px"><label class="btn" style="margin:0">批次上傳圖片建立新牌卡<input type="file" id="bulk" accept="image/*" multiple hidden></label><button class="ghost" id="add">新增空白牌卡</button></div>';
+  h+=list.map(cardForm).join("")||'<p class="muted">找不到牌卡。</p>';
+  root.innerHTML=h;wire();
+}
+function cardForm(c){
+  var cats=c.cats||{};
+  return '<details class="card" data-id="'+esc(c.id)+'"'+(st.open[c.id]?' open':'')+'><summary><img class="thumb" src="'+esc(src(c.img))+'" alt=""><div style="flex:1"><b>'+esc(c.no)+'. '+esc(c.name||"未命名")+'</b> <span class="muted">'+esc(c.en)+'</span><br>'+(c.published===false?'<span class="pill">已隱藏</span>':'<span class="pill">顯示中</span>')+'</div></summary>'+
+  '<div class="grid3"><div><label>編號</label><input data-f="no" value="'+esc(c.no)+'"></div><div><label>中文牌名</label><input data-f="name" value="'+esc(c.name)+'"></div><div><label>英文牌名</label><input data-f="en" value="'+esc(c.en)+'"></div></div>'+
+  '<div class="grid2"><div><label>牌上英文短語</label><input data-f="tag" value="'+esc(c.tag)+'"></div><div><label>短語中文翻譯</label><input data-f="tag_zh" value="'+esc(c.tag_zh)+'"></div></div>'+
+  '<label>關鍵字(用頓號或逗號分隔)</label><input data-f="keywords" value="'+esc(c.keywords)+'">'+
+  '<label>中文牌意</label><textarea data-f="meaning">'+esc(c.meaning)+'</textarea>'+
+  '<label>延伸牌意</label><textarea data-f="extended" style="min-height:150px">'+esc(c.extended)+'</textarea>'+
+  CATS.map(function(k){return '<label>'+k[1]+'</label><textarea data-cat="'+k[0]+'">'+esc(cats[k[0]]||"")+'</textarea>'}).join("")+
+  '<div class="grid2"><div><label>排序(數字小的在前)</label><input data-f="sort" type="number" value="'+esc(c.sort==null?0:c.sort)+'"></div><div><label>是否顯示在網站</label><select data-f="published"><option value="true"'+(c.published!==false?' selected':'')+'>顯示</option><option value="false"'+(c.published===false?' selected':'')+'>隱藏</option></select></div></div>'+
+  '<div class="row" style="margin-top:16px"><button data-act="save">儲存這張牌</button><label class="btn ghost" style="margin:0">更換圖片<input type="file" accept="image/*" data-img="'+esc(c.id)+'" hidden></label><span style="flex:1"></span><button class="danger" data-act="del">刪除</button></div></details>';
+}
+function compress(file,maxH){return new Promise(function(res,rej){
+  var im=new Image(),u=URL.createObjectURL(file);
+  im.onload=function(){var s=Math.min(1,(maxH||1500)/Math.max(im.naturalWidth,im.naturalHeight));var cv=document.createElement("canvas");cv.width=Math.round(im.naturalWidth*s);cv.height=Math.round(im.naturalHeight*s);
+    cv.getContext("2d").drawImage(im,0,0,cv.width,cv.height);URL.revokeObjectURL(u);
+    cv.toBlob(function(b){b?res({blob:b,land:im.naturalWidth>im.naturalHeight}):rej()},"image/jpeg",.88)};
+  im.onerror=function(){rej()};im.src=u})}
+async function upload(file,folder){
+  var r=await compress(file,1500);
+  var p=folder+"/"+Date.now().toString(36)+Math.random().toString(36).slice(2,6)+".jpg";
+  var u=await sb.storage.from(BUCKET).upload(p,r.blob,{contentType:"image/jpeg",cacheControl:"31536000"});
+  if(u.error)throw u.error;
+  return {url:sb.storage.from(BUCKET).getPublicUrl(p).data.publicUrl,land:r.land};
+}
+function rowOf(el){
+  var c=st.cards.filter(function(x){return x.id===el.dataset.id})[0],o={id:c.id,img:c.img,land:c.land,cats:{}};
+  el.querySelectorAll("[data-f]").forEach(function(i){var k=i.dataset.f,v=i.value;if(k==="sort")v=parseInt(v,10)||0;if(k==="published")v=v==="true";o[k]=v});
+  el.querySelectorAll("[data-cat]").forEach(function(i){o.cats[i.dataset.cat]=i.value});
+  return o;
+}
+function wire(){
+  document.getElementById("lo").onclick=async function(){await sb.auth.signOut();loginView()};
+  var q=document.getElementById("q");q.oninput=function(){st.q=q.value;clearTimeout(q.t);q.t=setTimeout(function(){view();var n=document.getElementById("q");n.focus();n.setSelectionRange(n.value.length,n.value.length)},250)};
+  document.querySelectorAll("details.card").forEach(function(d){d.addEventListener("toggle",function(){st.open[d.dataset.id]=d.open})});
+  document.querySelectorAll("[data-set]").forEach(function(i){i.onchange=async function(){var f=i.files[0];if(!f)return;toast("上傳中…",60000);
+    try{var u=await upload(f,"settings");var r=await sb.from("shiva_settings").upsert({key:i.dataset.set,value:u.url});if(r.error)throw r.error;st.settings[i.dataset.set]=u.url;toast("已更新");view()}catch(e){toast("失敗:"+((e&&e.message)||"請稍後重試"),6000)}}});
+  document.querySelectorAll("[data-img]").forEach(function(i){i.onchange=async function(){var f=i.files[0];if(!f)return;toast("上傳中…",60000);
+    try{var c=st.cards.filter(function(x){return x.id===i.dataset.img})[0];var u=await upload(f,"cards");
+      var r=await sb.from("shiva_cards").update({img:u.url,land:u.land}).eq("id",c.id);if(r.error)throw r.error;c.img=u.url;c.land=u.land;st.open[c.id]=true;toast("圖片已更換");view()}catch(e){toast("失敗:"+((e&&e.message)||"請稍後重試"),6000)}}});
+  document.querySelectorAll('[data-act="save"]').forEach(function(b){b.onclick=async function(){var d=b.closest("details");var o=rowOf(d);b.disabled=true;
+    var r=await sb.from("shiva_cards").upsert(o);b.disabled=false;
+    if(r.error)return toast("儲存失敗:"+r.error.message,6000);
+    var i=st.cards.findIndex(function(x){return x.id===o.id});st.cards[i]=Object.assign(st.cards[i],o);toast("已儲存,網站會立即更新")}});
+  document.querySelectorAll('[data-act="del"]').forEach(function(b){b.onclick=async function(){var d=b.closest("details"),id=d.dataset.id;
+    if(!confirm("確定要刪除這張牌卡嗎?此動作無法復原。"))return;
+    var r=await sb.from("shiva_cards").delete().eq("id",id);if(r.error)return toast("刪除失敗:"+r.error.message,6000);
+    st.cards=st.cards.filter(function(x){return x.id!==id});toast("已刪除");view()}});
+  document.getElementById("add").onclick=async function(){var n=nextNo();var o={id:"c"+Date.now().toString(36),no:String(n),name:"",en:"",sort:n,published:false,cats:{},land:false};
+    var r=await sb.from("shiva_cards").insert(o);if(r.error)return toast("新增失敗:"+r.error.message,6000);st.cards.push(o);st.open[o.id]=true;toast("已新增(預設為隱藏,寫好後再改成顯示)");view()};
+  document.getElementById("bulk").onchange=async function(e){var fs=Array.prototype.slice.call(e.target.files).sort(function(a,b){return a.name.localeCompare(b.name,"zh",{numeric:true})});var ok=0;
+    for(var i=0;i<fs.length;i++){toast("上傳 "+(i+1)+"/"+fs.length+"…",60000);
+      try{var u=await upload(fs[i],"cards");var n=nextNo();var o={id:"c"+Date.now().toString(36)+i,no:String(n),name:fs[i].name.replace(/\.[^.]+$/,""),en:"",img:u.url,land:u.land,sort:n,published:false,cats:{}};
+        var r=await sb.from("shiva_cards").insert(o);if(r.error)throw r.error;st.cards.push(o);ok++}catch(err){toast("第 "+(i+1)+" 張失敗:"+((err&&err.message)||""),6000)}}
+    toast("已建立 "+ok+" 張牌卡(預設隱藏,寫好牌意後改成顯示)",5000);view()};
+}
+function nextNo(){return st.cards.reduce(function(m,c){return Math.max(m,parseInt(c.no,10)||0)},0)+1}
+start();
+})();
+</script>
+</body>
+</html>

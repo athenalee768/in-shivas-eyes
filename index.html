@@ -1,0 +1,742 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#0c0a1f">
+<title>In Shiva's Eyes 牌卡</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=LXGW+WenKai+TC:wght@300;400;700&family=MonteCarlo&display=swap">
+<style>
+/* Layout: night-sky page. Starfield + drifting nebula behind; hero with forehead motif (crescent, three ash lines, vermilion tilak, opening eye); card strip; tabbed draw / gallery / admin; deck cover as back page. */
+:root{
+  --bg:#0c0a1f; --surface:rgba(30,24,66,.72); --surface-solid:#1b1540; --surface2:#261e55; --line:rgba(167,157,230,.24);
+  --fg:#ece8f8; --muted:#a8a1c9; --moon:#f4efe1; --skin:#9a95e0; --tilak:#e0502f; --gold:#e0ae4c;
+  --on-accent:#150f30; --danger:#ff9d89; --star:#ece8ff; --neb1:rgba(112,94,220,.40); --neb2:rgba(224,80,47,.13); --veil:rgba(9,7,26,.74);
+  --f-display:"LXGW WenKai TC","Kaiti TC","DFKai-SB","Songti TC",serif;
+  --f-en:"MonteCarlo","Snell Roundhand","Brush Script MT",cursive;
+  --f-body:"Microsoft JhengHei","微軟正黑體","PingFang TC","Heiti TC",system-ui,sans-serif;
+  color-scheme:dark;
+}
+@media (prefers-color-scheme:light){:root:not([data-theme="dark"]){
+  --bg:#f1eef9; --surface:rgba(255,255,255,.82); --surface-solid:#ffffff; --surface2:#e7e1f5; --line:rgba(84,70,160,.22);
+  --fg:#1c1540; --muted:#5d5683; --moon:#2a2060; --skin:#5a53b0; --tilak:#c23a22; --gold:#8c5810;
+  --on-accent:#ffffff; --danger:#b3392b; --star:#7b71cc; --neb1:rgba(150,130,235,.30); --neb2:rgba(224,110,80,.14); --veil:rgba(248,245,252,.86); color-scheme:light}}
+:root[data-theme="light"]{
+  --bg:#f1eef9; --surface:rgba(255,255,255,.82); --surface-solid:#ffffff; --surface2:#e7e1f5; --line:rgba(84,70,160,.22);
+  --fg:#1c1540; --muted:#5d5683; --moon:#2a2060; --skin:#5a53b0; --tilak:#c23a22; --gold:#8c5810;
+  --on-accent:#ffffff; --danger:#b3392b; --star:#7b71cc; --neb1:rgba(150,130,235,.30); --neb2:rgba(224,110,80,.14); --veil:rgba(248,245,252,.86); color-scheme:light}
+
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--fg);font:16px/1.75 var(--f-body);margin:0;
+  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:0 40px}
+.wrap{max-width:1080px;margin:0 auto;position:relative;z-index:1}
+h1,h2,h3,h4{font-family:var(--f-display);margin:0;line-height:1.3;text-wrap:balance}
+p{margin:0}
+button,input,textarea{font:inherit;color:inherit}
+button{cursor:pointer}
+:focus-visible{outline:2px solid var(--gold);outline-offset:2px}
+.svg-defs{position:absolute;width:0;height:0}
+.muted{color:var(--muted)}
+
+/* background fx */
+#bgfx{position:fixed;inset:0;z-index:0;pointer-events:none;overflow:hidden}
+#bgfx canvas{position:absolute;inset:0}
+#bgfx .bgimg{position:absolute;inset:-3%;background:center top/cover no-repeat;animation:bgzoom 60s ease-in-out infinite alternate}
+#bgfx .bgimg::after{content:"";position:absolute;inset:0;background:var(--veil)}
+@keyframes bgzoom{to{transform:scale(1.06) translateY(-1%)}}
+#bgfx .neb{position:absolute;border-radius:50%;filter:blur(70px);animation:nebdrift 48s ease-in-out infinite alternate}
+#bgfx .a{width:62vmax;height:62vmax;left:-22vmax;top:-26vmax;background:radial-gradient(circle,var(--neb1),transparent 66%)}
+#bgfx .b{width:56vmax;height:56vmax;right:-24vmax;top:34vh;background:radial-gradient(circle,var(--neb2),transparent 66%);animation-duration:64s;animation-direction:alternate-reverse}
+@keyframes nebdrift{to{transform:translate(7vmax,5vmax) scale(1.12)}}
+
+/* top bar */
+.top{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:10px 24px;padding:20px 0 12px;border-bottom:1px solid var(--line)}
+.brand{display:flex;align-items:center;gap:12px;min-width:0}
+.brand .eye{width:42px;height:63px;color:var(--gold);flex:none;animation:emblem 6s ease-in-out infinite}
+@keyframes emblem{50%{filter:drop-shadow(0 0 7px var(--gold))}}
+.brand .nm{font:400 2.2rem/1 var(--f-en);color:var(--moon)}
+.brand .sub{font-size:.74rem;font-family:var(--f-body);letter-spacing:.2em;color:var(--muted);margin-top:5px}
+nav{display:flex;gap:2px;overflow-x:auto;max-width:100%}
+nav button{background:none;border:0;border-bottom:2px solid transparent;padding:8px 14px;color:var(--muted);white-space:nowrap;font-weight:500;transition:color .2s,border-color .2s}
+nav button[aria-current="page"]{color:var(--fg);border-bottom-color:var(--tilak)}
+nav button:hover{color:var(--fg)}
+
+/* shared */
+.eyebrow{font-size:.74rem;letter-spacing:.22em;color:var(--skin);font-weight:500}
+.btn{background:var(--gold);color:var(--on-accent);border:0;border-radius:4px;padding:11px 24px;font-weight:700;letter-spacing:.06em;transition:filter .2s,transform .2s}
+.btn:hover{filter:brightness(1.1);transform:translateY(-1px)}
+.btn[disabled]{opacity:.45;cursor:not-allowed;transform:none}
+.btn.ghost{background:none;color:var(--fg);border:1px solid var(--line);font-weight:500}
+.btn.ghost:hover{border-color:var(--gold)}
+.btn.small{padding:6px 12px;font-size:.86rem;letter-spacing:0}
+.btn.danger{color:var(--danger);border-color:var(--danger)}
+.chips{display:flex;flex-wrap:wrap;gap:6px}
+.chip{border:1px solid var(--line);border-radius:99px;padding:1px 12px;font-size:.84rem;color:var(--muted)}
+.sample-note{margin-top:20px;border:1px dashed var(--skin);border-radius:8px;padding:10px 14px;font-size:.9rem;color:var(--muted)}
+.cardimg{display:block;width:100%;aspect-ratio:.66;object-fit:cover;object-position:50% 100%;background:var(--surface2);border-radius:7px}
+.cardimg.land{aspect-ratio:1.5}
+.ph{display:block;width:100%;aspect-ratio:.66;border-radius:7px;object-fit:cover}
+.tri{display:grid;gap:6px;width:92px}
+.tri i{height:3px;border-radius:2px;background:var(--moon);opacity:.9;transform-origin:left;animation:grow .9s both}
+.tri i:nth-child(2){animation-delay:.15s}.tri i:nth-child(3){animation-delay:.3s}
+@keyframes grow{from{transform:scaleX(0)}}
+
+/* hero */
+.hero{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(0,.85fr);gap:24px 40px;align-items:center;padding:48px 0 18px}
+.hero-text{display:grid;gap:18px;justify-items:start}
+.hero-text>*{animation:rise .9s both}
+.hero-text>*:nth-child(2){animation-delay:.12s}.hero-text>*:nth-child(3){animation-delay:.24s}.hero-text>*:nth-child(4){animation-delay:.36s}.hero-text>*:nth-child(5){animation-delay:.48s}
+@keyframes rise{from{opacity:0;transform:translateY(14px)}}
+.wordmark{font:400 clamp(3.6rem,10vw,5.6rem)/1.05 var(--f-en);color:var(--moon)}
+.wordmark span{display:block;font:400 .2em/1.4 var(--f-display);letter-spacing:.42em;color:var(--skin);font-style:normal;margin-top:14px}
+.lede{color:var(--muted);max-width:34em}
+.cta{display:flex;flex-wrap:wrap;gap:12px}
+.art{justify-self:center;width:min(100%,300px)}
+.art.v1 svg{display:block;width:100%;height:auto;overflow:visible}
+.art .moon{animation:breathe 7s ease-in-out infinite}
+@keyframes breathe{50%{filter:drop-shadow(0 0 14px var(--moon))}}
+.art .ash{animation:inkdraw 1.3s cubic-bezier(.3,.7,.2,1) both}
+.art .ash2{animation-delay:.25s}.art .ash3{animation-delay:.5s}
+@keyframes inkdraw{from{stroke-dashoffset:170}}
+.art .tilak{transform-box:fill-box;transform-origin:50% 50%;animation:tilak 1.2s 1s cubic-bezier(.3,.7,.2,1) both,glow 4.5s 2.2s ease-in-out infinite}
+@keyframes tilak{from{transform:scaleY(0);opacity:0}}
+@keyframes glow{50%{filter:drop-shadow(0 0 9px var(--tilak))}}
+.art .eyeout{stroke-dasharray:420;animation:inkdraw2 1.6s 1.4s ease both}
+@keyframes inkdraw2{from{stroke-dashoffset:420}}
+.art .blink{transform-box:fill-box;transform-origin:50% 50%;animation:blink 9s 5s infinite}
+@keyframes blink{0%,94%,100%{transform:scaleY(1)}97%{transform:scaleY(.08)}}
+.art .iris{transform-box:fill-box;transform-origin:50% 50%;animation:irisopen 1.1s 2.6s cubic-bezier(.3,.7,.2,1) both}
+@keyframes irisopen{from{transform:scaleY(.02);opacity:0}}
+@media (max-width:760px){.hero{grid-template-columns:minmax(0,1fr);padding-top:32px}.art{width:200px;order:-1;justify-self:start}}
+
+
+/* hero portrait: arch window with 108-bead mala, crescent and trident */
+.art.v2{position:relative;width:min(100%,340px);aspect-ratio:1}
+.art.v2 svg{position:absolute;overflow:visible;display:block}
+.art.v2 .mala,.art.v2 .rings{inset:0;width:100%;height:100%}
+.mala{animation:spin 170s linear infinite}
+.rings{animation:spin 100s linear infinite reverse}
+@keyframes spin{to{transform:rotate(360deg)}}
+.arch{position:absolute;left:24%;right:24%;top:14%;bottom:12%;border-radius:999px 999px 10px 10px;overflow:hidden;
+  box-shadow:0 0 0 1px var(--gold),0 0 0 7px var(--bg),0 0 0 8px var(--line),0 24px 60px rgba(0,0,0,.5),0 0 70px var(--neb1);animation:rise 1.2s .3s both}
+.arch img{width:100%;height:100%;object-fit:cover;object-position:50% 30%;display:block;animation:kb2 28s ease-in-out infinite alternate;transform-origin:50% 35%}
+.arch::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,transparent 60%,rgba(12,10,31,.55)),linear-gradient(105deg,transparent 40%,rgba(255,255,255,.16) 50%,transparent 60%);background-size:100% 100%,250% 100%;animation:glint 9s 2s ease-in-out infinite}
+@keyframes kb2{to{transform:scale(1.1)}}
+@keyframes glint{0%{background-position:0 0,150% 0}60%,100%{background-position:0 0,-50% 0}}
+.art.v2 .crescent{left:50%;top:-1%;width:21%;height:auto;transform:translateX(-50%);animation:rise 1.2s .9s both}
+.art.v2 .trident{right:-3%;top:4%;width:20%;height:auto;transform-origin:50% 100%;animation:sway 9s ease-in-out infinite alternate}
+@keyframes sway{from{transform:rotate(-2.5deg)}to{transform:rotate(2.5deg)}}
+.trident path{stroke-dasharray:1;animation:draw1 2s .5s ease both}
+@keyframes draw1{from{stroke-dashoffset:1}}
+@media (max-width:760px){.art.v2{width:min(100%,260px)}}
+
+/* card strip */
+.strip{overflow:hidden;margin:26px 0 8px;-webkit-mask-image:linear-gradient(90deg,transparent,#000 7%,#000 93%,transparent);mask-image:linear-gradient(90deg,transparent,#000 7%,#000 93%,transparent)}
+.track{display:flex;gap:14px;width:max-content;animation:drift 80s linear infinite}
+.strip:hover .track{animation-play-state:paused}
+@keyframes drift{to{transform:translateX(-50%)}}
+.strip button{background:none;border:0;padding:0;height:200px;flex:none;transition:transform .3s,filter .3s;filter:saturate(.9)}
+.strip button:hover{transform:translateY(-6px);filter:saturate(1.15)}
+.strip .cardimg,.strip .ph{width:auto;height:100%}
+
+/* draw */
+.sec-title{display:grid;gap:8px;padding:36px 0 6px}
+.sec-title h2{font-size:clamp(1.5rem,4vw,2rem)}
+.controls{display:grid;gap:22px;margin:18px 0 6px}
+.field{display:grid;gap:7px;font-size:.86rem;color:var(--muted)}
+.field input,.field textarea{background:var(--surface);border:1px solid var(--line);border-radius:6px;padding:10px 12px;color:var(--fg);width:100%}
+.field textarea{resize:vertical;min-height:84px}
+.row{display:flex;flex-wrap:wrap;gap:18px 28px;align-items:end}
+.seg{display:inline-flex;border:1px solid var(--line);border-radius:6px;overflow:hidden}
+.seg button{background:none;border:0;padding:9px 18px;color:var(--muted);transition:background .2s,color .2s}
+.seg button[aria-pressed="true"]{background:var(--surface2);color:var(--fg);box-shadow:inset 0 -2px 0 var(--tilak)}
+.pills{display:flex;flex-wrap:wrap;gap:8px}
+.pills button{background:none;border:1px solid var(--line);border-radius:99px;padding:5px 15px;color:var(--muted);font-size:.92rem;transition:all .2s}
+.pills button:hover{border-color:var(--skin);color:var(--fg)}
+.pills button[aria-pressed="true"]{background:var(--skin);border-color:var(--skin);color:var(--on-accent);font-weight:700}
+.q{flex:1 1 280px;min-width:0}
+.stage{position:relative;margin:26px 0;min-height:380px;display:grid;place-items:center;border:1px solid var(--line);border-radius:16px;background:radial-gradient(60% 70% at 50% 40%,var(--neb1),transparent 75%),var(--surface);padding:32px 12px;overflow:hidden}
+.pile{position:relative;width:150px;aspect-ratio:.66;margin:0 auto}
+.pile .cb{position:absolute;inset:0}
+.pile .cb:nth-child(1){transform:rotate(-6deg)}
+.pile .cb:nth-child(2){transform:rotate(-2deg) translateX(4px)}
+.pile .cb:nth-child(3){transform:rotate(2deg)}
+.pile .cb:nth-child(4){transform:rotate(6deg) translateX(-4px)}
+.pile::after{content:"";position:absolute;inset:-26px;border-radius:50%;border:1px solid var(--skin);opacity:.4;animation:ring 3.6s ease-in-out infinite}
+@keyframes ring{50%{transform:scale(1.12);opacity:.15}}
+.shuffling .cb:nth-child(odd){animation:shufA .6s ease-in-out 2}
+.shuffling .cb:nth-child(even){animation:shufB .6s ease-in-out 2}
+@keyframes shufA{50%{transform:translateX(-100px) rotate(-14deg)}}
+@keyframes shufB{50%{transform:translateX(100px) rotate(14deg)}}
+.cb{border-radius:9px;overflow:hidden;box-shadow:0 6px 18px rgba(0,0,0,.35)}
+.backimg{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block}
+.cb .frame{position:absolute;inset:6px;border:1px solid var(--gold);border-radius:6px;opacity:.7;pointer-events:none}
+.cb .frame::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,transparent 55%,rgba(12,10,31,.7))}
+.cb .eye{position:absolute;left:50%;bottom:7%;width:22%;height:auto;transform:translateX(-50%);color:var(--gold)}
+.cb svg.fallback{position:absolute;inset:0;width:100%;height:100%}
+.deal{display:grid;gap:14px;width:100%;justify-items:center;align-items:start}
+.deal.n1{grid-template-columns:minmax(0,1fr)}
+.deal.n3{grid-template-columns:repeat(3,minmax(0,1fr))}
+.slot{width:100%;display:grid;gap:10px;justify-items:center;text-align:center;animation:dealin .7s cubic-bezier(.2,.8,.2,1) both}
+.slot:nth-child(2){animation-delay:.12s}.slot:nth-child(3){animation-delay:.24s}
+@keyframes dealin{from{opacity:0;transform:translateY(-36px) scale(.9) rotate(-3deg)}}
+.slot .lbl{font-size:.8rem;letter-spacing:.2em;color:var(--skin)}
+.flip{width:min(100%,230px);aspect-ratio:.66;perspective:1000px;background:none;border:0;padding:0}
+.flip.land{width:min(100%,360px);aspect-ratio:1.5}
+.flip-in{position:relative;width:100%;height:100%;transform-style:preserve-3d;transition:transform .9s cubic-bezier(.3,.7,.2,1)}
+.flipped .flip-in{transform:rotateY(180deg)}
+.face{position:absolute;inset:0;backface-visibility:hidden;-webkit-backface-visibility:hidden;border-radius:9px;overflow:hidden}
+.face.front{transform:rotateY(180deg);box-shadow:0 0 0 1px var(--gold),0 12px 40px rgba(0,0,0,.45)}
+.face.front .cardimg,.face.front .ph{height:100%;aspect-ratio:auto}
+.face.front::after{content:"";position:absolute;inset:0;background:linear-gradient(105deg,transparent 35%,rgba(255,255,255,.3) 50%,transparent 65%);transform:translateX(-120%)}
+.flipped .face.front::after{animation:sheen 1.4s .7s ease}
+@keyframes sheen{to{transform:translateX(120%)}}
+.hint{font-size:.86rem;color:var(--muted)}
+.stage-actions{display:flex;gap:10px;flex-wrap:wrap;justify-content:center;margin-top:22px}
+.reading{display:grid;gap:20px}
+.rd{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:26px 26px 28px;display:grid;gap:14px;animation:rise .6s both}
+.rd .pos{font-size:.78rem;letter-spacing:.22em;color:var(--skin);font-weight:500}
+.rd h2,.rd h3{font-size:1.6rem}
+.en{font:400 2rem/1.2 var(--f-en);color:var(--muted)}
+.quote{font:italic 400 1rem/1.6 var(--f-body);color:var(--moon);max-width:46ch}
+.quote small{display:block;font:400 .86rem var(--f-body);font-style:normal;color:var(--muted);margin-top:3px}
+.ctabs{display:flex;gap:2px;overflow-x:auto;border-bottom:1px solid var(--line);margin-top:4px}
+.ctabs button{background:none;border:0;border-bottom:2px solid transparent;padding:8px 13px;color:var(--muted);white-space:nowrap;font-size:.92rem}
+.ctabs button[aria-pressed="true"]{color:var(--fg);border-bottom-color:var(--tilak)}
+.ctabs button:hover{color:var(--fg)}
+.focus{display:grid;gap:8px;animation:rise .5s both}
+.focus h4,.blk h4{font-size:.8rem;letter-spacing:.2em;color:var(--gold);font-weight:700}
+.focus .txt{font-size:1.06rem;color:var(--fg)}
+.focus .note{font-size:.82rem;color:var(--muted)}
+.blk{display:grid;gap:6px}
+.txt{white-space:pre-line;max-width:66ch}
+.blk .txt{color:var(--muted)}
+
+/* gallery */
+.sec-head{display:flex;flex-wrap:wrap;gap:12px 24px;align-items:end;justify-content:space-between;padding:38px 0 22px}
+.sec-head h1{font-size:2rem}
+.search{width:min(100%,280px)}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));grid-auto-flow:dense;gap:26px 16px}
+.tile{background:none;border:0;padding:0;text-align:left;display:grid;gap:9px;align-content:start;perspective:700px}
+.tile.land{grid-column:span 2}
+.tile .frame{transition:transform .25s ease-out,box-shadow .25s;transform:rotateX(var(--rx,0deg)) rotateY(var(--ry,0deg));border-radius:7px}
+.tile:hover .frame{box-shadow:0 10px 34px rgba(0,0,0,.4),0 0 0 1px var(--gold)}
+.tile .no{font-size:.74rem;letter-spacing:.18em;color:var(--skin)}
+.tile .nm{font-family:var(--f-display);font-weight:500;line-height:1.35}
+.empty{padding:56px 0;color:var(--muted);text-align:center}
+
+/* overlay */
+#overlay:empty{display:none}
+#overlay{position:fixed;inset:0;z-index:30;background:rgba(8,6,22,.82);overflow:auto;animation:fade .25s both;
+  padding:max(20px,env(safe-area-inset-top,0px)) max(16px,env(safe-area-inset-right,0px)) max(20px,env(safe-area-inset-bottom,0px)) max(16px,env(safe-area-inset-left,0px))}
+@keyframes fade{from{opacity:0}}
+.sheet{max-width:900px;margin:0 auto;background:var(--surface-solid);border:1px solid var(--line);border-radius:16px;padding:24px;display:grid;grid-template-columns:minmax(0,300px) minmax(0,1fr);gap:28px;position:relative;animation:rise .4s both}
+.sheet .x{position:absolute;top:12px;right:12px}
+.sheet .pic img,.sheet .pic svg{width:100%;height:auto;aspect-ratio:auto;border-radius:8px;display:block}
+.sheet .body{display:grid;gap:14px;align-content:start;padding-top:16px}
+.sheet h2{font-size:1.8rem}
+@media (max-width:660px){.sheet{grid-template-columns:minmax(0,1fr)}.sheet .pic{max-width:300px;margin:0 auto}.deal.n3{gap:8px}.flip.land{width:100%}}
+
+/* about + trinity */
+.about{display:grid;grid-template-columns:minmax(0,300px) minmax(0,1fr);gap:28px 40px;align-items:center;padding:6px 0 30px}
+.about .cv{border-radius:12px;overflow:hidden;box-shadow:0 20px 60px rgba(0,0,0,.5),0 0 0 1px var(--line)}
+.about .cv img{display:block;width:100%;height:auto}
+.about h2{font-size:1.7rem;margin:4px 0 10px}.about p{color:var(--muted)}
+.trinity{padding:10px 0 20px;margin-top:44px}.trinity h2{font-size:1.6rem}.trinity .lead{color:var(--muted);margin:8px 0 18px}
+.gods{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,300px),1fr));gap:22px}
+.god{margin:0;display:grid;gap:12px}.god img{display:block;width:100%;height:auto;border-radius:12px;box-shadow:0 16px 44px rgba(0,0,0,.45),0 0 0 1px var(--line)}
+.god b{font:700 1.15rem var(--f-display)}.god .rl{color:var(--gold);font-size:.9rem;margin-left:8px}.god p{color:var(--muted);font-size:.95rem;margin-top:4px}
+@media (max-width:660px){.about{grid-template-columns:minmax(0,1fr)}.about .cv{max-width:300px;margin:0 auto}}
+/* back page (封底) */
+.coverpage{position:relative;margin:56px 0 0;display:grid;justify-items:center;gap:16px}
+.coverpage .cv{position:relative;width:min(100%,520px);border-radius:12px;overflow:hidden;box-shadow:0 20px 60px rgba(0,0,0,.5),0 0 0 1px var(--line)}
+.coverpage .cv img{display:block;width:100%;height:auto;animation:kb 34s ease-in-out infinite alternate;transform-origin:50% 30%}
+@keyframes kb{to{transform:scale(1.07)}}
+.coverpage .cv::after{content:"";position:absolute;inset:0;background:linear-gradient(105deg,transparent 40%,rgba(255,255,255,.14) 50%,transparent 60%);transform:translateX(-120%);animation:sheen2 9s 2s ease-in-out infinite}
+@keyframes sheen2{60%,100%{transform:translateX(120%)}}
+.coverpage .cap{font:400 1.7rem/1.2 var(--f-en);color:var(--muted);letter-spacing:.06em;text-align:center}
+
+/* admin */
+.bar{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;display:flex;flex-wrap:wrap;gap:10px 16px;align-items:center;justify-content:space-between;background:var(--surface-solid);border:1px solid var(--line);border-radius:10px;padding:12px 16px;margin:28px 0 18px}
+.bar.dirty{border-color:var(--gold)}
+.tools{display:flex;flex-wrap:wrap;gap:10px;margin-bottom:18px}
+.drop{border:1px dashed var(--line);border-radius:10px;padding:16px;color:var(--muted);font-size:.9rem;margin-bottom:20px}
+.sets{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:14px;margin-bottom:22px}
+.setbox{display:grid;grid-template-columns:80px minmax(0,1fr);gap:14px;align-items:center;background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:12px}
+.setbox img{width:100%;height:auto;border-radius:6px;display:block}
+.setbox .t{font-weight:700;margin-bottom:6px}
+.arow{display:grid;grid-template-columns:120px minmax(0,1fr);gap:18px;background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:16px;margin-bottom:14px}
+.arow .th{display:grid;gap:8px;align-content:start}
+.af{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px;min-width:0}
+.af .wide{grid-column:1/-1}
+.af details{grid-column:1/-1;border:1px solid var(--line);border-radius:8px;padding:10px 12px}
+.af summary{cursor:pointer;color:var(--gold);font-weight:700;font-size:.92rem}
+.af details .af{margin-top:12px}
+.arow .acts{display:flex;flex-wrap:wrap;gap:8px;grid-column:1/-1}
+.fileb{position:relative;overflow:hidden;display:inline-block}
+.fileb input{position:absolute;inset:0;opacity:0;cursor:pointer;width:100%}
+@media (max-width:560px){.arow{grid-template-columns:minmax(0,1fr)}.arow .th{grid-template-columns:90px 1fr;align-items:end}}
+
+#toast{position:fixed;left:50%;transform:translateX(-50%);bottom:max(20px,env(safe-area-inset-bottom,0px));z-index:40;background:var(--moon);color:var(--bg);padding:10px 18px;border-radius:8px;font-size:.92rem;max-width:90vw}
+#toast:empty{display:none}
+@media (prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important}.strip{overflow-x:auto}}
+</style>
+<script src="config.js"></script>
+</head>
+<body>
+
+<div id="bgfx" aria-hidden="true"><div class="bgimg" id="bgimg"></div><div class="neb a"></div><div class="neb b"></div><canvas id="sky"></canvas></div>
+<svg class="svg-defs" aria-hidden="true">
+  <symbol id="shiva" viewBox="0 0 48 72"><g fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M24 2C28.5 12 28.5 22 24 33C19.5 22 19.5 12 24 2Z" fill="currentColor" fill-opacity=".3"/>
+    <path d="M9 7L12.5 17H5.5Z" fill="currentColor" fill-opacity=".3"/><path d="M39 7L42.5 17H35.5Z" fill="currentColor" fill-opacity=".3"/>
+    <path d="M9 17C9 28 15 34 24 36C33 34 39 28 39 17"/><path d="M17 39H31"/><path d="M24 33V70"/>
+    <path d="M16 48H32L24 56L16 48Z"/><path d="M16 64H32L24 56L16 64Z"/><path d="M16 56C10 60 11 66 14 69"/><path d="M32 56C38 60 37 66 34 69"/></g></symbol>
+  <symbol id="back" viewBox="0 0 200 300">
+    <rect x="1.5" y="1.5" width="197" height="297" rx="14" fill="var(--surface2)" stroke="var(--gold)" stroke-width="2"/>
+    <circle cx="100" cy="150" r="78" fill="none" stroke="var(--skin)" stroke-opacity=".6" stroke-dasharray="2 7" stroke-width="3" stroke-linecap="round"/>
+    <circle cx="100" cy="150" r="56" fill="none" stroke="var(--gold)" stroke-opacity=".35"/>
+    <use href="#shiva" x="66" y="96" width="68" height="102" style="color:var(--gold)"/>
+  </symbol>
+</svg>
+
+<div class="wrap" id="app"></div>
+<div id="overlay" role="dialog" aria-modal="true" aria-label="牌卡詳情"></div>
+<div id="toast" role="status" aria-live="polite"></div>
+<script type="application/json" id="cards-data">{"v": 2, "settings": {"bg": "images/bg.jpg", "back": "images/back.jpg", "cover": "images/cover.jpg", "god1": "images/brahma.jpg", "god2": "images/vishnu.jpg", "god3": "images/shiva.jpg"}, "cards": [{"id": "c01", "no": "1", "name": "本源", "en": "Origin", "tag": "Living in harmony with the Universe.", "tagZh": "與宇宙和諧共處。", "keywords": "合一、和諧、陰陽平衡、回到本源", "meaning": "「本源」是這副牌的起點。祂提醒你,內在的陰與陽、剛與柔、行動與等待,本來就不是對立,而是同一個整體的兩面。當你不再與自己拉扯,生命自然回到和諧的節奏。", "extended": "畫面中,濕婆與他的神聖伴侶合為同一張面容,一半是他,一半是她,象徵二元的統合。\n這張牌邀請你檢視:你正在壓抑或排斥自己的哪一個面向?允許兩種力量並存,力量才會完整。也可以把它當作新階段的開場:回到最初的心意,重新與自己對齊。", "cats": {"work": "在工作上,別再把「理性」與「直覺」、「競爭」與「合作」對立。找到團隊中互補的角色,讓不同風格的人各司其職,事情會比單打獨鬥順暢。也適合回頭確認:這份工作是否仍和你最初的熱忱一致?", "health": "身心需要的是平衡而非極端:動與靜、工作與休息、享受與節制之間,找到屬於你的中道。留意情緒與身體如何互相影響,讓作息順著自然的節律。", "love": "關係的和諧來自兩個完整的人相遇,而不是互相補足缺口。先與自己和好,再談與對方的共處。也留意是否總是一方在付出、一方在退讓,練習彼此尊重差異。", "family": "家中不同世代、不同性格,像不同的音階。和諧不是整齊劃一,而是各自存在又彼此呼應。這張牌提醒你,在家裡少一點評斷,多一點理解每個人所站的位置。", "social": "接納與你不同的人,也接納自己不同的面向。不需要為了合群而變形,真誠的存在本身就會吸引對的人。", "money": "財務上追求平衡:收入與支出、進取與保守、享受與儲備。不要只押一邊,讓資源像陰陽一樣流動循環,長期會更穩。", "growth": "回到內在的源頭,感受自己與萬物並非分離。靜坐、獨處,或在自然中安靜待一會兒,都能幫你重新接上「我是整體的一部分」的感覺。"}, "img": "images/01-origin.jpg", "land": false}, {"id": "c02", "no": "2", "name": "能力", "en": "Capability", "tag": "Don't underestimate your ability to grow. Shine brighter than your yesterday-self.", "tagZh": "別低估你成長的能力,讓自己比昨天更閃耀。", "keywords": "潛能、成長、多面能力、自我超越", "meaning": "你擁有的能力,比你以為的更多,也比你現在展現的更多。這張牌鼓勵你不要用過去的標準限制自己,真正的對手是昨天的自己,而不是別人。", "extended": "畫面中的濕婆展現出多張面孔、多隻手臂,各執不同的法器,象徵同一個人可以同時擁有多種才能與角色。\n提醒你:能力不是固定的,它會隨著使用而成長。問問自己:有哪一項天賦,我一直沒有認真拿出來用?今天比昨天多進步一點點,就已經足夠。", "cats": {"work": "這是肯定自己實力的時機。可以主動承接有挑戰的任務、說出你的想法,或開始學一項能延伸專業的新技能。你被低估,多半是因為你還沒有讓人看見。", "health": "身體也有成長的空間。循序漸進地增加活動量或建立新的健康習慣,別一次拚太猛。以「比昨天好一點」作為標準,持續比強度重要。", "love": "你值得被好好愛,也有能力經營好關係。不用懷疑自己「夠不夠好」,把注意力放在你能為關係帶來什麼成長,而不是和別人比較。", "family": "家人也許還用舊的眼光看你。你可以用實際的行動讓他們看見你的改變,同時也看見家人身上尚未被發現的長處。", "social": "展現你的專長與熱情,別因害怕被評價而退縮。在群體裡,你的貢獻會讓你自然被看見;也別吝於欣賞別人的亮點。", "money": "提升收入的關鍵,在於提升能力與價值:進修、考照、拓展技能或發展副業都值得評估。投資自己,是最穩當的投資之一。", "growth": "設定一個「超越昨天的自己」的小目標,並記錄進步。不與別人比,只與自己比,你的光會越來越穩定。"}, "img": "images/02-capability.jpg", "land": true}, {"id": "c03", "no": "3", "name": "真我", "en": "Atman", "tag": "To connect with things, connect with your atman.", "tagZh": "想與萬物連結,先連結你的真我。", "keywords": "真我、內在連結、靈性、純粹覺知", "meaning": "「阿特曼」指的是每個人內在不變的真我。當你與它連結,與人、事、物的關係也會跟著清晰。外在的連結,從內在的連結開始。", "extended": "畫面是一片宇宙星雲,中央是純白的光芒,象徵內在最純粹、不被角色與情緒染色的存在。\n這張牌邀請你暫停向外尋找答案,回到安靜之處問自己:撇開身分、成就與他人的期待,我是誰?當你與真我相連,會更容易分辨什麼是真正屬於你的。", "cats": {"work": "回到初衷:你為什麼做這件事?當行動與內在價值一致,做起來會更有力量。若感到失去連結,先花時間獨處釐清,再決定下一步。", "health": "身與心是連在一起的。透過靜坐、呼吸、散步或書寫,感受身體正在說什麼。傾聽內在,比盲目追隨外在標準更能帶來平靜。", "love": "與其追問「對方怎麼想」,先問「我真正想要的是什麼」。當你與自己連結,才能真誠地與伴侶連結。若目前單身,這是認識自己的好時機。", "family": "與家人的連結,需要你先安住自己。少一點反應、多一點在場,用平靜的陪伴代替很多的話語,往往更有力量。", "social": "不必靠扮演角色來融入。以真實的自己與人相處,關係會更少耗損。感到疏離時,先回頭與自己靠近。", "money": "金錢決策要符合你的價值觀,而不是被他人與情緒牽動。做大筆決定之前,給自己一段安靜的時間,聽聽內心的聲音。", "growth": "每天留一小段不受打擾的時間與自己相處。真正的成長來自向內的覺察,而不是向外的堆疊。"}, "img": "images/03-atman.jpg", "land": false}, {"id": "c04", "no": "4", "name": "喜悅的節奏", "en": "Rhythm of Joy", "tag": "Listens to the beat of your heart.", "tagZh": "聆聽你心跳的節拍。", "keywords": "喜悅、舞動、心的節奏、活在當下", "meaning": "喜悅不是等外在條件齊備才降臨,而是順著自己心的節拍生活時,自然流露的狀態。這張牌請你放下「應該怎樣」,聽聽什麼才真正讓你的心跳動。", "extended": "畫面中,濕婆在光芒中起舞,手持小鼓,象徵創造與生命的律動。\n舞蹈沒有標準答案,只有真實與投入。你可以問自己:最近一次覺得全然自由、忘了時間,是什麼時候?把更多這樣的時刻,安排進生活裡。", "cats": {"work": "找回工作中的節奏與樂趣。調整步調,讓高度專注與休息交替,也可以替工作加入你喜歡的方式。當熱情被點燃,效率常會隨之而來。", "health": "活動身體能幫你釋放壓力,跳舞、散步、聽音樂都可以。選擇你真心喜歡的運動,比選擇「最有效」的更能持久。", "love": "在關係中保持輕盈與喜悅:一起笑、一起玩、一起創造小小的儀式。別讓關係只剩下責任,記得相處最初的快樂。", "family": "為家人安排一些共同的歡樂時光,一頓飯、一首歌、一段散步都好。喜悅的家庭氣氛,是最好的滋養。", "social": "與讓你放鬆、能自在做自己的人相處,會讓你充滿能量。你也可以主動帶動輕鬆的氛圍,你的快樂會感染周圍的人。", "money": "把錢花在真正讓你心跳加速的事物上,比隨波逐流的消費更有價值。同時留意別因一時興起而超出預算。", "growth": "練習覺察「什麼讓我心裡發光」,並每天給它一點空間。快樂不是獎勵,而是生活的方向感。"}, "img": "images/04-rhythm-of-joy.jpg", "land": false}, {"id": "c05", "no": "5", "name": "期待", "en": "Expectation", "tag": "There are no shortcuts to success. Consistency is the key.", "tagZh": "成功沒有捷徑,持之以恆才是關鍵。", "keywords": "持續、踏實、耐心、不走捷徑", "meaning": "這張牌提醒你,期待要與行動相稱。願望可以實現,但需要日復一日的投入,而不是一次的衝刺或僥倖。穩定地持續,才是通往成功的路。", "extended": "畫面中,一道火焰之柱貫穿濕婆的面容,兩位神祇一上一下,彷彿在尋找它的盡頭,取自印度神話中火柱的故事,暗示真正的成就沒有捷徑可以投機。\n問問自己:我的期待背後,是否有足夠的日常行動支撐?把大目標拆成每天做得到的小步驟,也留意別因失望而過早放棄。", "cats": {"work": "專案或職涯目標需要長期耕耘,別期待立刻升遷或翻身。建立穩定的工作習慣與可衡量的里程碑,成果會在累積中顯現。", "health": "健康沒有速成,別被極端的方法吸引。規律作息、均衡飲食、持續運動,才是真正的長期投資。", "love": "感情需要時間培養信任。不要期待對方一夕之間改變,也別用過高的期待壓住彼此。用日常的關心與承諾,累積關係的深度。", "family": "家庭關係的改善來自一點一滴的互動,例如固定的相聚、耐心的溝通。別急著要求對方立即回應。", "social": "人脈與信任是慢慢累積的。持續而真誠的互動,比偶爾的大力社交更有效。", "money": "財富的累積靠紀律與時間:穩定儲蓄、分散且長期的配置,遠勝追逐一夜致富。對任何「快速獲利」的承諾保持警覺。", "growth": "把想培養的能力變成日常的小習慣,持續比天分重要。允許進度緩慢,但不要停下來。"}, "img": "images/05-expectation.jpg", "land": false}, {"id": "c06", "no": "6", "name": "圓滿自己", "en": "Complete Me", "tag": "Love of Lord Shiva is enormous. Love completes everything.", "tagZh": "濕婆的愛無比廣大,愛使一切圓滿。", "keywords": "愛、圓滿、接納、被支持", "meaning": "你本來就被廣大的愛所包圍。這張牌告訴你,不必等到完美才值得被愛。當你願意接受愛、也給出愛,生命中的缺口便漸漸被填滿。", "extended": "畫面中,濕婆閉目,雙手向上承接,掌心之下是整個地球,象徵愛可以擁抱整個世界,也包含你。\n若你近來感到匱乏或孤單,這張牌邀請你把雙手打開,允許自己接收:被關心、被幫助、被原諒。圓滿來自接納,而不是追求。", "cats": {"work": "以愛與關懷的心態工作,會讓成就更有意義。你不必獨自扛下一切,接受同事的支援也是一種成熟。", "health": "像對待所愛的人一樣善待自己的身體與情緒。休息、被照顧、允許自己脆弱,都是療癒的一部分。", "love": "愛是你的強項,也是你需要被接納的地方。與伴侶坦誠表達需要與感謝。若尚未遇見對象,先把愛給自己,這會成為吸引的基礎。", "family": "家人之間的愛,常被日常瑣事掩蓋。主動說出感謝與關心,也原諒過去的不完美,家會更溫暖。", "social": "以善意對待他人,也允許別人幫助你。給予與接受取得平衡,人際會更加滋潤。", "money": "對金錢不必抱持匱乏感。你是被支持的,資源會在適當的時刻出現。同時學習把一部分分享出去,讓富足流動。", "growth": "練習自我慈悲,對自己說溫柔的話。愛自己不是自私,而是愛這個世界的開始。"}, "img": "images/06-complete-me.jpg", "land": false}, {"id": "c07", "no": "7", "name": "小我", "en": "Ego", "tag": "Be conscious. Act as your soul, not your EGO.", "tagZh": "保持覺知,以靈魂行動,而不是以小我行動。", "keywords": "覺知、謙卑、放下我執、以靈魂行動", "meaning": "這張牌提醒你覺察:你現在的反應,是出自靈魂的智慧,還是出自害怕、驕傲、比較或想被認同的小我?先覺察,再行動。", "extended": "畫面中,象頭神雙手合十、低頭接受來自濕婆的祝福之手,象徵謙卑與臣服並不是軟弱,而是為智慧留出空間。\n小我常以「我是對的」「我不能輸」的聲音出現。當你想爭辯或證明自己時,先停一下、深呼吸,問自己:這是靈魂想做的選擇嗎?", "cats": {"work": "留意職場上的爭功、比較與面子問題。放下「我要贏」,專注在共同目標,反而能贏得尊重。願意聆聽回饋,是專業的表現。", "health": "小我可能讓你忽視身體的警訊,或是硬撐。承認自己需要休息或協助,並不丟臉。", "love": "感情裡的冷戰與爭對錯,往往來自小我。比起證明自己是對的,不如問「我們要怎麼一起往前」。誠心的道歉與傾聽,是最有力的語言。", "family": "在家人面前,最容易觸發舊有的模式與自尊。先覺察情緒再回應,放下「我最辛苦」或「你們都不懂我」的敘事。", "social": "留意自己是否過度在意面子、他人評價或想被認同。謙遜與好奇,會讓你更容易被喜歡與信任。", "money": "留意因虛榮、比較或不甘心而做的消費或投資決定。以真實需求與長期規劃為準,不為面子買單。", "growth": "練習每天覺察三次「小我出現的瞬間」,不批判,只是看見它。覺察本身,就是轉化的開始。"}, "img": "images/07-ego.jpg", "land": false}, {"id": "c08", "no": "8", "name": "業力", "en": "Karma", "tag": "The proper outcome comes from the proper method.", "tagZh": "正確的結果來自正確的方法。", "keywords": "因果、方法、行動、負責", "meaning": "業力即因與果。這張牌提醒你,想要得到好的結果,需要先檢視自己採用的方法與動機。結果不是憑空而來,而是此刻每個選擇的延續。", "extended": "畫面中,兩隻手按在一張繪有蓮花與神獸圖樣的舊紙卷上,像是攤開的計畫或藍圖,象徵「規劃與執行」。\n你也許正在重複某個模式,卻期待不同的結果,此牌建議你停下來調整方法。它同時也提醒:為自己的選擇負責,並相信正直而正確的付出,終究會回到你身上。", "cats": {"work": "檢視工作流程與溝通方式:哪些做法一直造成同樣的問題?調整方法、釐清責任、做好準備,成果會更好。誠信與品質,是長期的資本。", "health": "目前的身心狀態,與過往的生活習慣相連。從睡眠、飲食、運動與壓力的處理開始調整,是最直接的「正確方法」。", "love": "關係的現況,是雙方互動模式累積的結果。若想改變,先調整自己的溝通與回應方式,而不是等待對方改變。真誠與尊重,會帶來好的回應。", "family": "家庭中反覆出現的衝突,往往有固定的模式。找出模式,嘗試不同的互動方式,同時學習為自己的言行負責。", "social": "你怎麼對待人,人際就怎麼回應你。以誠信、守時與善意經營關係,會逐漸累積好的人緣。", "money": "理財要靠正確的方法:記帳、預算、風險評估與長期規劃。避開灰色地帶與投機的路,正當的途徑才能長久。", "growth": "回顧自己近期的選擇與其結果,看見因果,並設定一個新的習慣來取代舊的模式。"}, "img": "images/08-karma.jpg", "land": false}, {"id": "c09", "no": "9", "name": "悲傷療癒", "en": "Grief Management", "tag": "Giving your pains a voice. Feel it and let it go.", "tagZh": "讓你的痛苦有聲音,感受它,然後放下。", "keywords": "悲傷、釋放、哀悼、允許感受", "meaning": "悲傷需要被看見。這張牌邀請你不要壓抑痛苦,而是讓它有聲音:哭、說、寫、被陪伴,都是通往釋放的方式。感受過了,才能真正放下。", "extended": "畫面在烈焰與閃電之中,濕婆懷抱著所愛之人,仰頭釋放痛楚。連神也有悲傷,而祂選擇完整地經歷它。\n哀悼沒有時間表,不必急著「好起來」。你可以向信任的人傾訴,或用書寫、藝術與儀式表達。若悲傷持續深重、影響日常生活,請尋求專業心理協助。", "cats": {"work": "工作中的失落,例如失業、專案失敗、合作中斷,都需要時間消化。允許自己難過、適當休息,再重新出發,會比硬撐更有後勁。", "health": "長期壓抑情緒,可能反映在身體上,如疲憊、失眠、緊繃。讓情緒有出口,必要時尋求專業諮商或醫療協助,那是照顧自己,不是軟弱。", "love": "面對關係的結束或失落,給自己哀悼的空間。不急著進入新關係,也不強迫自己立刻釋懷。在關係中,也可以坦誠說出自己的傷與需要。", "family": "家庭裡可能有未被說出的傷痛或失去。找一個安全的時刻一起談談、一起紀念,讓悲傷成為連結,而不是距離。", "social": "向值得信任的朋友打開心,讓人陪伴你。你不需要在每個人面前都堅強,也可以暫時退出社交,整理自己。", "money": "面對經濟上的損失或遺憾,先接納情緒,再理性評估。不要在情緒最低潮時做重大的財務決定,等心情較平穩再行動。", "growth": "練習與痛苦同在:觀察它在身體的哪裡、有什麼形狀,不推開也不放大。放下,是在充分感受之後自然發生的。"}, "img": "images/09-grief-management.jpg", "land": false}, {"id": "c10", "no": "10", "name": "時機", "en": "Timing", "tag": "Be patient. Trust the process of life.", "tagZh": "保持耐心,信任生命的歷程。", "keywords": "耐心、時機、信任、順勢", "meaning": "萬事皆有其時。這張牌請你放慢對結果的焦慮,在該等待時安心等待,在機會出現時準備好行動。相信生命有它自己的節奏。", "extended": "畫面中,一位女子在老虎的陪伴下靜坐祈禱,身旁是燃燒的火壇與散落的花瓣,安然與力量並存。\n耐心不是被動等待,而是在等待中持續修煉與準備。若你正感到「怎麼還沒發生」,回頭看看:自己能做的部分,是否都已經做到?剩下的,交給時間。", "cats": {"work": "重要的升遷、轉職或合作,時機尚未成熟時,先累積實力與人脈。不必倉促決策,但機會來臨時要有所準備。", "health": "身體的恢復與調養需要時間,不要因為進度慢而焦慮或放棄。維持良好的生活習慣,讓身體以自己的步調復原。", "love": "緣分有它的時機。不必急著定義或下結論,給彼此時間觀察與培養。單身者保持開放與自愛,不為了「快點有伴」而將就。", "family": "家庭的課題,如溝通、決策、關係修復,需要時間醞釀。避免在情緒緊繃時逼迫結論,等待適當的時機再談。", "social": "好的關係靠時間檢驗。不用強求與每個人立刻熟絡,讓信任自然累積。", "money": "投資與大額決策要留意時機,避免因焦慮而追高殺低。長期持有、耐心等待,通常優於頻繁進出。", "growth": "學習在「等待」中保持穩定:呼吸、觀察、持續做日常功課。相信此刻的過程,正在為你鋪路。"}, "img": "images/10-timing.jpg", "land": false}, {"id": "c11", "no": "11", "name": "挑戰", "en": "Challenge", "tag": "You're STRONG enough & You're NOT ALONE.", "tagZh": "你足夠強大,而且你並不孤單。", "keywords": "勇氣、力量、不孤單、面對困難", "meaning": "困難來臨時,這張牌要你記住兩件事:你比自己以為的更強,而且你並不孤單。挑戰不是來打倒你的,是來讓你看見自己還沒用上的力量。", "extended": "畫面中,多臂的女神在火光與風雪裡揮舞利刃,氣勢逼人,而一隻堅定的手穩穩地伸向她,象徵力量與支持同時存在。\n面對難關時,不必假裝無所畏懼,也不必獨自硬撐。承認害怕、開口求援,是勇敢的一部分。想想:這次我可以向誰借力?又可以用什麼方式,把壓力轉成前進的動力?", "cats": {"work": "職場上的難關,是檢驗與長出實力的機會。把大問題拆成幾個小步驟,主動向前輩、同事或主管求助,你會發現自己並不孤單,也比預期更有辦法。", "health": "身心承受著壓力時,別一個人扛。把感受說出來,安排休息,必要時尋求專業協助。照顧好自己的力氣,才有力氣面對挑戰。", "love": "關係出現考驗時,先相信你們有能力一起度過。誠實說出困難與需要,面對衝突而不逃避,能讓關係更深。", "family": "家中若有壓力或爭執,別覺得是你一個人的責任。邀請家人一起分擔,明確說出你需要什麼幫助。", "social": "你正面對的人際壓力,不是只有你在承受。找到值得信任的人談談,你會得到支持,也可能發現別人也有類似的處境。", "money": "面對財務壓力,先看清全貌,再擬定具體可行的計畫。向可靠的人或專業人士諮詢,不要因羞愧而獨自承擔。", "growth": "把眼前的挑戰視為成長的邀請。回想過去撐過來的經驗,提醒自己:我曾經做到,現在也可以。"}, "img": "images/11-challenge.jpg", "land": false}, {"id": "c12", "no": "12", "name": "同行", "en": "Together", "tag": "One uses intuition as a compass. Using wisdom as a vehicle toward the journey.", "tagZh": "以直覺作為羅盤,以智慧作為前往旅程的載具。", "keywords": "同行、家人、直覺、智慧、合作", "meaning": "人生的旅程不是一個人走的。這張牌提醒你,用直覺辨別方向,用智慧選擇方法,並珍惜與你同行的人。方向與方法都有了,再多的路也能走得安穩。", "extended": "畫面中,濕婆與伴侶、兩位孩子,連同孔雀與小老鼠聚在一起,氣氛輕鬆而親近,象徵家庭與同伴間的溫暖相伴。\n直覺像羅盤,告訴你要往哪裡去;智慧像載具,決定你如何抵達。兩者缺一不可。也請想想:此刻誰在陪你前行?你是否好好感謝了他們?", "cats": {"work": "善用團隊的力量:你的直覺看見方向,同事的專長補上方法。分工合作、彼此信任,比單打獨鬥走得更遠。做重大決定時,同時參考感覺與資料。", "health": "身心狀態可以與家人或夥伴一起照顧:一起散步、一起用餐、互相提醒休息。同時參考身體的直覺感受與專業建議,找到適合你的方式。", "love": "兩個人同行,需要共同的方向與各自的空間。聊聊彼此對未來的想像,一起做決定,也尊重對方的步調。這是適合經營親密關係的時刻。", "family": "這是很適合安排家庭相聚的時刻。花時間在一起,用輕鬆的方式交流,讓家人感到被在乎。家中大事,以愛與智慧共同商量。", "social": "身邊有同行的朋友與夥伴。珍惜彼此支持的關係,也願意加入有共同目標的團體,在合作中成長。", "money": "財務規劃適合與家人或伴侶一起討論,建立共同的目標與預算。以直覺感受需求,以智慧做出理性安排。", "growth": "學習同時信任直覺與理性。也留意身邊願意陪你成長的人,與他們分享旅程,會讓成長更有力量。"}, "img": "images/12-together.jpg", "land": false}, {"id": "c13", "no": "13", "name": "平等", "en": "Equality", "tag": "Like other beings or things, you are equally a part of the universe.", "tagZh": "如同其他眾生與萬物,你也平等地是宇宙的一部分。", "keywords": "平等、不比較、共舞、歸屬", "meaning": "你不比任何人更高,也不比任何人更低。這張牌提醒你,每個存在都是宇宙的一部分,不需要靠比較來證明價值。放下高低之分,才能真正與世界共舞。", "extended": "畫面中,兩位神祇在滿月之下並肩起舞,彼此呼應,沒有誰在誰之上。\n當你覺得自己不如別人時,或是不自覺地輕視別人時,都可以回到這張牌:我們都是同一片宇宙的一部分。也可以問問自己:我是否在某些關係裡,把自己放得太低,或太高?", "cats": {"work": "職場上放下階級與比較的心態:尊重每個角色的貢獻,無論職位高低。你也不需要因為資歷較淺而覺得自己不夠格發言。", "health": "別用別人的標準衡量自己的身體與狀態。每個人的節奏與體質不同,接納自己的樣子,是健康的起點。", "love": "健康的關係建立在平等之上:互相尊重、分擔、聆聽。留意是否有一方長期居於主導或遷就,試著重新調整成對等的相處。", "family": "家庭中的每個人,不論年齡與角色,都值得被尊重與聆聽。給孩子與長輩都有表達意見的空間。", "social": "對待每個人保持平等的善意,不因身分、地位或條件而改變態度。你也值得被同樣尊重,別因自卑而退縮。", "money": "別為了比較而消費或投資。金錢上的富足不是與他人比誰多,而是讓自己與家人安穩、自在。", "growth": "練習在日常中看見自己與他人的相同之處。當你感覺與萬物相連,孤獨與比較心就會慢慢淡去。"}, "img": "images/13-equality.jpg", "land": false}, {"id": "c14", "no": "14", "name": "無時間之境", "en": "Timeless Space", "tag": "Going deeper and deeper. Be free from time constraints.", "tagZh": "愈來愈深入,從時間的限制中自由。", "keywords": "無時間、深入、自由、冥想", "meaning": "這張牌邀請你暫時離開時鐘的節奏,往內在更深處去。當你不再被「來不來得及」追著跑,會發現有一個無須趕路、無須證明的空間,一直在那裡。", "extended": "畫面中,一個白色身影在星雲般的宇宙中輕輕漂浮,四周沒有上下,也沒有時間的刻度。\n這是冥想與深度休息的意象。若你常覺得時間不夠用,請試著安排一段不看時間、不被打擾的時光:靜坐、泡澡、散步都可以。深入的過程不用急,愈慢,愈深。", "cats": {"work": "時間壓力很大時,先停下來,給自己一小段不被打斷的專注時間。把最重要的事情放在這段時間處理,比分心趕工更有效率。", "health": "深度的休息與放鬆對身心很重要。嘗試靜坐、深呼吸或睡前放下手機,讓身體進入真正的休息狀態。", "love": "與伴侶共處時,放下手機與行程,專心陪伴彼此。有品質的在場,比長時間的相處更能拉近距離。", "family": "和家人相處不必急著安排活動,可以只是靜靜待在一起。放慢步調,讓家裡有一點留白與安靜的空間。", "social": "不必被社交節奏牽著走。給自己獨處的時間,回來時你會有更多能量與人相處。", "money": "別被「錯過」的焦慮推著做決定。對於重要的財務選擇,給自己足夠的時間思考,不被限時優惠或他人催促左右。", "growth": "建立固定的靜心習慣,即使每天只有十分鐘。在無時間的空間裡,你會更靠近真實的自己。"}, "img": "images/14-timeless-space.jpg", "land": true}, {"id": "c15", "no": "15", "name": "紮根", "en": "Grounding", "tag": "Connecting with your roots. Release negativity to the ground.", "tagZh": "與你的根連結,把負面的能量釋放給大地。", "keywords": "紮根、接地、釋放、穩定", "meaning": "當心神不寧、想太多或情緒翻騰時,這張牌請你回到大地。想像自己如樹木般紮根,把緊繃與雜念交給土地,留下穩定與清明。", "extended": "畫面中,濕婆在山崖上以單腳站立、雙手合於頭頂,背景是蓊鬱的森林與瀑布,展現穩固與平衡。\n紮根可以很簡單:赤腳踩在草地上、慢慢深呼吸、感受腳底與地面接觸。也可以回頭看看:你的根在哪裡?是家人、價值觀、故鄉,還是某個重要的信念?與它們連結,會讓你更穩。", "cats": {"work": "在忙亂的工作中,先穩住自己的節奏。列出最重要的三件事,一次專注一件,不被雜訊帶著走。", "health": "多接觸自然:到戶外走走、赤腳踩踩草地、深呼吸。規律作息與穩定飲食,也是一種讓身體紮根的方式。", "love": "在感情中穩住自己,別被不安全感牽著走。先安頓好自己的情緒,再與對方溝通,關係會更踏實。", "family": "回到家的根源,與家人一起做熟悉的事:一頓家常飯、回老家、聊聊從前。這些會帶來安定與歸屬感。", "social": "穩穩地做自己,不被他人的情緒帶走。遇到負面的互動,事後給自己時間釋放與放下。", "money": "財務上穩紮穩打:建立緊急預備金、檢視基本開銷。踏實的基礎比高報酬更讓人安心。", "growth": "每天花幾分鐘觀察呼吸與身體的感覺,把注意力帶回此時此地。紮根是一種練習,不是一次完成。"}, "img": "images/15-grounding.jpg", "land": true}, {"id": "c16", "no": "16", "name": "平靜", "en": "Calm", "tag": "Retreat to effectively recharge.", "tagZh": "適度退下來,才能有效地充電。", "keywords": "平靜、休息、充電、獨處", "meaning": "退後一步,不是逃避,而是為了更有力地前進。這張牌告訴你,現在是需要停下來、補充能量的時候。有效的充電,會讓之後的行動事半功倍。", "extended": "畫面中,一個身影背對我們,靜靜坐在岩石上望向黃昏的海面,遠方雲霞柔和,海浪不斷拍打,卻不打擾內心的平靜。\n如果你最近很累,請不要再責備自己「不夠努力」。安排一段真正屬於自己的獨處時間:離開人群與訊息,面對一片海、一座山,或只是一個安靜的房間。", "cats": {"work": "工作疲累時,適度請假或調整工作量,別硬撐。短暫的暫停能讓你回來時更有效率,也避免倦怠。", "health": "這是需要好好休息的提醒。補足睡眠、減少刺激、放慢步調,讓身心有機會恢復。若長期疲憊,請安排專業的健康檢查。", "love": "關係中需要一些獨處的空間,並不代表疏遠。彼此給予空間、各自充電,再回來相聚,感情反而更穩定。", "family": "家庭中負擔很重時,學會請家人分擔,也讓自己有暫停的時間。你好好休息,才有力氣照顧家人。", "social": "不必勉強參加每一場聚會。篩選真正重要的互動,留一些時間給自己,是對自己與他人都誠實的做法。", "money": "暫停大額的投資與消費決定。在平靜的心境下,看得更清楚,決策也會更理性。", "growth": "每天保留一小段「什麼都不做」的時間,讓心像海面一樣慢慢沉澱,能量會自然回來。"}, "img": "images/16-calm.jpg", "land": true}, {"id": "c17", "no": "17", "name": "自由", "en": "Free", "tag": "Loosen your grip so you are free to go everywhere.", "tagZh": "鬆開你的緊握,這樣你就能自由地前往任何地方。", "keywords": "自由、放手、輕盈、鬆開", "meaning": "我們常常因為抓得太緊,才失去了自由。這張牌請你想想:是什麼讓你緊握不放?當你願意鬆開,你就能輕盈地去往任何方向。", "extended": "畫面中,一個身影在雲海的漩渦之上輕柔地向後伸展,身體柔軟而放鬆,四周是無邊的天空與海洋。\n緊握可能是對結果的執著、對人的控制、對過去的不捨。放手不是放棄,而是相信自己無論如何都能站穩。也問問自己:如果放下這件事,我會得到什麼樣的自由?", "cats": {"work": "放下對完美與掌控的執著,學著授權與信任團隊。也不妨重新思考:是否有某個職位或習慣,其實在限制你的發展?", "health": "緊繃的身體需要被放鬆。練習伸展、深呼吸,留意肩頸與下巴是否一直用力。放鬆的身體,也會帶來放鬆的心。", "love": "在關係中放下控制與猜疑,給對方也給自己空間。愛不是緊抓,而是讓彼此自由地選擇靠近。若有一段已經結束的感情,也許是時候放手了。", "family": "試著放下對家人的期待與掌控,尊重每個人走自己的路。放手,反而讓關係更靠近。", "social": "不必緊抓住某種形象或舊有的圈子。你有權利離開讓你不舒服的關係,也有自由結識新的朋友。", "money": "放下對金錢過度的焦慮與計較,同時也檢視是否被負債、舊有的消費習慣綁住。逐步整理,才能真正得到財務上的自由。", "growth": "寫下你正在緊握的三件事,然後問自己:哪一個我可以先鬆開一點?練習一次一點點放手。"}, "img": "images/17-free.jpg", "land": true}, {"id": "c18", "no": "18", "name": "生命", "en": "Life", "tag": "Be(ware) the fire.", "tagZh": "成為那團火,也覺察那團火。", "keywords": "生命力、熱情、火焰、覺察、親密", "meaning": "火是生命的能量,能溫暖、能創造,也可能灼傷。「Be(ware)」是一個雙關:既是「成為」那團火,也是「覺察、當心」它。這張牌邀請你熱情地活著,同時清醒地掌握自己的力量。", "extended": "畫面中,兩個身影在蓮花之上緊緊相擁,背後是絢爛如煙火的星空,象徵陰陽能量交融所創造出的生命。\n你近來是否感受到某種強烈的渴望、熱情或衝動?那是生命力的展現,值得被看見。也請留意:當情緒或慾望過熱時,先覺察它,再決定如何運用。讓火成為照亮與溫暖的力量,而不是燒盡一切的力量。", "cats": {"work": "你的熱情與衝勁是最大的資本,適合投入有意義的創作或專案。但也要留意過度燃燒,學會分配精力,避免倦怠。", "health": "生命力旺盛的時期,可以好好運動與活動身體,也要留意作息與飲食的節制,避免過度消耗。若有發炎、上火等不適,請諮詢專業人員。", "love": "感情中有強烈的吸引力與熱度。珍惜這份親密,同時以尊重與真誠相待,覺察自己的情緒與慾望,避免讓衝動主導。", "family": "家中的能量也許有些「火熱」,例如急躁、爭執。先覺察情緒,再溝通,把火氣轉成對家人真誠的關心。", "social": "你的熱情會吸引周圍的人,也可能不小心灼傷別人。以善意與分寸表達想法,讓影響力成為溫暖的光。", "money": "財務上有想積極行動的衝動,例如大額消費或投資。先冷靜評估風險,再決定。熱情要搭配謹慎。", "growth": "觀察自己內在的「火」:是什麼點燃了你?什麼又讓你耗盡?學著與這股能量共處,讓它成為生命的動力。"}, "img": "images/18-life.jpg", "land": true}, {"id": "c19", "no": "19", "name": "皈敬濕婆", "en": "Om Namah Shivaya", "tag": "I offer Lord Shiva my deepest respect and devotion.", "tagZh": "我向濕婆獻上我最深的敬意與奉獻。", "keywords": "敬意、奉獻、咒語、信任、臣服", "meaning": "「嗡那摩濕婆耶」是向濕婆致敬的咒語。這張牌邀請你以謙卑與真誠的心,把自己交託給比自己更大的力量,並相信你被守護、被引領。", "extended": "畫面中,一隻結著手印的手重疊在幾何圖形之上,背景是層層疊疊的梵文咒語,象徵聲音、符號與意念合一。\n反覆誦念咒語,可以幫助心安定下來,不再被雜念牽動。當你感到無力或迷惘時,可以安靜地默念這句話,同時問自己:我是否願意放下掌控,信任生命的安排?", "cats": {"work": "以敬業與感恩的心看待工作。做你該做的事,不過度執著於結果。需要幫助或指引時,也願意向前輩請益。", "health": "規律的靜心或誦念能讓身心穩定。可以每天花幾分鐘,輕聲念誦或靜靜呼吸,幫助神經系統放鬆。", "love": "在感情中以尊重與感謝對待彼此。把對方視為值得敬重的人,而不是需要改造的對象,關係會更深厚。", "family": "對家人懷著感恩與尊敬,尤其是長輩。一個真誠的問候,或一起進行簡單的祈福儀式,能讓家更和諧。", "social": "以謙卑與尊重面對每個人。你不需要控制別人怎麼看你,專注在真誠與善意上即可。", "money": "以感恩與知足的態度看待財富。取之有道、用之有度,把一部分分享給需要的人,財富會更加流動。", "growth": "找到屬於你的靜心儀式,例如誦念、祈禱、冥想。重複的練習能培養信任與內在的穩定。"}, "img": "images/19-om-namah-shivaya.jpg", "land": false}, {"id": "c20", "no": "20", "name": "宇宙之音", "en": "AUM", "tag": "Listen deeply. You'll hear cosmic AUM.", "tagZh": "深深聆聽,你會聽見宇宙的「嗡」。", "keywords": "聲音、聆聽、振動、宇宙、靜心", "meaning": "當你真正安靜下來,會發現萬物都在以某種頻率共鳴。這張牌邀請你把注意力轉向內在,深深聆聽,你會聽到一個超越語言的聲音,那是與宇宙相連的感覺。", "extended": "畫面是水面上一個發光的「嗡(AUM)」符號,周圍是一圈圈擴散的波紋,象徵聲音與振動向外擴散,觸及所有存在。\n試著在安靜的環境中閉上眼睛,專注傾聽周圍的聲音,再聽聽自己的呼吸與心跳。也可以輕輕吟唱「嗡」,感受聲音在身體裡共鳴。聆聽,也包含聆聽別人真正想表達的內容。", "cats": {"work": "工作溝通時,先認真聆聽,再回應。聽見同事話語背後的需求,能避免許多誤解,也讓合作更順暢。", "health": "留意身體發出的細微訊號:疲勞、緊繃、情緒起伏。多聽聽身體在說什麼,並用呼吸、吟唱或聲音放鬆自己。", "love": "在伴侶面前,全心傾聽比急著回答更重要。放下手機、看著對方,讓對方感覺被聽見,感情會更貼近。", "family": "多聽聽家人的聲音,尤其是平時比較少說話的人。用耐心聆聽,可能會發現他們一直想說卻沒說出口的事。", "social": "做一個好的聆聽者,是最受歡迎的人際特質。專心聽、少打斷,別人會因此信任你。", "money": "對金錢的決定,多聽聽內心真正的聲音,也聽取可靠的意見。避免被噪音與流行牽著走。", "growth": "每天固定安靜幾分鐘,聽聽內在的聲音。靜心、吟唱或單純的傾聽,都是連結宇宙的入口。"}, "img": "images/20-aum.jpg", "land": false}, {"id": "c21", "no": "21", "name": "感恩", "en": "Gratitude", "tag": "When you've received, give it forward.", "tagZh": "當你有所領受,就把它傳遞出去。", "keywords": "感恩、傳遞、給予與領受、善的循環", "meaning": "感恩不只是說謝謝,而是把得到的善意再傳出去。這張牌提醒你,你手中已經握著許多祝福,而祝福會在流動中變得更豐盛。", "extended": "畫面中,一隻神聖的手把一顆金剛菩提子遞向下方捧著種子的雙手,象徵恩典被接住,也被繼續傳遞。\n回頭看看:最近誰幫過你?你又能把這份善意轉給誰?給予不必龐大,一個傾聽、一句鼓勵、一次主動協助,都是讓善循環下去的方式。", "cats": {"work": "對同事、主管與合作夥伴表達感謝,並把你學到的經驗分享給後進。懂得感恩與提攜,人脈與口碑會自然累積,也為自己創造被支持的環境。", "health": "感謝身體一路的陪伴,好好吃飯、睡覺、活動就是回報。也可以練習每天寫下三件感恩的小事,幫助心情安定。", "love": "別忘了對身邊的人說出感謝,也接受對方的付出而不急著回報。感情在被看見與被珍惜中成長。", "family": "對家人的付出說聲謝謝,尤其是平時默默承擔的人。把長輩給你的照顧,用你的方式傳給下一代。", "social": "有人曾在你需要時伸出援手,現在你也可以成為別人的那雙手。善意是最好的人際資產。", "money": "對你已經擁有的資源心存感謝,並適度分享與回饋。懂得流動,金錢與機會才不會停滯。", "growth": "把感恩變成每天的小習慣。感謝的心會讓你更容易看見已有的豐盛,而不是只盯著缺少的部分。"}, "img": "images/21-gratitude.jpg", "land": false}, {"id": "c22", "no": "22", "name": "解脫", "en": "Liberate", "tag": "Relieve from all the problems and sufferings.", "tagZh": "從一切問題與痛苦中解脫。", "keywords": "解脫、放下、卸下重擔、自由", "meaning": "這張牌是一份邀請:放下那些你一直抓緊的煩惱與重擔。真正的解脫不是問題全部消失,而是你不再被它們束縛。", "extended": "金色三叉戟與達瑪鼓,是濕婆的象徵:三叉戟象徵破除過去、現在、未來的執著,鼓聲則是創造與覺醒的振動。念珠纏繞其上,提醒你信念與修持是支撐。\n問問自己:我正抓著什麼不放?是一段怨念、一個標準,還是一個過去的版本?承認它、感謝它,然後輕輕鬆手。", "cats": {"work": "放下完美主義與過度的責任感。分清哪些是你能處理的、哪些該交給別人或時間。鬆開之後,你會有更多空間做真正重要的事。", "health": "壓力與緊繃需要出口。透過運動、伸展、呼吸或專心的休息釋放累積的重量。身心長期不適時,也請尋求專業協助。", "love": "放下對對方或過去關係的怨懟與期待,感情才有重新流動的可能。若關係已成負擔,也可以誠實考慮該放手的部分。", "family": "家庭中的舊傷與角色包袱,不必由你一個人背。練習界線與原諒,讓自己與家人都鬆一口氣。", "social": "不必討好每一個人。放下別人怎麼看你的擔心,關係會更輕鬆,也更真誠。", "money": "財務上的焦慮,可以透過清楚的盤點與規劃來緩解。放下對「不夠」的恐懼,重新設定屬於你的安心標準。", "growth": "練習放下:寫下煩惱,再逐一問「這是我能控制的嗎」。靜心或誦念,能幫助你與內在的自由重新連結。"}, "img": "images/22-liberate.jpg", "land": false}, {"id": "c23", "no": "23", "name": "信念", "en": "Faith", "tag": "You did your best, and Divine will do the rest.", "tagZh": "你已盡力,其餘交給神聖。", "keywords": "信任、盡力、交託、相信過程", "meaning": "你已經做了你能做的,接下來的部分,請相信有更大的力量在安排。這張牌邀請你放下過度的掌控,在信任中等待。", "extended": "林間光線下靜靜佇立的林伽,是濕婆最樸素的象徵,不言不動,卻承載著無限。\n信念不是盲目樂觀,而是在盡力之後選擇安心。你可以問自己:我是否已經盡了力?如果是,那麼還在焦慮的,是結果還是我對掌控的需要?把結果交出去,把專注留在當下能做的事。", "cats": {"work": "專案送出、面試完畢、提案已報,剩下的就交給時間。把精力轉向下一件事,不要反覆自我審查。持續盡責,好的機會自然會來。", "health": "做好該做的保養與照顧後,學會信任身體自己的修復力。焦慮本身也會消耗體力,試著安心休息。若有症狀,仍請諮詢醫師。", "love": "感情需要信任。你已經誠心付出,就不必反覆試探或過度擔心。給彼此空間,讓關係以自己的節奏成長。", "family": "對家人的事,你已盡心,就相信他們有自己的路與力量。陪伴比控制更有力量。", "social": "相信對的人會留下,也相信時間會證明真誠。不需要每次都急著解釋或證明自己。", "money": "做好規劃與風險控管後,就不必每天盯著盤面或帳戶焦慮。保持耐心,以長期的眼光看待財富。", "growth": "培養一種「盡人事」的心態:專注過程、接納結果。每天花幾分鐘靜心或祈禱,提醒自己並不孤單。"}, "img": "images/23-faith.jpg", "land": false}, {"id": "c24", "no": "24", "name": "寧靜", "en": "Serenity", "tag": "You are what you seek inside. Your true self cannot be described by what you have.", "tagZh": "你所尋找的,就在你的內在。真正的你,無法用你所擁有的來定義。", "keywords": "寧靜、喜樂、內在圓滿、真我", "meaning": "寧靜來自內在,而非外在的擁有。這張牌提醒你:你不需要再多一個頭銜或條件,才有資格感到圓滿。", "extended": "畫面是一場莊嚴而喜悅的婚禮,新人被花環與花瓣包圍,眾神在旁祝福。這是濕婆與帕爾瓦蒂神聖結合的意象,象徵內在陰陽合一的喜悅。\n當你不再向外抓取,寧靜就會出現。試著問:如果不靠成就、關係、外表,我是誰?那個不被這些定義的你,才是你一直在尋找的家。", "cats": {"work": "不要用職稱與績效定義自己的價值。在忙碌中保留片刻的靜,你的判斷會更清晰,也更能穩定面對變動。", "health": "身心安寧是最好的養生。減少過度的刺激與比較,給自己留白的時間,睡眠與情緒都會因此受益。", "love": "感情的圓滿,是兩個內在完整的人彼此祝福。先安頓好自己,再與對方分享喜悅。若正處於婚姻或承諾的議題,以喜悅而非壓力去看待。", "family": "家人的團聚與慶賀是福氣。放下比較與期待,單純享受相聚的當下。", "social": "有些相聚值得慶祝。不必以社交場合的表現證明自己,真誠自在最吸引人。", "money": "財富帶來的安心,終究來自你與金錢的關係。知足、有餘裕,比追求數字更重要。", "growth": "每天留一段安靜的時間,例如散步、靜坐或呼吸。回到內在,你會發現你要找的答案一直都在。"}, "img": "images/24-serenity.jpg", "land": true}, {"id": "c25", "no": "25", "name": "智慧", "en": "Wisdom", "tag": "The less you think, the more you know.", "tagZh": "想得越少,知道得越多。", "keywords": "智慧、靜心、直觀、放下雜念", "meaning": "有時,過度思考反而讓答案更模糊。這張牌邀請你安靜下來,讓更深的智慧自然浮現。", "extended": "巨大的濕婆面容閉目低垂,而前方一位平凡的靜坐者與祂的氣息相連。這象徵每個人心中都住著那份智慧,只要安靜,就能被連結。\n如果你正在糾結,試著暫停分析,讓身體放鬆、呼吸變慢。答案往往在安靜的間隙中出現。你已知道的,比你以為的更多。", "cats": {"work": "重要決策前,給自己一段不被打擾的安靜時間。讓資訊沉澱,再用直覺與邏輯共同做判斷,而不是被資訊淹沒。", "health": "過度思慮會消耗心神與睡眠。透過靜坐、深呼吸、散步,讓大腦休息,身體也會跟著放鬆。", "love": "感情中不必反覆分析對方的每句話。回到內心,問自己真實的感受,你會知道自己需要什麼。", "family": "家庭的事不必每件都想得完美。簡單、耐心的陪伴,往往勝過複雜的計畫。", "social": "少一點揣測,多一點直接而真誠的交流。很多誤會,在好好說話之後就消失了。", "money": "不要被過多的資訊與意見干擾理財決定。回到你的原則與長期目標,簡單而一致的方式通常最穩。", "growth": "培養靜心習慣,讓思緒像水慢慢沉澱。在安靜中,你會聽見自己內在的智慧。"}, "img": "images/25-wisdom.jpg", "land": false}, {"id": "c26", "no": "26", "name": "由內而外", "en": "Inside out", "tag": "Lord Shiva is all. So I have all in the first place.", "tagZh": "濕婆即是一切,所以我本來就擁有一切。", "keywords": "內在豐盛、本自具足、綻放、由內而外", "meaning": "你所尋找的一切,本來就在你之內。這張牌提醒你,綻放是從內在開始,向外自然展開。", "extended": "發光的人形胸前,一朵蓮花盛開,蝴蝶與白鴿環繞,象徵靈性的開展與心的自由。\n當你相信自己本來就具足,就不會再從別人那裡乞求認可。試著把注意力從「我缺什麼」轉向「我已經有什麼」,你會看到自己早已擁有的天賦、愛與力量。", "cats": {"work": "你的價值不必由職位或他人的認可來決定。相信自己的能力與特質,主動展現,而不是等待被發現。", "health": "從內在調理身心:良好的睡眠、飲食、情緒釋放。當內在平衡,外在狀態也會跟著改善。", "love": "先愛自己,感情就不會變成乞討。你的圓滿能與對方分享,而不是依賴對方填補。", "family": "家人的愛是你的根。你也可以成為家裡的光,以穩定與溫暖影響身邊的人。", "social": "真誠做自己,就是最好的社交方式。把自信建立在內在,不需要靠比較或炫耀。", "money": "豐盛的心態是財富的起點。相信自己有創造價值的能力,同時感謝已有的資源。", "growth": "每天練習把手放在心口,對自己說:我本來就足夠。讓內在的富足成為行動的基礎。"}, "img": "images/26-inside-out.jpg", "land": false}, {"id": "c27", "no": "27", "name": "接納", "en": "Acceptance", "tag": "The key to finding peace of mind is to accept all aspects of yourself.", "tagZh": "找到內心平靜的鑰匙,是接納自己的所有面向。", "keywords": "接納、擁抱自己、和解、平靜", "meaning": "心的平靜,從不再與自己對抗開始。這張牌邀請你溫柔地接納自己的所有面向,包括光明與陰影。", "extended": "畫面中,宇宙般的身影彼此擁抱,金黃與深藍交融,象徵內在不同部分的和解。\n你可能一直在否定某個自己:太敏感、太軟弱、太固執、太平凡。試著說:「我看見你了,你也屬於我。」接納不是放棄成長,而是讓改變從愛而非批判出發。", "cats": {"work": "接受自己的限制與缺點,也接受自己的優點。別因一次失誤就否定全部的自己,從中學習、調整、再前進。", "health": "好好善待你的身體與情緒,不再苛責。接受它現在的狀態,才能溫柔地照顧它。", "love": "接納自己,才能真正接納對方。關係中少一點要求與控制,多一點理解與包容。", "family": "放下對家人或自己的「應該」,接受每個人的樣子。接納是修復關係的第一步。", "social": "不必成為所有人眼中的完美。真誠地展現自己,對的人會喜歡你原本的樣子。", "money": "接受自己與金錢相處的習慣與過去的決定,不責備自己。從現在起重新規劃,往前走就好。", "growth": "靜坐時,對浮現的每一種情緒輕聲說「我接納你」。擁抱自己,是最深的療癒。"}, "img": "images/27-acceptance.jpg", "land": false}, {"id": "c28", "no": "28", "name": "蛻變", "en": "Transform", "tag": "Embracing change. Make room for something that serves you.", "tagZh": "擁抱改變,為更適合你的事物騰出空間。", "keywords": "蛻變、改變、重生、放下舊殼", "meaning": "舊的皮該褪去了。這張牌告訴你,改變正在發生,放下不再適合你的,才能為新的成長騰出空間。", "extended": "蛇蛻下舊皮,在光中展現新的色彩。蛇在濕婆的意象中象徵能量與重生。蛻變常伴隨不適,卻是成長必經的過程。\n想一想:哪些習慣、關係或信念,已經像舊皮一樣緊了?你不必一次全放下,先從一個小改變開始,例如結束一個消耗你的習慣。", "cats": {"work": "是轉換跑道、學習新技能或調整角色的時機。接受不確定,逐步嘗試,新的方向會在行動中變得清晰。", "health": "改變生活習慣的好時機。從小處開始,例如調整作息、增加運動,並給身體時間適應。", "love": "關係可能進入新階段。放下舊的模式與期待,誠實面對彼此的成長,也許能找到更合適的相處方式。", "family": "家庭結構或角色的轉變,需要彈性與耐心。溝通新的安排,讓每個人都找到舒服的位置。", "social": "也許是時候調整人際圈,離開消耗你的關係,靠近讓你成長的人。", "money": "重新檢視你的財務習慣與規劃。放下不再適用的做法,為更適合現階段的方式騰出空間。", "growth": "允許自己成為新的樣子。記錄改變中的感受,並肯定自己走過的每一步。"}, "img": "images/28-transform.jpg", "land": false}, {"id": "c29", "no": "29", "name": "安全", "en": "Safe", "tag": "You are safe under Lord Shiva's protection.", "tagZh": "你在濕婆的守護之下,是安全的。", "keywords": "安全、守護、信賴、被保護", "meaning": "你被守護著。這張牌帶來安心的訊息:在你覺得脆弱或不安時,有一股溫柔而堅定的力量在你身後。", "extended": "濕婆的側影與三叉戟立於身後,碎裂的鏡面與面紗後露出一雙凝視的眼睛,象徵在不安與遮蔽之中,你依然被看見、被守護。\n若你最近感到恐懼或不確定,先讓呼吸慢下來,感覺腳踩在地上。你並非赤手空拳面對一切。同時,也留意現實中可以尋求協助的資源與人。", "cats": {"work": "職場上若有壓力或不確定,先穩住自己,再一步步處理。保留重要紀錄、向可信任的人求助,也是在保護自己。", "health": "身體需要安全感才能修復。創造安心的作息與環境,感到不適時及時就醫,不要獨自撐著。", "love": "在關係中,你有權利感到安全與被尊重。若感到不安,誠實說出需要,並留意是否被善待。", "family": "家是安全的港灣。也請守護好你自己的界線,讓家中的每個人都能安心。", "social": "選擇讓你感到安全與被尊重的人相處。信任需要時間累積,不必急著打開所有防備。", "money": "建立緊急預備金與基本保障,讓安全感有實質的支持。重大財務決定前,多方確認。", "growth": "在心中想像被光包覆的畫面,或誦念讓你安心的祈禱文。安全感可以從內在被喚起。"}, "img": "images/29-safe.jpg", "land": false}, {"id": "c30", "no": "30", "name": "選擇", "en": "Choices", "tag": "There is no wrong path. Make a choice that you won't regret later.", "tagZh": "沒有錯誤的路。做出你日後不會後悔的選擇。", "keywords": "選擇、抉擇、岔路、為自己負責", "meaning": "面對岔路,你不需要找「唯一正確」的答案。這張牌提醒你,每條路都有它的風景,重要的是選了之後,你願意為它負責。", "extended": "兩扇拱門分別映出不同的人與世界,南迪牛背對著我們,安靜地凝視。祂不替你選擇,只是陪伴你看清。\n試著問自己:如果選這條,我十年後會怎麼看?哪一個選擇更貼近我真正的價值?不必追求零風險,而是選出你能全心投入、事後也不會懊悔的那條。", "cats": {"work": "面對職涯選擇,列出你真正在乎的價值與條件,而非只看眼前的利弊。選定之後全力以赴,遇到調整也能更快修正。", "health": "在不同的治療或生活方式之間選擇時,蒐集足夠的資訊並諮詢專業意見。選擇符合你身體與生活節奏的方式。", "love": "感情上的抉擇,誠實面對你的真實感受。無論選擇繼續或放手,都為自己的決定負責。", "family": "家庭中的決定常牽涉多人。溝通各自的需求,尋找兼顧彼此的方案,但不要放棄自己的底線。", "social": "選擇與誰相處,也是選擇你想成為怎樣的人。把時間留給真正滋養你的關係。", "money": "面對投資與消費的選擇,回到你的長期目標與風險承受度。不必追逐每個機會,選適合你的就好。", "growth": "做決定前,先安靜下來聽聽內在的聲音。完成選擇後,練習不再反覆回頭質疑。"}, "img": "images/30-choices.jpg", "land": false}, {"id": "c31", "no": "31", "name": "依靠", "en": "Rely on", "tag": "Allow yourself to be embraced with unconditional love.", "tagZh": "允許自己被無條件的愛擁抱。", "keywords": "依靠、被愛、接受支持、家的溫暖", "meaning": "你不必什麼都自己扛。這張牌邀請你放鬆,允許自己被愛、被扶持,把重量交給值得信賴的人與力量。", "extended": "畫面是一家人的溫柔依偎:帕爾瓦蒂輕撫著疲憊閉眼的濕婆,象神甘尼夏依在他們懷中。這是一幅無條件的愛與安全依靠的畫面。\n總是堅強的你,也有累的時候。接受幫助不是軟弱,而是讓愛流動。想想看,現在誰可以讓你依靠?你是否也願意成為別人的依靠?", "cats": {"work": "不必凡事親力親為。懂得分工與請求協助,才能走得更遠。尋找可以討論、請益的前輩與夥伴。", "health": "累的時候,允許自己休息與被照顧。身心需要溫柔對待,不是只有堅持。", "love": "在關係中學會示弱並接受愛。真誠地表達需要,對方才有機會支持你。", "family": "家是可以卸下防備的地方。珍惜與家人的依偎與陪伴,也主動給予擁抱與關心。", "social": "找幾個可以真心傾訴的朋友。被理解與陪伴,會讓你更有力量面對生活。", "money": "必要時尋求可信賴的專業或家人協助,一起規劃財務。不必一個人承擔所有壓力。", "growth": "想像自己被一股溫暖的愛包圍。在安靜時,讓自己感受被支持,而不是只想著要堅強。"}, "img": "images/31-rely-on.jpg", "land": false}, {"id": "c32", "no": "32", "name": "循環", "en": "Cycle", "tag": "Every ending is a new beginning and every beginning has an end.", "tagZh": "每個結束都是新的開始,每個開始也都有終點。", "keywords": "循環、月相、結束與開始、順應節奏", "meaning": "萬事都有周期,如月亮盈虧。這張牌提醒你,一個階段的結束,其實是下一個階段的起點。", "extended": "濕婆靜坐於雪山前,十二個月相圍繞著祂,從滿月到新月再回到滿月。祂頭上的新月象徵時間與循環,也象徵在變化中的平靜。\n你現在處於哪個月相?是需要播種、成長、豐收,還是休息?順著自己的節奏,不強求在新月期就要滿月,也不為月缺而哀傷。", "cats": {"work": "工作有高峰與低谷。低潮時蓄積實力、整理經驗;高峰時把握機會,同時為下一個周期做準備。", "health": "身體也有節律。順應季節與作息,在該休息的時候休息,在有力氣時活動。", "love": "關係有熱絡與平淡的周期。把平淡視為深化的階段,而不是退場的訊號。若關係結束,也是一個階段的完成。", "family": "家庭成員成長、遷移、告別,都是生命的周期。珍惜相聚的時光,也學習接受轉變。", "social": "人際關係會隨階段改變。感謝曾經陪伴你的人,也歡迎新的緣分進入。", "money": "金錢有起伏。盈餘時儲備、低谷時保守,以長期的眼光看待周期,不被短期的變動左右。", "growth": "觀察月亮的變化,與自己的節奏對話。每個階段都有它的功課,也都有它的美。"}, "img": "images/32-cycle.jpg", "land": false}, {"id": "c33", "no": "33", "name": "我是", "en": "I AM", "tag": "Be true to yourself.", "tagZh": "忠於自己。", "keywords": "海底輪、根基、自我認同、真實", "meaning": "「我是」是所有力量的根基。這張牌邀請你回到最底層的安全感與認同,忠於真實的自己。", "extended": "紅色的海底輪(Muladhara)位於脊椎底端,象徵生存、安全與歸屬,是大地之力的根。\n問問自己:我是否真的活在自己認同的方式裡?當你忠於自己,內在會有踏實的穩定感。這不是固執,而是清楚知道自己是誰、需要什麼。", "cats": {"work": "不必為了迎合而扭曲自己。清楚說出你的價值與界線,並在能發揮專長的位置上穩穩站好。", "health": "回到身體的基本:規律作息、穩定飲食、腳踏實地的運動。腳踏實地的生活能帶來安全感。", "love": "在關係裡保持真實,不假裝成對方期待的樣子。真實的相遇才能長久。", "family": "家是歸屬感的來源。回到家人間的連結,也確認你自己在家中的位置與界線。", "social": "忠於自己的原則,選擇接受你原本樣子的朋友。你不必成為別人。", "money": "金錢的基本安全感很重要。建立穩定收入與基本儲備,讓你能更有底氣做選擇。", "growth": "每天花幾分鐘感受雙腳與地面的接觸,對自己說「我是」。從根基開始建立自信。"}, "img": "images/33-i-am.jpg", "land": false}, {"id": "c34", "no": "34", "name": "我感受", "en": "I FEEL", "tag": "Your feeling matters. Focus on what you feel both internally and externally.", "tagZh": "你的感受很重要。留意你內在與外在的感覺。", "keywords": "臍輪、情感、感受、創造力", "meaning": "你的感受有價值。這張牌邀請你停下來,誠實地感受內在的情緒與外在的環境。", "extended": "橙色的臍輪(Svadhisthana)位於下腹,象徵情感、流動、創造與喜悅,如水般柔軟。\n情緒不是障礙,而是訊息。當你感到疲憊、喜悅、不安,都值得被承認。試著問:現在我身體哪裡有感覺?那是什麼情緒?不評判,只是看見。", "cats": {"work": "留意工作中讓你有活力與消耗你的事。你的感受是重要的線索,指引你更適合的方向與做法。", "health": "情緒與身體相連。壓力常以不適的形式出現,給情緒表達的出口,例如書寫、運動、與人傾訴。", "love": "誠實說出你的感受,也傾聽對方的感受。感情在被理解中加深,而不是在壓抑中維持。", "family": "家人之間的情緒需要空間。允許彼此有情緒,並以尊重的方式溝通。", "social": "留意與誰相處時你感到輕鬆、與誰相處後疲憊。你的感覺會告訴你哪些關係值得投入。", "money": "金錢常與情緒有關,例如因情緒而衝動消費。花錢前先停一下,辨認自己的感受。", "growth": "每天做一次情緒盤點:我現在感覺如何?把它寫下來,培養與感受相處的能力。"}, "img": "images/34-i-feel.jpg", "land": false}, {"id": "c35", "no": "35", "name": "我行動", "en": "I DO", "tag": "Believe in your actions like Lord Shiva always believes in you.", "tagZh": "相信你的行動,就像濕婆始終相信你。", "keywords": "太陽神經叢輪、行動力、意志、自信", "meaning": "你已經有行動的力量。這張牌鼓勵你相信自己的決定,並勇敢採取行動。", "extended": "黃色的太陽神經叢輪(Manipura)位於上腹,象徵意志、自信與行動力,如同內在的太陽。\n如果你一直在想卻沒開始,試著從一小步做起。行動不需要等到完美,信任自己,走出去,過程中再調整。祂相信你,你也可以相信你自己。", "cats": {"work": "是展現主動與領導力的時候。提出你的想法、承擔任務,用行動證明能力,並接受過程中的調整。", "health": "動起來有益身心。選擇你喜歡的運動,從小目標開始建立習慣。注意不過度逞強。", "love": "感情中,主動表達心意或邁出一步。清楚而溫和地說出你想要的,而不是等待對方猜測。", "family": "家中有需要處理的事,不要拖延。主動承擔並與家人分工,能讓氣氛更和諧。", "social": "主動聯繫、主動邀約或主動協助。你的一個小行動,可能就是關係的轉機。", "money": "把財務目標拆成具體行動,例如固定儲蓄、學習理財。持續執行比一次性的大動作更有效。", "growth": "每天完成一件你一直拖延的小事。累積這些小勝利,自信會自然提升。"}, "img": "images/35-i-do.jpg", "land": false}, {"id": "c36", "no": "36", "name": "我愛", "en": "I LOVE", "tag": "Open your heart to feel the love inside you.", "tagZh": "敞開你的心,感受內在的愛。", "keywords": "心輪、愛、慈悲、敞開", "meaning": "愛從你的心開始。這張牌邀請你放下防備,感受內在本來就有的愛與慈悲。", "extended": "綠色的心輪(Anahata)位於胸口,象徵愛、慈悲與連結,六芒星是天與地的結合。\n也許過去的傷讓你有些封閉。你不必一下子完全敞開,只要允許自己感受一點溫柔。對自己好一點,再把這份愛分享給他人。", "cats": {"work": "以善意與同理對待同事與客戶。在工作中帶入關懷,能建立更深的信任與合作關係。", "health": "愛自己是健康的基礎。善待你的身體與心情,並關注胸口與呼吸,讓心放鬆下來。", "love": "感情的核心是愛與慈悲。放下防備,真誠表達愛意,也允許自己接受愛。", "family": "對家人表達愛與感謝。擁抱、一句關心,都是讓家更溫暖的力量。", "social": "以開放的心看待他人,多一點善意與寬容。你的溫柔也會吸引同樣善意的人。", "money": "以愛與分享的心看待金錢。適度回饋與捐助,能讓你感受到給予的富足。", "growth": "將手放在心口,深呼吸,對自己說「我愛你」。每天練習,讓愛成為內在的底色。"}, "img": "images/36-i-love.jpg", "land": false}, {"id": "c37", "no": "37", "name": "我表達", "en": "I SPEAK", "tag": "Express yourself. The world wants to know about you.", "tagZh": "表達你自己。世界想要認識你。", "keywords": "喉輪、表達、真實發聲、溝通", "meaning": "你的聲音值得被聽見。這張牌鼓勵你誠實、清楚地表達自己的想法與感受。", "extended": "藍綠色的喉輪(Vishuddha)位於喉嚨,象徵溝通、真實與表達,連結著心與語言。\n也許你一直把話放在心裡。試著用簡單、真誠的方式說出來,不需要完美。表達不是為了說服,而是讓真實的你被看見。", "cats": {"work": "在會議與合作中勇敢提出想法與需求。清楚溝通能避免誤解,也讓你的價值被看見。", "health": "喉嚨與頸肩常反映壓抑的情緒。透過說話、唱歌、書寫來釋放,也留意身體發出的訊號。", "love": "好好說出你的感受與需要,溫和而誠實。溝通是感情中最重要的橋樑。", "family": "與家人直接而尊重地表達。把話說清楚,能減少猜測與誤會。", "social": "真誠地分享你自己,也樂於傾聽他人。好的交流是雙向的。", "money": "清楚談論金錢的議題,如預算、分擔與規劃,避免因迴避而產生壓力或誤解。", "growth": "試著每天寫日記或對著鏡子說出真實的想法,練習把內在的聲音說出口。"}, "img": "images/37-i-speak.jpg", "land": false}, {"id": "c38", "no": "38", "name": "我看見", "en": "I SEE", "tag": "Open your eyes, the truth is right in front of you.", "tagZh": "睜開你的眼睛,真相就在你面前。", "keywords": "眉心輪、直覺、洞察、看清真相", "meaning": "答案可能就在眼前,只是你還沒看清。這張牌邀請你打開內在的眼睛,看見事情的本質。", "extended": "靛藍色的眉心輪(Ajna)位於雙眉之間,也就是常說的第三眼,象徵直覺、洞察與智慧。濕婆的額頭正是第三眼所在。\n暫時放下先入為主的想法與他人的聲音,安靜地看一看真實的情況。你的直覺往往比你以為的更準確。", "cats": {"work": "看清局勢與細節,辨識真正的機會與風險。信任你的直覺,同時以事實驗證。", "health": "留意身體給你的訊號,不要忽略細小的不適。信任直覺,同時尋求專業的檢查與意見。", "love": "看清關係的真實面貌,包含對方的優點與你自己的需求。不被幻想或恐懼左右。", "family": "留意家人間沒有說出口的需要與情緒。用心觀察,能更準確地回應。", "social": "看清誰是真誠的朋友,誰讓你耗損。觀察對方的行動,比聽他說什麼更可靠。", "money": "仔細檢視財務的真實狀況與合約內容。看清楚之後再決定,避免被表象或情緒帶著走。", "growth": "靜心時把注意力放在眉心,觀察念頭的來去。練習看見,而不是被念頭帶著走。"}, "img": "images/38-i-see.jpg", "land": false}, {"id": "c39", "no": "39", "name": "我理解", "en": "I UNDERSTAND", "tag": "Don't judge what you don't understand.", "tagZh": "不要評斷你不理解的事。", "keywords": "頂輪、理解、不評斷、開闊", "meaning": "你不必立刻下結論。這張牌提醒你,保持開放與謙遜,在理解之前不輕易評斷。", "extended": "紫色的頂輪(Sahasrara)位於頭頂,象徵智慧、合一與超越,千瓣蓮花向宇宙敞開。新月與念珠環繞,象徵濕婆的頭冠。\n每個人都有自己的故事與視角。當你想評斷時,先問:我真的了解他的處境嗎?保持好奇,你會發現更寬廣的世界。", "cats": {"work": "面對不同的做事方式與意見,先了解背後的原因。開放的態度能讓團隊合作更有彈性。", "health": "不要輕易批評自己的身心狀態或他人的生活方式。以理解與好奇探索什麼對你有效。", "love": "多一點理解與傾聽,少一點評斷與假設。感情在被理解時最溫暖。", "family": "不同世代的家人,價值觀會有差異。試著了解對方的成長背景,能減少許多衝突。", "social": "放下標籤與刻板印象,以好奇心認識每個人。你會發現更多有趣的連結。", "money": "對不熟悉的理財工具或觀念,先學習了解,再決定要不要參與,而非盲目否定或盲目追隨。", "growth": "練習放下「我是對的」的執著。保持開放,讓智慧在理解中自然成長。"}, "img": "images/39-i-understand.jpg", "land": false}, {"id": "c40", "no": "40", "name": "終點之門", "en": "Gateway to the end", "tag": "You can't close an awakening eye. Just accept and take this journey to the end.", "tagZh": "覺醒的眼睛無法再閉上。接受它,把這趟旅程走到最後。", "keywords": "覺醒、旅程、完成、無法回頭", "meaning": "當覺醒的眼睛已經睜開,就無法再假裝沒看見。這張牌邀請你接受這趟旅程,勇敢走完。", "extended": "濕婆的身影化為宇宙,眾神與守護者站在兩側,無數的人影從光中走來。這是一趟與整個宇宙同行的旅程。\n你已經走了很遠,知道了許多。不必害怕前方的未知,也不必回頭。接受你所看見的,懷著信任,把這段路走到終點,那裡有你真正的完成。", "cats": {"work": "當你已經看清自己想走的方向,就不必猶豫。接受過程中的挑戰,朝著目標一步步完成。", "health": "照顧身心是一生的旅程。接受自己目前的狀態,持續以溫柔的方式前進,不必急於一時。", "love": "感情的路上,接受你所看見的真相。無論走向承諾或告別,都帶著清醒與尊重完成它。", "family": "家庭是一段長遠的旅程。接受每個階段的轉變與課題,並與家人一起走下去。", "social": "你已經認識了許多人與事。接受每段緣分的來去,珍惜同行的人,也感謝離開的人。", "money": "財務是長期旅程。接受過程中的起伏,持續執行你的計畫,完成屬於你的階段目標。", "growth": "覺醒之後不必恐懼。每天繼續你的修習,相信旅程本身就是目的。"}, "img": "images/40-gateway.jpg", "land": false}]}</script>
+<script>
+(function(){
+"use strict";
+var $=function(s,r){return (r||document).querySelector(s)};
+var esc=function(s){return String(s==null?"":s).replace(/[&<>"']/g,function(c){return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]})};
+var uid=function(){return "c"+Date.now().toString(36)+Math.random().toString(36).slice(2,6)};
+var src=function(id){return !id?"":(/^(\/|https?:|data:|images\/)/.test(id)?id:"/_blob/"+id)};
+
+var CATS=[["all","綜合"],["work","工作事業"],["health","健康身心"],["love","感情"],["family","家庭"],["social","人際關係"],["money","金錢財富"],["growth","自我成長"]];
+var NOTES={health:"健康面向僅供身心覺察參考,不能取代醫療診斷與專業建議。",money:"財富面向是心態與習慣的提醒,不構成投資建議。"};
+var SPREADS={1:["今日指引"],3:["過去","現在","未來"]};
+var SAMPLES=[
+ {id:"s1",sample:true,no:"範例",name:"範例牌・靜心",en:"Sample card",keywords:"專注、沉澱、傾聽",meaning:"這是示範用的牌意。請到「後台」上傳真實牌卡並撰寫牌意,範例會自動消失。",extended:"延伸意義可寫牌卡的象徵、情境提醒或給抽牌者的提問。",cats:{}},
+ {id:"s2",sample:true,no:"範例",name:"範例牌・轉化",en:"Sample card",keywords:"改變、釋放、重生",meaning:"這是示範用的牌意。每張牌都能有自己的牌名、關鍵字、牌意與各面向解讀。",extended:"延伸意義可以分段書寫,換行會原樣顯示。",cats:{}},
+ {id:"s3",sample:true,no:"範例",name:"範例牌・開啟",en:"Sample card",keywords:"覺察、起點、洞見",meaning:"這是示範用的牌意。上傳真實牌卡後,線上抽牌只會從你的牌卡中抽取。",extended:"抽到的牌會同時顯示牌意與延伸意義。",cats:{}}
+];
+
+var state={cards:[],settings:{back:"",cover:"",bg:"",god1:"",god2:"",god3:""},tab:"draw",admin:false,canUpload:false,dirty:false,busy:false,
+  q:"",open:null,openTab:"all",delConfirm:null,focus:"all",
+  draw:{spread:1,phase:"idle",picks:[],flipped:[],question:""}};
+try{
+  var raw=JSON.parse($("#cards-data").textContent||"null");
+  if(Array.isArray(raw))state.cards=raw;
+  else if(raw){state.cards=raw.cards||[];state.settings=Object.assign({back:"",cover:"",bg:"",god1:"",god2:"",god3:""},raw.settings||{})}
+}catch(e){}
+try{var t0=sessionStorage.getItem("tab");if(t0)state.tab=t0}catch(e){}
+
+var pool=function(){return state.cards.length?state.cards:SAMPLES};
+var byId=function(id){return pool().filter(function(c){return c.id===id})[0]};
+var kw=function(s){return String(s||"").split(/[,，、\s]+/).filter(Boolean)};
+var catName=function(k){return (CATS.filter(function(c){return c[0]===k})[0]||[])[1]||""};
+
+function toast(msg,ms){var t=$("#toast");t.textContent=msg;clearTimeout(toast.t);toast.t=setTimeout(function(){t.textContent=""},ms||3200)}
+
+/* ---------- pieces ---------- */
+function img(c){
+  if(c.img)return '<img class="cardimg'+(c.land?' land':'')+'" src="'+esc(src(c.img))+'" alt="'+esc(c.name)+'" loading="lazy" decoding="async">';
+  return '<svg class="ph" viewBox="0 0 200 300" role="img" aria-label="'+esc(c.name)+'"><use href="#back"/></svg>';
+}
+function backHTML(){
+  var b=state.settings.back;
+  if(!b)return '<svg class="fallback" viewBox="0 0 200 300" aria-hidden="true"><use href="#back"/></svg>';
+  return '<img class="backimg" src="'+esc(src(b))+'" alt=""><i class="frame"></i><svg class="eye" viewBox="0 0 48 72" aria-hidden="true"><use href="#shiva"/></svg>';
+}
+function tabsHTML(active,scope){
+  return '<div class="ctabs" role="group" aria-label="解讀面向">'+CATS.map(function(c){
+    return '<button data-act="cat" data-scope="'+scope+'" data-v="'+c[0]+'" aria-pressed="'+(active===c[0])+'">'+c[1]+'</button>'}).join("")+'</div>';
+}
+function focusHTML(c,key){
+  if(key==="all")return "";
+  var tx=c.cats&&c.cats[key];
+  return '<section class="focus"><h4>'+esc(catName(key))+'・解讀</h4><p class="txt">'+(tx?esc(tx):'<span class="muted">此面向的解讀整理中</span>')+'</p>'+(NOTES[key]?'<p class="note">'+NOTES[key]+'</p>':'')+'</section>';
+}
+function detailHTML(c,pos,tag,key,scope){
+  return (pos?'<div class="pos">'+esc(pos)+'</div>':'')+
+   '<'+tag+'>'+esc(c.name||"未命名牌卡")+'</'+tag+'>'+
+   (c.en?'<div class="en">'+esc(c.en)+'</div>':'')+
+   (kw(c.keywords).length?'<div class="chips">'+kw(c.keywords).map(function(k){return '<span class="chip">'+esc(k)+'</span>'}).join("")+'</div>':'')+
+   ((c.tag||c.tagZh)?'<p class="quote">'+esc(c.tag||"")+(c.tagZh?'<small>'+esc(c.tagZh)+'</small>':'')+'</p>':'')+
+   tabsHTML(key,scope)+focusHTML(c,key)+
+   '<div class="blk"><h4>牌意</h4><p class="txt">'+(c.meaning?esc(c.meaning):'牌意整理中')+'</p></div>'+
+   (c.extended?'<div class="blk"><h4>延伸意義</h4><p class="txt">'+esc(c.extended)+'</p></div>':'');
+}
+function pilesHTML(){var b=backHTML();return '<div class="cb">'+b+'</div><div class="cb">'+b+'</div><div class="cb">'+b+'</div><div class="cb">'+b+'</div>'}
+
+/* ---------- views ---------- */
+function header(){
+  var tabs=[["draw","線上抽牌"],["gallery","牌卡介紹"]];
+  if(state.admin)tabs.push(["admin","後台管理"]);
+  return '<header class="top"><div class="brand"><svg class="eye" viewBox="0 0 48 72" aria-hidden="true"><use href="#shiva"/></svg><div><div class="nm">In Shiva\'s Eyes</div><div class="sub">神諭卡・牌意與線上抽牌</div></div></div>'+
+   '<nav aria-label="主選單">'+tabs.map(function(t){return '<button data-act="tab" data-v="'+t[0]+'"'+(state.tab===t[0]?' aria-current="page"':'')+'>'+t[1]+'</button>'}).join("")+'</nav></header>';
+}
+function artPortrait(){
+  var beads="";
+  for(var i=0;i<108;i++){var a=i/108*Math.PI*2-Math.PI/2,x=170+Math.cos(a)*158,y=170+Math.sin(a)*158,big=i%27===0;
+    beads+='<circle cx="'+x.toFixed(1)+'" cy="'+y.toFixed(1)+'" r="'+(big?4.4:2.5)+'"/>'}
+  var tri='<path pathLength="1" d="M30 6C37 22 37 40 30 58C23 40 23 22 30 6Z" fill="var(--gold)" fill-opacity=".28"/>'+
+   '<path pathLength="1" d="M12 14L17 28H7Z" fill="var(--gold)" fill-opacity=".28"/><path pathLength="1" d="M48 14L53 28H43Z" fill="var(--gold)" fill-opacity=".28"/>'+
+   '<path pathLength="1" d="M12 28C12 46 17 60 30 64C43 60 48 46 48 28"/><path pathLength="1" d="M20 68H40"/><path pathLength="1" d="M30 58V296"/>'+
+   '<path pathLength="1" d="M14 112H46L30 134L14 112Z"/><path pathLength="1" d="M14 156H46L30 134L14 156Z"/><path pathLength="1" d="M14 134C4 146 5 164 11 180"/><circle cx="11" cy="184" r="3.2" fill="var(--gold)" stroke="none"/><path pathLength="1" d="M46 134C56 146 55 164 49 180"/><circle cx="49" cy="184" r="3.2" fill="var(--gold)" stroke="none"/>';
+  return '<div class="art v2" aria-hidden="true">'+
+   '<svg class="mala" viewBox="0 0 340 340"><g fill="var(--gold)" fill-opacity=".8">'+beads+'</g><circle cx="170" cy="170" r="158" fill="none" stroke="var(--gold)" stroke-opacity=".25"/></svg>'+
+   '<svg class="rings" viewBox="0 0 340 340"><circle cx="170" cy="170" r="140" fill="none" stroke="var(--skin)" stroke-opacity=".5" stroke-width="2" stroke-dasharray="1 7" stroke-linecap="round"/></svg>'+
+   '<div class="arch"><img src="'+esc(src(state.settings.back))+'" alt=""></div>'+
+   '<svg class="crescent" viewBox="80 6 80 80"><path class="moon" d="M139 13.1A38 38 0 1 0 152.9 65A31 31 0 0 1 139 13.1Z" fill="var(--moon)"/></svg>'+
+   '<svg class="trident" viewBox="0 0 60 300" fill="none" stroke="var(--gold)" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">'+tri+'</svg></div>';
+}
+function artSVG(){
+  if(state.settings.back)return artPortrait();
+  return '<div class="art v1" aria-hidden="true"><svg viewBox="0 0 240 300">'+
+  '<path class="moon" d="M139 13.1A38 38 0 1 0 152.9 65A31 31 0 0 1 139 13.1Z" fill="var(--moon)"/>'+
+  '<g stroke="var(--moon)" stroke-width="6" stroke-linecap="round" stroke-dasharray="170"><path class="ash ash1" d="M40 108H200"/><path class="ash ash2" d="M40 126H200"/><path class="ash ash3" d="M40 144H200"/></g>'+
+  '<path class="tilak" d="M120 88C131 106 131 144 120 170C109 144 109 106 120 88Z" fill="var(--tilak)"/>'+
+  '<g class="blink"><path class="eyeout" d="M34 232C74 190 166 190 206 232C166 274 74 274 34 232Z" fill="none" stroke="var(--gold)" stroke-width="3" stroke-linejoin="round"/>'+
+  '<g class="iris"><circle cx="120" cy="232" r="25" fill="none" stroke="var(--gold)" stroke-width="3"/><circle cx="120" cy="232" r="9" fill="var(--gold)"/></g></g>'+
+  '</svg></div>';
+}
+function stripHTML(){
+  if(!state.cards.length)return "";
+  var items=state.cards.slice();while(items.length<10)items=items.concat(state.cards);
+  var one=items.map(function(c){return '<button data-act="open" data-id="'+esc(c.id)+'" aria-label="'+esc(c.name)+'">'+img(c)+'</button>'}).join("");
+  return '<div class="strip" aria-label="牌卡一覽"><div class="track">'+one+one+'</div></div>';
+}
+function sampleNote(){
+  if(state.cards.length)return "";
+  return '<p class="sample-note">目前顯示的是範例牌卡。'+(state.admin?'請到「後台管理」上傳牌卡圖片並撰寫牌意,範例會自動隱藏。':'牌卡內容整理中,敬請期待。')+'</p>';
+}
+function coverHTML(){
+  if(!state.settings.cover)return "";
+  return '<section class="coverpage" aria-label="封底"><div class="cv"><img src="'+esc(src(state.settings.cover))+'" alt="In Shiva\'s Eyes Oracle 牌組封面" loading="lazy"></div><div class="cap">In Shiva\'s Eyes Oracle ・ Divinye Studio</div></section>';
+}
+
+function aboutHTML(){
+  var s=state.settings;if(!s.cover)return "";
+  return '<section class="about" aria-label="關於這副牌"><div class="cv"><img src="'+esc(src(s.cover))+'" alt="In Shiva\'s Eyes Oracle 牌組封面"></div><div><div class="eyebrow">ABOUT THE DECK</div><h2>In Shiva\'s Eyes Oracle</h2><p>由 Divinye Studio 創作的神諭卡。每張牌以濕婆的視角,陪你看見內在的聲音。本站收錄 '+pool().length+' 張牌卡,每張都有中文牌意、延伸意義,並依工作、健康、感情、家庭、人際、金錢與成長分別解讀。</p></div></section>';
+}
+var GODS=[["god1","梵天 Brahma","創造者 The Creator","象徵創造、起始與知識。當你想開啟新的計畫或方向,梵天提醒你,一切從清楚的意念開始。"],
+ ["god2","毗濕奴 Vishnu","守護者 The Preserver","象徵維繫、守護與秩序。當你需要穩住現狀、照顧所愛,毗濕奴代表持續而溫柔的守護。"],
+ ["god3","濕婆 Shiva","毀滅者 The Destroyer","象徵破除、轉化與釋放。放下不再需要的,才能為新的生命騰出空間,這是濕婆舞蹈的意義。"]];
+function godsHTML(){
+  var s=state.settings;if(!GODS.some(function(g){return s[g[0]]}))return "";
+  return '<section class="trinity" aria-label="三大神卡"><div class="eyebrow">THE TRINITY</div><h2>三大神卡</h2><p class="lead">牌組附贈的三張神明卡:創造、守護、轉化,是生命運行的三個面向。</p><div class="gods">'+
+   GODS.filter(function(g){return s[g[0]]}).map(function(g){return '<figure class="god"><img src="'+esc(src(s[g[0]]))+'" alt="'+esc(g[1])+'" loading="lazy"><figcaption><b>'+g[1]+'</b><span class="rl">'+g[2]+'</span><p>'+g[3]+'</p></figcaption></figure>'}).join("")+'</div></section>';
+}
+function applyBg(){var e=$("#bgimg");if(!e)return;var b=state.settings.bg;e.style.backgroundImage=b?'url("'+src(b)+'")':"";e.style.display=b?"":"none"}
+function drawView(){
+  var d=state.draw,n=d.spread,pos=SPREADS[n],ready=pool().length>=n;
+  var h='<section class="hero"><div class="hero-text"><div class="eyebrow">DIVINYE STUDIO ・ ORACLE</div>'+
+   '<h1 class="wordmark">In Shiva\'s Eyes<span>神 諭 卡</span></h1>'+
+   '<p class="lede">以濕婆為意象的神諭卡。先靜下心來,想著此刻最在意的事,再抽一張牌,聽聽它想對你說的話。</p>'+
+   '<div class="tri" aria-hidden="true"><i></i><i></i><i></i></div>'+
+   '<div class="cta"><button class="btn" data-act="gotodraw">開始抽牌</button><button class="btn ghost" data-act="tab" data-v="gallery">瀏覽牌卡</button></div></div>'+artSVG()+'</section>'+stripHTML();
+  h+='<div id="draw-anchor" class="sec-title"><div class="eyebrow">ONLINE DRAW</div><h2>線上抽牌</h2></div>';
+  h+='<div class="controls"><div class="row"><div class="field"><span id="sp-l">牌陣</span><div class="seg" role="group" aria-labelledby="sp-l">'+
+   '<button data-act="spread" data-v="1" aria-pressed="'+(n===1)+'">單張指引</button>'+
+   '<button data-act="spread" data-v="3" aria-pressed="'+(n===3)+'">三張時間流</button></div></div>'+
+   '<label class="field q" for="q-in">想問的問題(選填,只留在你的畫面)<input id="q-in" data-act="q" value="'+esc(d.question)+'" placeholder="例如:接下來三個月,我在工作上要留意什麼?"></label></div>'+
+   '<div class="field"><span id="ft-l">想看哪個面向的解讀</span><div class="pills" role="group" aria-labelledby="ft-l">'+CATS.map(function(c){
+     return '<button data-act="cat" data-scope="draw" data-v="'+c[0]+'" aria-pressed="'+(state.focus===c[0])+'">'+c[1]+'</button>'}).join("")+'</div></div></div>';
+  h+='<div class="stage">';
+  if(d.phase==="idle"||d.phase==="shuffling"){
+    h+='<div style="text-align:center"><div class="pile'+(d.phase==="shuffling"?' shuffling':'')+'">'+pilesHTML()+'</div>'+
+     '<div class="stage-actions" style="margin-top:44px"><button class="btn" data-act="start"'+((d.phase==="shuffling"||!ready)?' disabled':'')+'>'+(d.phase==="shuffling"?'洗牌中…':'洗牌並抽牌')+'</button></div>'+
+     (ready?'':'<p class="hint" style="margin-top:10px">牌卡數量不足,請改選單張,或先在後台新增牌卡。</p>')+'</div>';
+  }else{
+    h+='<div style="width:100%"><div class="deal n'+n+'">'+d.picks.map(function(id,i){
+      var c=byId(id)||{name:"",id:id};
+      return '<div class="slot"><div class="lbl">'+esc(pos[i])+'</div>'+
+       '<button class="flip'+(c.land?' land':'')+(d.flipped[i]?' flipped':'')+'" data-act="flip" data-i="'+i+'" aria-label="翻開第 '+(i+1)+' 張牌"><div class="flip-in">'+
+       '<div class="face cb">'+backHTML()+'</div><div class="face front">'+img(c)+'</div></div></button></div>'}).join("")+'</div>'+
+     '<div class="stage-actions"><button class="btn ghost" data-act="flipall">全部翻開</button><button class="btn" data-act="start">重新抽牌</button></div>'+
+     '<p class="hint" style="text-align:center;margin-top:10px">點一下牌背即可翻開</p></div>';
+  }
+  h+='</div><div class="reading" id="reading"></div>'+sampleNote()+coverHTML();
+  return h;
+}
+function readingHTML(){
+  var d=state.draw,pos=SPREADS[d.spread],out="";
+  if(d.question&&d.flipped.some(Boolean))out+='<p class="muted">你的問題:'+esc(d.question)+'</p>';
+  d.picks.forEach(function(id,i){
+    if(!d.flipped[i])return;
+    var c=byId(id);if(!c)return;
+    out+='<article class="rd">'+detailHTML(c,pos[i],"h3",state.focus,"draw")+'</article>';
+  });
+  return out;
+}
+function galleryView(){
+  var q=state.q.trim().toLowerCase();
+  var list=pool().filter(function(c){return !q||[c.name,c.en,c.no,c.keywords,c.meaning,c.tag,c.tagZh].join(" ").toLowerCase().indexOf(q)>-1});
+  var h='<div class="sec-head"><div><div class="eyebrow">THE DECK</div><h1>牌卡介紹</h1></div>'+
+   '<label class="field search" for="g-q"><span>搜尋牌名或關鍵字</span><input id="g-q" data-act="gq" value="'+esc(state.q)+'" placeholder="例如:耐心"></label></div>';
+  h+=list.length?'<div class="grid">'+list.map(function(c){
+    return '<button class="tile'+(c.land?' land':'')+'" data-act="open" data-id="'+esc(c.id)+'"><span class="frame">'+img(c)+'</span>'+(c.no?'<span class="no">'+esc(c.no)+'</span>':'')+'<span class="nm">'+esc(c.name||"未命名牌卡")+'</span></button>'}).join("")+'</div>'
+    :'<p class="empty">找不到符合的牌卡。</p>';
+  return aboutHTML()+h+godsHTML()+sampleNote();
+}
+
+function adminView(){
+  var h='<div class="bar" id="pubbar"></div>';
+  h+='<div class="sets">'+[["bg","網頁背景圖"],["back","牌背圖(抽牌時的牌背)"],["cover","牌盒封面(介紹頁與封底)"],["god1","三神卡:梵天"],["god2","三神卡:毗濕奴"],["god3","三神卡:濕婆"]].map(function(s){
+    return '<div class="setbox">'+(state.settings[s[0]]?'<img src="'+esc(src(state.settings[s[0]]))+'" alt="">':'<span class="muted">尚未設定</span>')+'<div><div class="t">'+s[1]+'</div>'+
+     (state.canUpload?'<span class="btn ghost small fileb">更換圖片<input type="file" accept="image/*" data-act="setimg" data-k="'+s[0]+'" aria-label="更換'+s[1]+'"></span>':'')+'</div></div>'}).join("")+'</div>';
+  h+='<div class="tools"><span class="btn fileb">批次上傳牌卡圖片<input type="file" id="bulk" accept="image/*" multiple data-act="bulk" aria-label="批次上傳牌卡圖片"></span>'+
+   '<button class="btn ghost" data-act="addblank">新增空白牌卡</button><button class="btn ghost" data-act="sortno">依編號排序</button></div>';
+  h+='<p class="drop">可一次選取多張牌卡圖片,每張圖會建立一張新牌卡,牌名預設為檔名。上傳後在下方填寫中文牌名、關鍵字、牌意、延伸意義與各面向解讀,最後按「發布到網站」,訪客才看得到變更。橫式牌卡會自動以橫式顯示。</p>';
+  if(!state.canUpload)h+='<p class="sample-note">目前無法上傳圖片(沒有編輯權限)。</p>';
+  h+=state.cards.length?state.cards.map(function(c,i){return adminRow(c,i)}).join(""):'<p class="empty">還沒有牌卡。先上傳圖片開始建立。</p>';
+  return h;
+}
+function adminRow(c,i){
+  var id=esc(c.id);
+  var f=function(k,label,val,wide,area){
+    var fid="a-"+id+"-"+k.replace(".","_");
+    return '<label class="field'+(wide?' wide':'')+'" for="'+fid+'">'+label+(area?'<textarea id="'+fid+'" rows="'+area+'" data-f="'+k+'" data-id="'+id+'">'+esc(val)+'</textarea>':'<input id="'+fid+'" data-f="'+k+'" data-id="'+id+'" value="'+esc(val)+'">')+'</label>';
+  };
+  var cats=c.cats||{};
+  return '<article class="arow" data-row="'+id+'"><div class="th">'+img(c)+'<span class="muted" style="font-size:.8rem">第 '+(i+1)+' 張</span></div>'+
+   '<div class="af">'+f("name","牌名(中文)",c.name)+f("en","英文牌名",c.en)+f("no","編號",c.no)+f("keywords","關鍵字(用頓號分隔)",c.keywords)+
+   f("tag","牌上英文句",c.tag,true)+f("tagZh","牌上句子中文",c.tagZh,true)+
+   f("meaning","中文牌意",c.meaning,true,5)+f("extended","延伸意義",c.extended,true,5)+
+   '<details><summary>各面向解讀(工作、健康、感情…)</summary><div class="af">'+CATS.slice(1).map(function(k){return f("cats."+k[0],k[1],cats[k[0]]||"",true,3)}).join("")+'</div></details>'+
+   '<div class="acts">'+(state.canUpload?'<span class="btn ghost small fileb">換圖片<input type="file" accept="image/*" data-act="replace" data-id="'+id+'" aria-label="更換圖片"></span>':'')+
+   '<button class="btn ghost small" data-act="up" data-id="'+id+'"'+(i===0?' disabled':'')+'>上移</button>'+
+   '<button class="btn ghost small" data-act="down" data-id="'+id+'"'+(i===state.cards.length-1?' disabled':'')+'>下移</button>'+
+   '<button class="btn ghost small danger" data-act="del" data-id="'+id+'">'+(state.delConfirm===c.id?'再按一次確認刪除':'刪除')+'</button></div></div></article>';
+}
+function updateBar(){
+  var b=$("#pubbar");if(!b)return;
+  b.className="bar"+(state.dirty?" dirty":"");
+  b.innerHTML='<span>'+(state.busy?'處理中…':state.dirty?'有尚未發布的變更(共 '+state.cards.length+' 張牌卡)':'網站內容已是最新(共 '+state.cards.length+' 張牌卡)')+'</span>'+
+   '<button class="btn" data-act="publish"'+((!state.dirty||state.busy)?' disabled':'')+'>發布到網站</button>';
+}
+
+function render(){
+  applyBg();
+  var v=state.tab==="gallery"?galleryView():state.tab==="admin"&&state.admin?adminView():drawView();
+  $("#app").innerHTML=header()+'<main>'+v+'</main>';
+  if(state.tab==="draw")$("#reading").innerHTML=readingHTML();
+  if(state.tab==="admin"&&state.admin)updateBar();
+  renderOverlay();
+}
+function renderOverlay(){
+  var o=$("#overlay"),c=state.open&&byId(state.open);
+  if(!c){o.innerHTML="";return}
+  var pic=c.img?'<img src="'+esc(src(c.img))+'" alt="'+esc(c.name)+'">':'<svg viewBox="0 0 200 300" role="img" aria-label="'+esc(c.name)+'"><use href="#back"/></svg>';
+  o.innerHTML='<div class="sheet"><button class="btn ghost small x" data-act="close" aria-label="關閉">關閉</button><div class="pic">'+pic+'</div><div class="body">'+detailHTML(c,c.no?"NO. "+c.no:"","h2",state.openTab,"open")+'</div></div>';
+}
+function refreshFocus(){
+  document.querySelectorAll('[data-act="cat"][data-scope="draw"]').forEach(function(b){b.setAttribute("aria-pressed",String(b.dataset.v===state.focus))});
+  var r=$("#reading");if(r)r.innerHTML=readingHTML();
+}
+
+/* ---------- draw ---------- */
+function shuffleSecure(a){
+  a=a.slice();
+  for(var i=a.length-1;i>0;i--){var r=new Uint32Array(1);crypto.getRandomValues(r);var j=r[0]%(i+1);var t=a[i];a[i]=a[j];a[j]=t}
+  return a;
+}
+function start(){
+  var d=state.draw,n=d.spread;
+  if(pool().length<n){toast("牌卡數量不足");return}
+  d.phase="shuffling";d.picks=[];d.flipped=[];render();
+  var st=$(".stage");if(st&&st.scrollIntoView)st.scrollIntoView({block:"center",behavior:"smooth"});
+  setTimeout(function(){
+    d.picks=shuffleSecure(pool().map(function(c){return c.id})).slice(0,n);
+    d.flipped=d.picks.map(function(){return false});
+    d.phase="dealt";render();
+    var s=$(".stage");if(s&&s.scrollIntoView)s.scrollIntoView({block:"center",behavior:"smooth"});
+  },1300);
+}
+function flip(i){
+  var d=state.draw;if(d.flipped[i])return;
+  d.flipped[i]=true;
+  var b=document.querySelector('.flip[data-i="'+i+'"]');if(b)b.classList.add("flipped");
+  $("#reading").innerHTML=readingHTML();
+}
+
+/* ---------- events ---------- */
+document.addEventListener("click",function(e){
+  var t=e.target.closest("[data-act]");
+  if(!t){if(e.target.id==="overlay"){state.open=null;renderOverlay()}return}
+  var a=t.dataset.act;
+  if(a==="tab"){state.tab=t.dataset.v;try{sessionStorage.setItem("tab",state.tab)}catch(x){};state.open=null;render();window.scrollTo(0,0)}
+  else if(a==="gotodraw"){var an=$("#draw-anchor");if(an)an.scrollIntoView({behavior:"smooth"})}
+  else if(a==="spread"){state.draw.spread=+t.dataset.v;state.draw.phase="idle";state.draw.picks=[];state.draw.flipped=[];render()}
+  else if(a==="cat"){
+    if(t.dataset.scope==="draw"){state.focus=t.dataset.v;refreshFocus()}
+    else{state.openTab=t.dataset.v;renderOverlay()}
+  }
+  else if(a==="start")start();
+  else if(a==="flip")flip(+t.dataset.i);
+  else if(a==="flipall"){state.draw.picks.forEach(function(_,i){flip(i)})}
+  else if(a==="open"){state.open=t.dataset.id;state.openTab="all";renderOverlay();$("#overlay").scrollTop=0}
+  else if(a==="close"){state.open=null;renderOverlay()}
+  else if(a==="addblank"){state.cards.push({id:uid(),no:"",name:"",en:"",tag:"",tagZh:"",keywords:"",meaning:"",extended:"",cats:{},img:""});state.dirty=true;render();toast("已新增空白牌卡(在清單最下方)")}
+  else if(a==="sortno"){state.cards.sort(function(x,y){return String(x.no||"").localeCompare(String(y.no||""),"zh-Hant",{numeric:true})});state.dirty=true;render()}
+  else if(a==="up"||a==="down"){
+    var i=state.cards.findIndex(function(c){return c.id===t.dataset.id}),j=a==="up"?i-1:i+1;
+    if(i>-1&&j>-1&&j<state.cards.length){var c=state.cards[i];state.cards[i]=state.cards[j];state.cards[j]=c;state.dirty=true;render()}
+  }
+  else if(a==="del"){
+    if(state.delConfirm===t.dataset.id){state.cards=state.cards.filter(function(c){return c.id!==t.dataset.id});state.delConfirm=null;state.dirty=true;render()}
+    else{state.delConfirm=t.dataset.id;render();setTimeout(function(){if(state.delConfirm===t.dataset.id){state.delConfirm=null;if(state.tab==="admin")render()}},4000)}
+  }
+  else if(a==="publish")publish();
+});
+document.addEventListener("keydown",function(e){if(e.key==="Escape"&&state.open){state.open=null;renderOverlay()}});
+document.addEventListener("input",function(e){
+  var t=e.target;
+  if(t.dataset.f){
+    var c=state.cards.filter(function(x){return x.id===t.dataset.id})[0];
+    if(c){
+      var p=t.dataset.f.split(".");
+      if(p.length===2){c[p[0]]=c[p[0]]||{};c[p[0]][p[1]]=t.value}else c[p[0]]=t.value;
+      if(!state.dirty){state.dirty=true;updateBar()}
+    }
+  }else if(t.dataset.act==="q"){state.draw.question=t.value}
+  else if(t.dataset.act==="gq"){
+    state.q=t.value;var pos=t.selectionStart;render();
+    var n=$("#g-q");if(n){n.focus();try{n.setSelectionRange(pos,pos)}catch(x){}}
+  }
+});
+document.addEventListener("change",function(e){
+  var t=e.target,a=t.dataset.act;
+  if(a==="bulk"){addFiles(Array.prototype.slice.call(t.files));t.value=""}
+  else if(a==="replace"&&t.files[0]){replaceImage(t.dataset.id,t.files[0]);t.value=""}
+  else if(a==="setimg"&&t.files[0]){setSetting(t.dataset.k,t.files[0]);t.value=""}
+});
+document.addEventListener("pointermove",function(e){
+  if(e.pointerType!=="mouse")return;
+  var f=e.target.closest&&e.target.closest(".tile .frame");if(!f)return;
+  var r=f.getBoundingClientRect();
+  f.style.setProperty("--ry",(((e.clientX-r.left)/r.width-.5)*10).toFixed(1)+"deg");
+  f.style.setProperty("--rx",((.5-(e.clientY-r.top)/r.height)*10).toFixed(1)+"deg");
+});
+document.addEventListener("pointerout",function(e){
+  var f=e.target.closest&&e.target.closest(".tile .frame");if(f){f.style.removeProperty("--rx");f.style.removeProperty("--ry")}
+});
+
+/* ---------- admin: upload + publish ---------- */
+function prep(file){
+  return new Promise(function(res){
+    if(!window.createImageBitmap||!/^image\/(jpeg|png|webp)$/.test(file.type))return res({blob:file,land:false});
+    createImageBitmap(file).then(function(bm){
+      var land=bm.width>bm.height*1.05,s=Math.min(1,1600/Math.max(bm.width,bm.height));
+      if(s===1&&file.size<2500000)return res({blob:file,land:land});
+      var cv=document.createElement("canvas");cv.width=Math.round(bm.width*s);cv.height=Math.round(bm.height*s);
+      cv.getContext("2d").drawImage(bm,0,0,cv.width,cv.height);
+      cv.toBlob(function(b){res({blob:b||file,land:land})},"image/jpeg",.9);
+    }).catch(function(){res({blob:file,land:false})});
+  });
+}
+async function upload(file){
+  var assets=await window.claude.use("assets");
+  if(!assets)throw new Error("noassets");
+  var p=await prep(file),r=await assets.upload(p.blob);
+  return {id:r.id,land:p.land};
+}
+async function addFiles(files){
+  files=files.filter(function(f){return /^image\//.test(f.type)});
+  if(!files.length)return;
+  files.sort(function(a,b){return a.name.localeCompare(b.name,"zh-Hant",{numeric:true})});
+  state.busy=true;updateBar();var ok=0;
+  for(var i=0;i<files.length;i++){
+    toast("上傳中 "+(i+1)+" / "+files.length,60000);
+    try{
+      var u=await upload(files[i]);
+      state.cards.push({id:uid(),no:"",name:files[i].name.replace(/\.[^.]+$/,""),en:"",tag:"",tagZh:"",keywords:"",meaning:"",extended:"",cats:{},img:u.id,land:u.land});ok++;
+    }catch(err){toast("「"+files[i].name+"」上傳失敗,請稍後重試。",5000);break}
+  }
+  state.busy=false;if(ok){state.dirty=true;toast("已上傳 "+ok+" 張,請填寫牌意後發布")}
+  render();
+}
+async function replaceImage(id,file){
+  var c=state.cards.filter(function(x){return x.id===id})[0];if(!c)return;
+  state.busy=true;updateBar();toast("上傳中…",60000);
+  try{var u=await upload(file);c.img=u.id;c.land=u.land;state.dirty=true;toast("圖片已更換")}catch(err){toast("上傳失敗,請稍後重試。",5000)}
+  state.busy=false;render();
+}
+async function setSetting(k,file){
+  state.busy=true;updateBar();toast("上傳中…",60000);
+  try{var u=await upload(file);state.settings[k]=u.id;state.dirty=true;toast("圖片已更換")}catch(err){toast("上傳失敗,請稍後重試。",5000)}
+  state.busy=false;render();
+}
+async function publish(){
+  var artifact=await window.claude.use("artifact");
+  if(!artifact){toast("目前無法發布(沒有編輯權限)");return}
+  state.busy=true;updateBar();
+  var keep={TITLE:1,META:1,STYLE:1,SCRIPT:1,LINK:1};
+  var data=JSON.stringify({v:2,settings:state.settings,cards:state.cards}).replace(/</g,"\\u003c");
+  var parts=[];
+  Array.prototype.forEach.call(document.body.children,function(n){
+    var ok=keep[n.tagName]||["app","overlay","toast","bgfx"].indexOf(n.id)>-1||(n.tagName.toLowerCase()==="svg"&&n.classList.contains("svg-defs"));
+    if(!ok)return;
+    var c=n.cloneNode(true);
+    if(n.id==="app"||n.id==="overlay"||n.id==="toast")c.innerHTML="";
+    if(n.id==="bgfx"){var cv=c.querySelector("canvas");if(cv){cv.removeAttribute("width");cv.removeAttribute("height");cv.removeAttribute("style")}}
+    if(n.id==="cards-data")c.textContent=data;
+    parts.push(c.outerHTML);
+  });
+  var reset="",ss=document.head.querySelectorAll("style");
+  for(var i=0;i<ss.length;i++){if(ss[i].textContent.indexOf("safe-area-inset")>-1){reset=ss[i].textContent;break}}
+  if(!reset)reset=":root{color-scheme:light;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0;font:14px system-ui,sans-serif}img{max-width:100%}[hidden]{display:none!important}";
+  var html='<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>'+reset+'</style></head><body>'+parts.join("")+'</body></html>';
+  try{await artifact.publish(html);toast("已發布,頁面將重新載入")}
+  catch(err){
+    state.busy=false;updateBar();
+    toast(err&&err.code==="conflict"?"網站剛被更新,頁面將重新載入,請重做剛才的變更":"發布失敗:"+((err&&err.message)||"請稍後重試"),6000);
+  }
+}
+
+/* ---------- starfield ---------- */
+(function(){
+  var c=$("#sky");if(!c||!c.getContext)return;
+  var x=c.getContext("2d"),W=0,H=0,S=[],star=null,dpr=Math.min(window.devicePixelRatio||1,2);
+  var still=window.matchMedia&&matchMedia("(prefers-reduced-motion: reduce)").matches;
+  function size(){
+    W=window.innerWidth;H=window.innerHeight;c.width=W*dpr;c.height=H*dpr;c.style.width=W+"px";c.style.height=H+"px";
+    var n=Math.min(260,Math.round(W*H/8000));S=[];
+    for(var i=0;i<n;i++)S.push({x:Math.random()*W,y:Math.random()*H,r:Math.random()*1.25+.25,p:Math.random()*6.28,s:.5+Math.random()*1.4});
+  }
+  function frame(t){
+    x.setTransform(dpr,0,0,dpr,0,0);x.clearRect(0,0,W,H);
+    var col=(getComputedStyle(document.documentElement).getPropertyValue("--star")||"#fff").trim();
+    x.fillStyle=col;
+    for(var i=0;i<S.length;i++){var s=S[i];x.globalAlpha=.25+.75*(Math.sin(t/1000*s.s+s.p)*.5+.5);x.beginPath();x.arc(s.x,s.y,s.r,0,6.283);x.fill()}
+    if(!still){
+      if(!star&&Math.random()<.003)star={x:Math.random()*W*.8,y:Math.random()*H*.35,vx:7+Math.random()*4,vy:3+Math.random()*2,l:0};
+      if(star){star.x+=star.vx;star.y+=star.vy;star.l++;var a=Math.max(0,1-star.l/38);
+        var g=x.createLinearGradient(star.x,star.y,star.x-star.vx*9,star.y-star.vy*9);g.addColorStop(0,col);g.addColorStop(1,"transparent");
+        x.globalAlpha=a;x.strokeStyle=g;x.lineWidth=1.6;x.beginPath();x.moveTo(star.x,star.y);x.lineTo(star.x-star.vx*9,star.y-star.vy*9);x.stroke();
+        if(star.l>38)star=null}
+      requestAnimationFrame(frame);
+    }
+  }
+  size();window.addEventListener("resize",function(){size();if(still)frame(0)});
+  requestAnimationFrame(frame);
+})();
+
+render();
+(function(){
+  var C=window.SHIVA||{};
+  if(!C.url||!C.key||/你的|YOUR/i.test(C.url+C.key))return;
+  var H={apikey:C.key,Authorization:"Bearer "+C.key};
+  function get(p){return fetch(C.url+"/rest/v1/"+p,{headers:H}).then(function(r){if(!r.ok)throw 0;return r.json()})}
+  Promise.all([get("shiva_cards?select=*&published=eq.true&order=sort.asc,no.asc"),get("shiva_settings?select=*")]).then(function(r){
+    if(r[0].length)state.cards=r[0].map(function(x){return {id:x.id,no:String(x.no||""),name:x.name||"",en:x.en||"",tag:x.tag||"",tagZh:x.tag_zh||"",keywords:x.keywords||"",meaning:x.meaning||"",extended:x.extended||"",cats:x.cats||{},img:x.img||"",land:!!x.land}});
+    r[1].forEach(function(s){if(s.value)state.settings[s.key]=s.value});
+    var ae=document.activeElement;if(!(ae&&ae.matches&&ae.matches("input,textarea")))render();
+  }).catch(function(){});
+})();
+})();
+</script>
+
+</body>
+</html>
