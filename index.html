@@ -240,6 +240,65 @@ nav button:hover{color:var(--fg)}
 @media (max-width:660px){.sheet{grid-template-columns:minmax(0,1fr)}.sheet .pic{max-width:300px;margin:0 auto}.deal.n3{gap:8px}.flip.land{width:100%}}
 
 .langbtn{margin-left:10px;border:1px solid var(--line);background:transparent;color:inherit;border-radius:999px;padding:6px 14px;font:inherit;font-size:.85rem;cursor:pointer}.langbtn:hover{border-color:var(--gold);color:var(--gold)}
+/* ---------- lively deck page ---------- */
+.rv{opacity:0;transform:translateY(26px) scale(.98);transition:opacity .8s cubic-bezier(.2,.7,.2,1),transform .8s cubic-bezier(.2,.7,.2,1);transition-delay:var(--d,0ms)}
+.rv.in{opacity:1;transform:none}
+.about{overflow-x:clip;position:relative}
+.cvw{position:relative;isolation:isolate}
+.cvw .mand{position:absolute;left:50%;top:50%;width:175%;max-width:none;aspect-ratio:1;transform:translate(-50%,-50%);z-index:-1;opacity:.7;animation:spin 90s linear infinite;pointer-events:none}
+.cvw .mand .m2{transform-origin:170px 170px;animation:spin 50s linear infinite reverse}
+.cvw::after{content:"";position:absolute;inset:-8%;z-index:-2;background:radial-gradient(closest-side,rgba(224,174,76,.28),transparent 70%);animation:breathe 5s ease-in-out infinite;pointer-events:none}
+.about .cv{animation:floaty 7s ease-in-out infinite}
+.about .cv::after{content:"";position:absolute;inset:0;background:linear-gradient(115deg,transparent 35%,rgba(255,255,255,.35) 50%,transparent 65%);transform:translateX(-120%);animation:sheen 6s ease-in-out 1.5s infinite;pointer-events:none}
+.about .cv{position:relative}
+.sparks{position:absolute;inset:0;pointer-events:none;overflow:hidden}
+.sparks i{position:absolute;bottom:-10px;width:5px;height:5px;border-radius:50%;background:var(--gold);box-shadow:0 0 8px var(--gold);opacity:0;animation:rise 9s ease-in infinite}
+.sparks i:nth-child(1){left:8%;animation-delay:0s}.sparks i:nth-child(2){left:22%;animation-delay:2.2s;width:3px;height:3px}.sparks i:nth-child(3){left:41%;animation-delay:4.5s}.sparks i:nth-child(4){left:63%;animation-delay:1.3s;width:4px;height:4px}.sparks i:nth-child(5){left:81%;animation-delay:3.6s}.sparks i:nth-child(6){left:93%;animation-delay:6s;width:3px;height:3px}
+@keyframes spin{to{transform:translate(-50%,-50%) rotate(360deg)}}
+@keyframes floaty{0%,100%{translate:0 0}50%{translate:0 -9px}}
+@keyframes breathe{0%,100%{opacity:.5;transform:scale(.96)}50%{opacity:1;transform:scale(1.05)}}
+@keyframes sheen{0%,55%{transform:translateX(-120%)}85%,100%{transform:translateX(120%)}}
+@keyframes rise{0%{transform:translateY(0) scale(.6);opacity:0}15%{opacity:.9}100%{transform:translateY(-420px) translateX(24px) scale(1.2);opacity:0}}
+.about h2{background:linear-gradient(90deg,var(--fg),var(--gold),var(--fg));background-size:200% auto;-webkit-background-clip:text;background-clip:text;color:transparent;animation:shimmer 7s linear infinite}
+@keyframes shimmer{to{background-position:200% center}}
+.orn{display:flex;align-items:center;justify-content:center;gap:14px;margin:8px 0 26px;color:var(--gold)}
+.orn .ln{flex:1;height:1px;max-width:260px;background:linear-gradient(90deg,transparent,var(--gold));transform:scaleX(0);transform-origin:right;transition:transform 1.2s ease .2s}
+.orn .ln.r{background:linear-gradient(270deg,transparent,var(--gold));transform-origin:left}
+.orn.in .ln{transform:scaleX(1)}
+.orn svg{width:46px;height:46px;overflow:visible}
+.orn svg path{stroke-dasharray:1;stroke-dashoffset:1;transition:stroke-dashoffset 1.6s ease .3s}
+.orn.in svg path{stroke-dashoffset:0}
+.orn.in svg{animation:breathe 4s ease-in-out 2s infinite}
+.feat{position:relative;overflow:hidden;transition:transform .3s,box-shadow .3s,border-color .3s,opacity .8s ease var(--d,0ms)}
+.feat:hover{transform:translateY(-6px);border-color:var(--gold);box-shadow:0 16px 40px rgba(0,0,0,.25),0 0 22px rgba(224,174,76,.25)}
+.feat .ic{display:block;width:44px;height:44px;margin-bottom:8px;color:var(--gold);transition:transform .5s}
+.feat:hover .ic{transform:rotate(-8deg) scale(1.15)}
+.feat .ic *{vector-effect:non-scaling-stroke}
+.feat::before{content:"";position:absolute;right:-30px;top:-30px;width:90px;height:90px;border-radius:50%;background:radial-gradient(closest-side,rgba(224,174,76,.25),transparent);transition:transform .6s}
+.feat:hover::before{transform:scale(2.2)}
+.steps{position:relative}
+.steps .num{position:relative;transition:transform .3s,background .3s,color .3s}
+.steps li:hover .num{transform:scale(1.18) rotate(8deg);background:var(--gold);color:var(--bg)}
+.steps .num::after{content:"";position:absolute;inset:-5px;border-radius:50%;border:1px solid var(--gold);opacity:0;animation:ping 3s ease-out infinite}
+.steps li:nth-child(2) .num::after{animation-delay:.7s}.steps li:nth-child(3) .num::after{animation-delay:1.4s}.steps li:nth-child(4) .num::after{animation-delay:2.1s}
+@keyframes ping{0%{transform:scale(.8);opacity:.8}70%,100%{transform:scale(1.7);opacity:0}}
+.cta .btn{position:relative;overflow:hidden;animation:glow 3s ease-in-out infinite}
+.cta .btn:hover{transform:translateY(-3px) scale(1.03)}
+@keyframes glow{0%,100%{box-shadow:0 0 0 0 rgba(224,174,76,.45)}50%{box-shadow:0 0 0 12px rgba(224,174,76,0)}}
+.tile .frame{position:relative;overflow:hidden}
+.tile .frame::after{content:"";position:absolute;inset:0;background:linear-gradient(115deg,transparent 35%,rgba(255,255,255,.4) 50%,transparent 65%);transform:translateX(-130%);transition:transform .8s}
+.tile:hover .frame::after{transform:translateX(130%)}
+.tile:hover .nm{color:var(--gold)}.tile .nm{transition:color .25s}
+.tile:hover .no{letter-spacing:.3em}.tile .no{transition:letter-spacing .3s}
+.grid .tile.rv .frame{animation:floaty 6s ease-in-out infinite;animation-delay:calc(var(--d,0ms) * -4)}
+.god{position:relative}
+.god img{transition:transform .6s,box-shadow .6s}
+.god:hover img{transform:scale(1.04) rotate(-.8deg);box-shadow:0 22px 60px rgba(0,0,0,.5),0 0 40px rgba(224,174,76,.35),0 0 0 1px var(--gold)}
+.trinity .eyebrow::before,.trinity .eyebrow::after{content:"✦";margin:0 8px;color:var(--gold);display:inline-block;animation:twinkle 2.6s ease-in-out infinite}
+.trinity .eyebrow::after{animation-delay:1.3s}
+@keyframes twinkle{0%,100%{opacity:.3;transform:scale(.7) rotate(0)}50%{opacity:1;transform:scale(1.2) rotate(90deg)}}
+@media (max-width:660px){.cvw .mand{width:135%}}
+@media (prefers-reduced-motion:reduce){.rv{opacity:1;transform:none}.orn .ln{transform:none}.orn svg path{stroke-dashoffset:0}}
 /* about + trinity */
 .about{display:grid;grid-template-columns:minmax(0,300px) minmax(0,1fr);gap:28px 40px;align-items:center;padding:6px 0 30px}
 .about .cv{border-radius:12px;overflow:hidden;box-shadow:0 20px 60px rgba(0,0,0,.5),0 0 0 1px var(--line)}
@@ -458,6 +517,21 @@ function coverHTML(){
   return '<section class="coverpage" aria-label="封底"><div class="cv"><img src="'+esc(src(state.settings.cover))+'" alt="In Shiva\'s Eyes Oracle 牌組封面" loading="lazy"></div><div class="cap">In Shiva\'s Eyes Oracle ・ Divinye Studio</div></section>';
 }
 
+function mandalaSVG(){
+  var beads="",i,a,x,y;
+  for(i=0;i<108;i++){a=i/108*Math.PI*2;x=170+Math.cos(a)*158;y=170+Math.sin(a)*158;beads+='<circle cx="'+x.toFixed(1)+'" cy="'+y.toFixed(1)+'" r="'+(i%27===0?3.6:1.7)+'"/>'}
+  var pet="";for(i=0;i<12;i++)pet+='<path transform="rotate('+(i*30)+' 170 170)" d="M170 170C150 130 150 92 170 62C190 92 190 130 170 170Z"/>';
+  var pet2="";for(i=0;i<8;i++)pet2+='<path transform="rotate('+(i*45+22.5)+' 170 170)" d="M170 170C158 148 158 126 170 108C182 126 182 148 170 170Z"/>';
+  return '<svg class="mand" viewBox="0 0 340 340" aria-hidden="true"><g fill="var(--gold)">'+beads+'</g><circle cx="170" cy="170" r="148" fill="none" stroke="var(--gold)" stroke-opacity=".4"/><g class="m2" fill="none" stroke="var(--gold)" stroke-opacity=".5" stroke-width="1">'+pet+'</g><g fill="none" stroke="var(--skin)" stroke-opacity=".5">'+pet2+'<circle cx="170" cy="170" r="108" stroke-dasharray="2 6"/></g></svg>';
+}
+function ornHTML(){
+  return '<div class="orn rv" aria-hidden="true"><i class="ln"></i><svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path pathLength="1" d="M24 40C14 34 10 24 14 14C20 18 23 24 24 32C25 24 28 18 34 14C38 24 34 34 24 40Z"/><path pathLength="1" d="M24 40C20 30 20 18 24 8C28 18 28 30 24 40Z"/><path pathLength="1" d="M8 36C14 42 34 42 40 36"/></svg><i class="ln r"></i></div>';
+}
+var FEAT_IC=[
+ '<svg class="ic" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="6" width="22" height="34" rx="3"/><rect x="17" y="10" width="22" height="34" rx="3" opacity=".6"/><path d="M28 20l2 4 4 .6-3 3 .8 4.2-3.8-2-3.8 2 .8-4.2-3-3 4-.6z"/></svg>',
+ '<svg class="ic" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M24 6v36M14 12v10c0 5 4 8 10 8s10-3 10-8V12M14 12l-3 6h6zM34 12l-3 6h6z"/><path d="M16 40h16"/></svg>',
+ '<svg class="ic" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="24" cy="24" r="4"/><path d="M24 20c-3-6-3-10 0-14 3 4 3 8 0 14zM24 28c3 6 3 10 0 14-3-4-3-8 0-14zM20 24c-6-3-10-3-14 0 4 3 8 3 14 0zM28 24c6 3 10 3 14 0-4-3-8-3-14 0z"/></svg>',
+ '<svg class="ic" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 24c6-9 12-13 18-13s12 4 18 13c-6 9-12 13-18 13S12 33 6 24z"/><circle cx="24" cy="24" r="6"/><circle cx="24" cy="24" r="1.5" fill="currentColor"/></svg>'];
 function aboutHTML(){
   var s=state.settings;if(!s.cover)return "";
   var n=pool().length;
@@ -466,8 +540,8 @@ function aboutHTML(){
    ["七個生活面向","每張牌除了牌意與延伸意義,另有工作、健康、感情、家庭、人際、金錢、成長的分別解讀。"],
    ["不預言,只陪伴","神諭卡不是宿命的宣判,而是一面鏡子,幫助你整理心緒、提出好問題。"]];
   var steps=[["靜下來","深呼吸幾次,帶著一個你想了解的問題或心情。"],["抽牌","單張牌看今日指引,三張牌看過去、現在、未來。"],["對照解讀","先看直覺的感受,再讀牌意;依問題選擇對應的面向。"],["帶一句話走","選一句最有共鳴的話,放在今天的生活裡實踐。"]];
-  return '<section class="about" aria-label="關於這副牌"><div class="cv"><img src="'+esc(src(s.cover))+'" alt="In Shiva\'s Eyes Oracle 牌組封面"></div><div><div class="eyebrow">ABOUT THE DECK</div><h2>In Shiva\'s Eyes Oracle</h2>'+(LANG==="en"?'<p>An oracle deck created by Divinye Studio. Each card looks through Shiva’s eyes to help you hear your inner voice. This site presents all '+n+' cards, each with its meaning and a deeper meaning, plus separate readings for work, health, love, family, relationships, money and personal growth.</p><p class="sm">Every card carries a short English phrase from the deck, such as “You’re STRONG enough &amp; You’re NOT ALONE.” The readings here are available in both English and Chinese, so readers of either language can use them.</p>':'<p>由 Divinye Studio 創作的神諭卡。每張牌以濕婆的視角,陪你看見內在的聲音。本站收錄 '+n+' 張牌卡,每張都有中文牌意、延伸意義,並依工作、健康、感情、家庭、人際、金錢與成長分別解讀。</p><p class="sm">牌卡的英文箴言保留原文,例如「You\'re STRONG enough &amp; You\'re NOT ALONE.」,中文則是對其意涵的詮釋,讓不同語言的讀者都能親近。</p>')+'</div></section>'
-   +'<section class="intro" aria-label="牌卡介紹"><div class="feats">'+feats.map(function(f){return '<div class="feat"><b>'+f[0]+'</b><p>'+f[1]+'</p></div>'}).join("")+'</div><h3 class="ihow">如何使用這副牌</h3><ol class="steps">'+steps.map(function(f,i){return '<li><span class="num">'+(i+1)+'</span><div><b>'+f[0]+'</b><p>'+f[1]+'</p></div></li>'}).join("")+'</ol><div class="cta"><button class="btn" data-act="tab" data-v="draw">開始線上抽牌 →</button></div></section>';
+  return '<section class="about" aria-label="關於這副牌"><div class="sparks" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i></div><div class="cvw">'+mandalaSVG()+'<div class="cv"><img src="'+esc(src(s.cover))+'" alt="In Shiva\'s Eyes Oracle 牌組封面"></div></div><div><div class="eyebrow">ABOUT THE DECK</div><h2>In Shiva\'s Eyes Oracle</h2>'+(LANG==="en"?'<p>An oracle deck created by Divinye Studio. Each card looks through Shiva’s eyes to help you hear your inner voice. This site presents all '+n+' cards, each with its meaning and a deeper meaning, plus separate readings for work, health, love, family, relationships, money and personal growth.</p><p class="sm">Every card carries a short English phrase from the deck, such as “You’re STRONG enough &amp; You’re NOT ALONE.” The readings here are available in both English and Chinese, so readers of either language can use them.</p>':'<p>由 Divinye Studio 創作的神諭卡。每張牌以濕婆的視角,陪你看見內在的聲音。本站收錄 '+n+' 張牌卡,每張都有中文牌意、延伸意義,並依工作、健康、感情、家庭、人際、金錢與成長分別解讀。</p><p class="sm">牌卡的英文箴言保留原文,例如「You\'re STRONG enough &amp; You\'re NOT ALONE.」,中文則是對其意涵的詮釋,讓不同語言的讀者都能親近。</p>')+'</div></section>'
+   +'<section class="intro" aria-label="牌卡介紹"><div class="feats">'+feats.map(function(f,i){return '<div class="feat">'+FEAT_IC[i]+'<b>'+f[0]+'</b><p>'+f[1]+'</p></div>'}).join("")+'</div><h3 class="ihow">如何使用這副牌</h3><ol class="steps">'+steps.map(function(f,i){return '<li><span class="num">'+(i+1)+'</span><div><b>'+f[0]+'</b><p>'+f[1]+'</p></div></li>'}).join("")+'</ol><div class="cta"><button class="btn" data-act="tab" data-v="draw">開始線上抽牌 →</button></div></section>';
 }
 var GODS=[["god1","梵天 Brahma","創造者 The Creator","象徵創造、起始與知識。當你想開啟新的計畫或方向,梵天提醒你,一切從清楚的意念開始。"],
  ["god2","毗濕奴 Vishnu","守護者 The Preserver","象徵維繫、守護與秩序。當你需要穩住現狀、照顧所愛,毗濕奴代表持續而溫柔的守護。"],
@@ -556,7 +630,7 @@ function galleryView(){
   h+=list.length?'<div class="grid">'+list.map(function(c){
     return '<button class="tile'+(c.land?' land':'')+'" data-act="open" data-id="'+esc(c.id)+'"><span class="frame">'+img(c)+'</span>'+(c.no?'<span class="no">'+esc(c.no)+'</span>':'')+'<span class="nm">'+esc(c.name||"未命名牌卡")+'</span></button>'}).join("")+'</div>'
     :'<p class="empty">找不到符合的牌卡。</p>';
-  return aboutHTML()+h+godsHTML()+sampleNote();
+  return aboutHTML()+ornHTML()+h+ornHTML()+godsHTML()+sampleNote();
 }
 
 function adminView(){
@@ -602,8 +676,22 @@ function render(){
   var v=state.tab==="gallery"?galleryView():state.tab==="admin"&&state.admin?adminView():drawView();
   $("#app").innerHTML=trHTML(header()+'<main>'+v+'</main>');
   if(state.tab==="draw")$("#reading").innerHTML=readingHTML();
+  revealInit();
   if(state.tab==="admin"&&state.admin)updateBar();
   renderOverlay();
+}
+var revIO=null;
+function revealInit(){
+  var sel=".about>div:last-child,.about .cvw,.feat,.ihow,.steps li,.intro .cta,.sec-head,.tile,.trinity .eyebrow,.trinity h2,.trinity .lead,.god";
+  var els=Array.prototype.slice.call(document.querySelectorAll(sel));
+  var still=window.matchMedia&&matchMedia("(prefers-reduced-motion: reduce)").matches;
+  var all=els.concat(Array.prototype.slice.call(document.querySelectorAll(".orn")));
+  if(still||!("IntersectionObserver" in window)){all.forEach(function(e){e.classList.add("rv","in")});return}
+  if(revIO)revIO.disconnect();
+  revIO=new IntersectionObserver(function(es){es.forEach(function(en){if(en.isIntersecting){en.target.classList.add("in");revIO.unobserve(en.target)}})},{threshold:.12,rootMargin:"0px 0px -6% 0px"});
+  var grp=new Map();
+  els.forEach(function(e){var par=e.parentNode,n=grp.get(par)||0;grp.set(par,n+1);e.classList.add("rv");e.style.setProperty("--d",Math.min(n,8)*90+"ms")});
+  all.forEach(function(e){revIO.observe(e)});
 }
 function renderOverlay(){
   var o=$("#overlay"),c=state.open&&byId(state.open);
