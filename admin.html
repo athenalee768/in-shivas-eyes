@@ -48,6 +48,7 @@ var C=window.SHIVA||{},BUCKET="shiva";
 var root=document.getElementById("root");
 var esc=function(s){return String(s==null?"":s).replace(/[&<>"']/g,function(c){return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]})};
 var CATS=[["work","工作事業"],["health","健康身心"],["love","感情"],["family","家庭"],["social","人際關係"],["money","金錢財富"],["growth","個人成長"]];
+var SHOPDEF="https://athenalee768.github.io/eight-auspicious/shop.html";
 var SETS_ALL=[["bg","網頁背景圖"],["back","牌背圖(抽牌用)"],["cover","牌盒封面 / 首頁牌組封面"],["god1","三神卡:梵天","shiva"],["god2","三神卡:毗濕奴","shiva"],["god3","三神卡:濕婆","shiva"]];
 var st={decks:[],deck:null,cards:[],q:"",open:{},needMigrate:false};
 function cur(){return st.decks.filter(function(d){return d.slug===st.deck})[0]||null}
@@ -90,6 +91,7 @@ function view(){
    '<div class="grid2"><div><label>中文副標(例如:神諭卡)</label><input data-d="sub" value="'+esc(dk.sub)+'"></div><div><label>English subtitle</label><input data-d="sub_en" value="'+esc(dk.sub_en)+'"></div></div>'+
    '<label>中文簡介(顯示在首頁牌組卡片)</label><textarea data-d="descr">'+esc(dk.descr)+'</textarea><label>English description</label><textarea data-d="descr_en">'+esc(dk.descr_en)+'</textarea>'+
    '<div class="grid2"><div><label>排序(數字小的在前)</label><input data-d="sort" type="number" value="'+esc(dk.sort==null?0:dk.sort)+'"></div><div><label>是否顯示在首頁</label><select data-d="published"><option value="true"'+(dk.published!==false?' selected':'')+'>顯示</option><option value="false"'+(dk.published===false?' selected':'')+'>隱藏</option></select></div></div>'+
+   '<h3 style="margin:18px 0 4px;font-size:1rem">商城導購(選填)</h3><p class="muted" style="margin:0 0 8px">填了網址,這個牌組的「牌卡介紹」頁與抽牌結果下方就會出現「前往商城選購」按鈕;留空就不顯示(適合還沒販售的牌組)。</p><div class="grid2"><div><label>商品或商城網址</label><input data-shop="shop_url" placeholder="https://athenalee768.github.io/eight-auspicious/shop.html" value="'+esc(ds.shop_url||(dk.slug==="shiva"?SHOPDEF:""))+'"></div><div><label>按鈕文字(留空用預設)</label><input data-shop="shop_label" placeholder="前往八吉祥商城選購" value="'+esc(ds.shop_label||"")+'"></div></div>'+
    '<div class="row" style="margin-top:14px"><button id="savedeck">儲存牌組資訊</button></div></div>';
   h+='<h2>牌組圖片</h2>'+SETS.map(function(x){return '<div class="setbox"><img src="'+esc(src(ds[x[0]]))+'" alt=""><div style="flex:1"><div>'+x[1]+'</div></div><label class="btn ghost" style="margin:0">更換圖片<input type="file" accept="image/*" data-set="'+x[0]+'" hidden></label></div>'}).join("");
   h+='<h2>牌卡</h2><div class="row"><input id="q" placeholder="搜尋編號、牌名或關鍵字" value="'+esc(st.q)+'" style="max-width:320px"><label class="btn" style="margin:0">批次上傳圖片建立新牌卡<input type="file" id="bulk" accept="image/*" multiple hidden></label><button class="ghost" id="add">新增空白牌卡</button></div>';
@@ -152,6 +154,7 @@ function wire(){
     st.decks.push(o);st.deck=slug;st.open={};toast("已建立(預設隱藏;上傳牌卡、寫好內容後再改成顯示)",5000);view()};
   var sd=document.getElementById("savedeck");if(sd)sd.onclick=async function(){
     var d=cur(),o={};document.querySelectorAll("[data-d]").forEach(function(i){var k=i.dataset.d,v=i.value;if(k==="sort")v=parseInt(v,10)||0;if(k==="published")v=v==="true";o[k]=v});
+    var ns=Object.assign({},d.settings||{});document.querySelectorAll("[data-shop]").forEach(function(i){ns[i.dataset.shop]=i.value.trim()});if(ns.shop_url&&!/^https?:\/\//i.test(ns.shop_url))return toast("商城網址要以 https:// 開頭",5000);o.settings=ns;
     sd.disabled=true;var r=await sb.from("draw_decks").update(o).eq("slug",d.slug);sd.disabled=false;
     if(r.error)return toast("儲存失敗:"+r.error.message,6000);Object.assign(d,o);toast("牌組資訊已儲存");view()};
   document.querySelectorAll("[data-aud]").forEach(function(i){i.onchange=async function(){var f=i.files[0];if(!f)return;toast("上傳語音中…",120000);
