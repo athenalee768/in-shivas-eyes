@@ -709,8 +709,9 @@ function stripHTML(){
   return '<div class="strip" aria-label="牌卡一覽"><div class="track">'+one+one+'</div></div>';
 }
 var LINEURL="https://lin.ee/Q8XKTw6";
+var HELPURL="https://athenalee768.github.io/eight-auspicious/card-reading.html";
 function helpHTML(){
-  var en=LANG==="en",u=(state.settings.help_url||"").trim();if(!/^https?:\/\//i.test(u))u=LINEURL;
+  var en=LANG==="en",u=(state.settings.help_url||"").trim();if(!/^https?:\/\//i.test(u))u=HELPURL;
   return '<section class="helpcta" aria-label="'+(en?"Teacher reading":"老師解牌")+'"><div class="sc-t"><h3>'+(en?"Want a real teacher to read for you?":"想真人老師解牌?")+' <small>'+(en?"Paid service":"服務另計")+'</small></h3></div><a class="btn" href="'+esc(u)+'" target="_blank" rel="noopener">'+(en?"Teacher reading":"老師解牌")+' →</a></section>';
 }
 function shopHTML(){
