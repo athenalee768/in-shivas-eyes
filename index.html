@@ -5,16 +5,16 @@
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#0c0a1f">
 <title>In Shiva's Eyes 牌卡</title>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=LXGW+WenKai+TC:wght@300;400;700&family=MonteCarlo&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Pacifico&family=Fredoka:wght@400;500;600&family=Noto+Sans+TC:wght@300;400;500;700&display=swap">
 <style>
 /* Layout: night-sky page. Starfield + drifting nebula behind; hero with forehead motif (crescent, three ash lines, vermilion tilak, opening eye); card strip; tabbed draw / gallery / admin; deck cover as back page. */
 :root{
   --bg:#0c0a1f; --surface:rgba(30,24,66,.72); --surface-solid:#1b1540; --surface2:#261e55; --line:rgba(167,157,230,.24);
   --fg:#ece8f8; --muted:#a8a1c9; --moon:#f4efe1; --skin:#9a95e0; --tilak:#e0502f; --gold:#e0ae4c;
   --on-accent:#150f30; --danger:#ff9d89; --star:#ece8ff; --neb1:rgba(112,94,220,.40); --neb2:rgba(224,80,47,.13); --veil:rgba(9,7,26,.74);
-  --f-display:"LXGW WenKai TC","Kaiti TC","DFKai-SB","Songti TC",serif;
-  --f-en:"MonteCarlo","Snell Roundhand","Brush Script MT",cursive;
-  --f-body:"Microsoft JhengHei","微軟正黑體","PingFang TC","Heiti TC",system-ui,sans-serif;
+  --f-display:"Pacifico",var(--f-body);
+  --f-en:"Pacifico",var(--f-body);
+  --f-body:"Fredoka","Noto Sans TC","PingFang TC","Microsoft JhengHei","微軟正黑體","Heiti TC",system-ui,sans-serif;
   color-scheme:dark;
 }
 @media (prefers-color-scheme:light){:root:not([data-theme="dark"]){
@@ -52,7 +52,8 @@ button{cursor:pointer}
 /* top bar */
 .top{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:10px 24px;padding:20px 0 12px;border-bottom:1px solid var(--line)}
 .brand{display:flex;align-items:center;gap:12px;min-width:0}
-.brand .eye{width:42px;height:63px;color:var(--gold);flex:none;animation:emblem 6s ease-in-out infinite}
+.brand .eye{width:60px;height:90px;color:var(--gold);flex:none;transition:transform .3s}
+.brand:hover .eye{transform:translateY(-4px) rotate(-5deg) scale(1.06)}
 @keyframes emblem{50%{filter:drop-shadow(0 0 7px var(--gold))}}
 .brand .nm{font:400 2.2rem/1 var(--f-en);color:var(--moon)}
 .brand .sub{font-size:.74rem;font-family:var(--f-body);letter-spacing:.2em;color:var(--muted);margin-top:5px}
@@ -245,7 +246,7 @@ nav button:hover{color:var(--fg)}
 .homefoot{display:grid;justify-items:center;gap:10px;text-align:center;padding:40px 0 30px;margin-top:20px;border-top:1px solid var(--line)}
 .hf-orb{position:relative;width:120px;height:120px;display:grid;place-items:center}
 .hf-ring{position:absolute;inset:0;width:100%;height:100%;animation:lvhf 60s linear infinite}
-.hf-emb{width:44px;height:66px;color:var(--gold);animation:lvbreathe 5s ease-in-out infinite;filter:drop-shadow(0 0 10px rgba(224,174,76,.45))}
+.hf-emb{width:60px;height:90px;color:var(--gold);filter:drop-shadow(0 0 10px rgba(224,174,76,.45))}
 @keyframes lvhf{to{transform:rotate(360deg)}}
 .hf-name{font:700 1.5rem var(--f-display);letter-spacing:.2em}
 .hf-line{color:var(--muted);margin:0}
@@ -391,6 +392,42 @@ nav button:hover{color:var(--fg)}
 .shopcta{max-width:980px;margin:44px auto 10px;padding:26px 32px;border:1px solid var(--line,rgba(201,168,76,.35));border-radius:14px;display:flex;align-items:center;justify-content:space-between;gap:22px;flex-wrap:wrap;background:linear-gradient(135deg,rgba(201,168,76,.10),rgba(201,168,76,.02))}
 .shopcta .sc-t{flex:1 1 320px}.shopcta h3{margin:4px 0 6px;font-size:1.3rem}.shopcta p{margin:0;opacity:.85}.shopcta .btn{white-space:nowrap;text-decoration:none}
 @media(max-width:640px){.shopcta{padding:20px;text-align:center}}
+/* 首頁專屬配色(與牌組頁區隔):暖橘桃 + 青綠 */
+:root[data-page="home"]{--bg:#0f2a2e;--surface:rgba(22,62,68,.72);--surface-solid:#173f45;--surface2:#1f5058;--line:rgba(255,190,140,.28);--fg:#fff1e0;--muted:#b7d3cc;--moon:#ffe9c9;--skin:#ffb184;--tilak:#ff7a59;--gold:#ffc95a;--on-accent:#2a1408;--star:#fff0d6;--neb1:rgba(255,150,100,.30);--neb2:rgba(70,215,190,.24);--veil:rgba(10,32,36,.74)}
+@media (prefers-color-scheme:light){:root[data-page="home"]:not([data-theme="dark"]){--bg:#fff3e2;--surface:rgba(255,255,255,.86);--surface-solid:#ffffff;--surface2:#ffe4c8;--line:rgba(214,108,58,.28);--fg:#3b1f2a;--muted:#7a5560;--moon:#5a2a35;--skin:#e2603f;--tilak:#e2603f;--gold:#c9701a;--on-accent:#ffffff;--star:#f0a05a;--neb1:rgba(255,168,110,.38);--neb2:rgba(80,200,185,.26);--veil:rgba(255,245,232,.86)}}
+:root[data-page="home"][data-theme="light"]{--bg:#fff3e2;--surface:rgba(255,255,255,.86);--surface-solid:#ffffff;--surface2:#ffe4c8;--line:rgba(214,108,58,.28);--fg:#3b1f2a;--muted:#7a5560;--moon:#5a2a35;--skin:#e2603f;--tilak:#e2603f;--gold:#c9701a;--on-accent:#ffffff;--star:#f0a05a;--neb1:rgba(255,168,110,.38);--neb2:rgba(80,200,185,.26);--veil:rgba(255,245,232,.86)}
+@keyframes lvtw{0%,100%{opacity:.25}50%{opacity:1}}
+.lv-tw{animation:lvtw 2.4s ease-in-out infinite}
+.tile.locked{cursor:default;pointer-events:none}.tile.locked .frame{opacity:.85}.tile.locked .nm{color:var(--muted)}
+.partial-note{text-align:center;color:var(--muted);margin:18px auto 0;max-width:560px;font-size:.95rem}
+/* 貓耳小牌動態 */
+.cat{overflow:visible;animation:lvbob 3.6s ease-in-out infinite}
+@keyframes lvbob{0%,100%{transform:translateY(0)}50%{transform:translateY(-5px)}}
+.cat .earL,.cat .earR{transform-box:fill-box;transform-origin:50% 100%}
+.cat .earL{animation:lvearL 5s ease-in-out infinite}.cat .earR{animation:lvearR 5s ease-in-out 1.7s infinite}
+@keyframes lvearL{0%,84%,100%{transform:rotate(0)}89%{transform:rotate(-16deg)}94%{transform:rotate(5deg)}}
+@keyframes lvearR{0%,84%,100%{transform:rotate(0)}89%{transform:rotate(16deg)}94%{transform:rotate(-5deg)}}
+.cat .ceyes{transform-box:fill-box;transform-origin:50% 70%;animation:lvblink 4.2s ease-in-out infinite}
+@keyframes lvblink{0%,90%,100%{transform:scaleY(1)}94%{transform:scaleY(.1)}}
+.cat .whL,.cat .whR{transform-box:fill-box;animation:lvwh 3s ease-in-out infinite}.cat .whL{transform-origin:100% 50%}.cat .whR{transform-origin:0 50%;animation-direction:reverse}
+@keyframes lvwh{0%,100%{transform:rotate(0)}50%{transform:rotate(7deg)}}
+.cat .cstar{transform-box:fill-box;transform-origin:center;animation:lvstar 2.8s ease-in-out infinite}
+@keyframes lvstar{0%,100%{transform:scale(1) rotate(0)}50%{transform:scale(1.25) rotate(18deg)}}
+.cat .chk{animation:lvchk 3s ease-in-out infinite}@keyframes lvchk{50%{opacity:1}}
+.deckcard.soon .dc-img .cat{width:56%;height:auto;color:var(--gold)}
+@media (max-width:520px){.brand .eye{width:46px;height:69px}}
+/* 首頁文案區 */
+.hchips{display:flex;flex-wrap:wrap;gap:8px;margin:14px 0 0}.hchips span{border:1px solid var(--line);border-radius:999px;padding:4px 14px;font-size:.88rem;color:var(--muted);background:var(--surface)}
+.howto,.scen{display:grid;gap:16px;grid-template-columns:repeat(auto-fit,minmax(230px,1fr))}
+.hstep,.scen-c{background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:22px 20px;position:relative}
+.hstep .n{font:600 2.4rem/1 var(--f-display);color:var(--skin);opacity:.55}
+.hstep h3,.scen-c h3{font-size:1.15rem;margin:6px 0 6px}.hstep p,.scen-c p{color:var(--muted);margin:0;font-size:.95rem}
+.scen-c .em{font-size:2rem;display:block;margin-bottom:4px}
+.hnote{margin:34px auto 0;max-width:720px;text-align:center;color:var(--muted);font-size:.92rem;line-height:1.8}
+.hnote a{color:var(--gold)}
+.hsec{margin-top:56px}
+:root:lang(en) :is(h1,h2,h3,h4,.wordmark,.brand .nm,.hf-name,.deckcard b,.god b,.feat b,.ihow,.hstep .n){font-weight:400}
+.tile .nm{font-family:var(--f-body)}
 </style>
 <script src="config.js"></script>
 </head>
@@ -403,7 +440,7 @@ nav button:hover{color:var(--fg)}
     <path d="M9 7L12.5 17H5.5Z" fill="currentColor" fill-opacity=".3"/><path d="M39 7L42.5 17H35.5Z" fill="currentColor" fill-opacity=".3"/>
     <path d="M9 17C9 28 15 34 24 36C33 34 39 28 39 17"/><path d="M17 39H31"/><path d="M24 33V70"/>
     <path d="M16 48H32L24 56L16 48Z"/><path d="M16 64H32L24 56L16 64Z"/><path d="M16 56C10 60 11 66 14 69"/><path d="M32 56C38 60 37 66 34 69"/></g></symbol>
-  <symbol id="drawone" viewBox="0 0 48 72"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="6" y="22" width="24" height="38" rx="3" transform="rotate(-16 18 60)" opacity=".55"/><rect x="18" y="22" width="24" height="38" rx="3" transform="rotate(16 30 60)" opacity=".55"/><rect x="12" y="12" width="24" height="40" rx="3" fill="rgba(224,174,76,.12)"/><path d="M24 22l2.6 6.4 6.6.5-5 4.4 1.6 6.6-5.8-3.6-5.8 3.6 1.6-6.6-5-4.4 6.6-.5z"/><path d="M24 4v4M14 6l2 3M34 6l-2 3"/></g></symbol>
+  <symbol id="drawone" viewBox="0 0 48 72"><mask id="d1m" maskUnits="userSpaceOnUse" x="0" y="0" width="48" height="72"><rect width="48" height="72" fill="#fff"/><rect x="10.5" y="14" width="27" height="43" rx="7" fill="#000"/></mask><g fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><g mask="url(#d1m)" opacity=".8"><rect x="8" y="22" width="20" height="34" rx="4.5" transform="rotate(-12 24 58)" fill="currentColor" fill-opacity=".12"/><rect x="20" y="22" width="20" height="34" rx="4.5" transform="rotate(12 24 58)" fill="currentColor" fill-opacity=".12"/></g><rect x="10.5" y="14" width="27" height="43" rx="7" fill="currentColor" fill-opacity=".2"/><path d="M24 19.5l1.7 3.6 3.9.5-2.9 2.7.8 3.9-3.5-2-3.5 2 .8-3.9-2.9-2.7 3.9-.5z" fill="currentColor" stroke-width="1"/><circle cx="18.6" cy="39" r="2" fill="currentColor" stroke="none"/><circle cx="29.4" cy="39" r="2" fill="currentColor" stroke="none"/><path d="M19.6 44.6q4.4 5 8.8 0" stroke-width="2.2"/><circle cx="15.2" cy="44" r="2.6" fill="#ff8f9c" stroke="none" opacity=".75"/><circle cx="32.8" cy="44" r="2.6" fill="#ff8f9c" stroke="none" opacity=".75"/><g class="lv-tw" stroke-width="1.8"><path d="M24 3v5M21.5 5.5h5"/><path d="M6 10v4M4 12h4"/><path d="M42 8v4M40 10h4"/></g><circle cx="12" cy="4" r="1" fill="currentColor" stroke="none"/><circle cx="37" cy="2.5" r="1" fill="currentColor" stroke="none"/></g></symbol>
   <symbol id="back" viewBox="0 0 200 300">
     <rect x="1.5" y="1.5" width="197" height="297" rx="14" fill="var(--surface2)" stroke="var(--gold)" stroke-width="2"/>
     <circle cx="100" cy="150" r="78" fill="none" stroke="var(--skin)" stroke-opacity=".6" stroke-dasharray="2 7" stroke-width="3" stroke-linecap="round"/>
@@ -467,7 +504,7 @@ applyLang();
 var state={cards:[],settings:{back:"",cover:"",bg:"",god1:"",god2:"",god3:""},tab:"gallery",admin:false,canUpload:false,dirty:false,busy:false,
   q:"",open:null,openTab:"all",delConfirm:null,focus:"all",
   draw:{spread:1,phase:"idle",picks:[],flipped:[],question:""}};
-var SDEF={back:"",cover:"",bg:"",god1:"",god2:"",god3:"",shop_url:"",shop_label:""};
+var SDEF={back:"",cover:"",bg:"",god1:"",god2:"",god3:"",shop_url:"",shop_label:"",show_count:0};
 state.decks=[];state.deck=null;state.tab="home";
 function shivaDeck(cards,settings){
   return {slug:"shiva",name:"In Shiva's Eyes",name_en:"In Shiva's Eyes",sub:"神諭卡",sub_en:"Oracle Deck",
@@ -552,20 +589,41 @@ function detailHTML(c,pos,tag,key,scope){
 function pilesHTML(){var b=backHTML();return '<div class="cb">'+b+'</div><div class="cb">'+b+'</div><div class="cb">'+b+'</div><div class="cb">'+b+'</div>'}
 
 
+var FANSEED=Math.random();
 function homeFan(){
-  var imgs=[];
-  state.decks.forEach(function(d){(d.cards||[]).filter(function(c){return c.img&&!c.land}).slice(0,12).forEach(function(c){imgs.push(c.img)})});
-  var pick=[],n=Math.min(5,imgs.length);
-  for(var i=0;i<n;i++)pick.push(imgs[Math.floor(i*imgs.length/n)]);
+  /* 每個牌組輪流出一張(各牌組平均露出),且只用「可公開展示」的牌:遵守各牌組的展示張數設定 */
+  var lists=state.decks.filter(function(d){return d.published!==false}).map(function(d,di){
+    var n=parseInt(d.settings&&d.settings.show_count,10)||0;
+    var cs=(d.cards||[]).filter(function(c){return c.published!==false&&c.img&&!c.land});
+    if(n>0)cs=cs.slice(0,n);
+    var k=cs.length,off=k?Math.floor((FANSEED*997+di*7)%k):0;
+    return cs.map(function(c,i){return cs[(i+off)%k].img});
+  }).filter(function(l){return l.length});
+  var pick=[],r=0;
+  while(pick.length<5&&lists.some(function(l){return l.length>r})){
+    lists.forEach(function(l){if(pick.length<5&&l[r])pick.push(l[r])});r++;
+  }
+  var n=pick.length;
   if(!pick.length)return '<div class="art"></div>';
   var rot=n===1?[0]:n===2?[-8,8]:n===3?[-16,0,16]:n===4?[-24,-8,8,24]:[-28,-14,0,14,28];
   return '<div class="fan" aria-hidden="true">'+pick.map(function(im,i){return '<div class="fc" style="--r:'+rot[i]+'deg;--i:'+i+'"><img src="'+esc(src(im))+'" alt=""></div>'}).join("")+'</div>';
+}
+function catLogo(cls){
+  return '<svg class="cat '+(cls||"")+'" viewBox="0 0 48 72" aria-hidden="true" overflow="visible"><g fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">'+
+  '<path class="earL" d="M11 24L10 7l12 9" fill="currentColor" fill-opacity=".2"/><path class="earR" d="M37 24l1-17-12 9" fill="currentColor" fill-opacity=".2"/>'+
+  '<rect x="10" y="14" width="28" height="46" rx="9" fill="currentColor" fill-opacity=".2"/>'+
+  '<path class="cstar" d="M24 20l1.2 2.6 2.8.3-2.1 1.9.6 2.8-2.5-1.4-2.5 1.4.6-2.8-2.1-1.9 2.8-.3z" fill="currentColor" stroke-width=".8"/>'+
+  '<g class="ceyes"><path d="M16.5 37q2.4-3.4 4.8 0M26.7 37q2.4-3.4 4.8 0" stroke-width="2"/></g>'+
+  '<path d="M22.6 41.5h2.8l-1.4 1.8z" fill="currentColor" stroke-width="1"/><path d="M20.5 45.5q1.7 2.4 3.5 0q1.8 2.4 3.5 0" stroke-width="1.8"/>'+
+  '<path class="whL" d="M6 40h7M6 45l7-1.5" stroke-width="1.5"/><path class="whR" d="M42 40h-7M42 45l-7-1.5" stroke-width="1.5"/>'+
+  '<circle class="chk" cx="16" cy="46.5" r="2.4" fill="#ff8f9c" stroke="none" opacity=".7"/><circle class="chk" cx="32" cy="46.5" r="2.4" fill="#ff8f9c" stroke="none" opacity=".7"/>'+
+  '<g class="lv-tw" stroke-width="1.8"><path d="M4 8v4M2 10h4"/><path d="M44 4v4M42 6h4"/></g></g></svg>';
 }
 function homeView(){
   var en=LANG==="en",ds=state.decks.filter(function(d){return d.published!==false});
   var h='<section class="hero homehero"><div class="hero-text"><div class="eyebrow">DRAW ONE ・ ORACLE &amp; CARDS</div>'+
    '<h1 class="wordmark">'+(en?"Draw One":"抽一張")+'<span>'+(en?"抽一張":"Draw One")+'</span></h1>'+
-   '<p class="lede">選一副牌,靜下心來,抽一張,聽聽它想對你說的話。</p><div class="tri" aria-hidden="true"><i></i><i></i><i></i></div>'+
+   '<p class="lede">'+(en?"Pick a deck, settle your mind, draw one card — and hear what it wants to tell you.":"選一副牌,靜下心來,抽一張,聽聽它想對你說的話。")+'</p><div class="hchips"><span>'+(en?"Online draws":"線上抽牌")+'</span><span>'+(en?"Chinese & English":"中英雙語")+'</span><span>'+(en?"Read aloud":"可朗讀")+'</span><span>'+(en?"Many decks":"多種牌組")+'</span></div><div class="tri" aria-hidden="true"><i></i><i></i><i></i></div>'+
    '<div class="cta"><button class="btn" data-act="gotodecks">選擇牌組</button></div></div>'+homeFan()+'</section>';
   h+='<div id="decks-anchor" class="sec-title"><div class="eyebrow">DECKS</div><h2>選擇牌組</h2></div>';
   h+=ds.length?'<div class="decks">'+ds.map(function(d){
@@ -573,9 +631,20 @@ function homeView(){
     var cnt=cs.filter(function(c){return c.published!==false}).length;
     return '<button class="deckcard" data-act="opendeck" data-slug="'+esc(d.slug)+'"><span class="dc-img">'+(cov?'<img src="'+esc(src(cov))+'" alt="" loading="lazy">':'<svg viewBox="0 0 200 300" aria-hidden="true"><use href="#back"/></svg>')+'</span>'+
      '<span class="dc-body"><b>'+esc(dtx(d,"name"))+'</b><span class="dc-sub">'+esc(dtx(d,"sub"))+'</span><span class="dc-desc">'+esc(dtx(d,"descr"))+'</span><span class="dc-meta">'+(cnt?(en?cnt+" cards":cnt+" 張牌")+" ・ ":"")+(en?"Enter the deck →":"進入牌組 →")+'</span></span></button>'}).join("")+
-    '<div class="deckcard soon" aria-hidden="false"><span class="dc-img"><svg viewBox="0 0 48 72" aria-hidden="true"><use href="#drawone"/></svg></span><span class="dc-body"><b>更多牌組即將推出</b><span class="dc-desc">新的牌卡正在準備中,敬請期待。</span></span></div></div>'
+    '<div class="deckcard soon" aria-hidden="false"><span class="dc-img">'+catLogo('soon-cat')+'</span><span class="dc-body"><b>更多牌組即將推出</b><span class="dc-desc">新的牌卡正在準備中,敬請期待。</span></span></div></div>'
    :'<p class="empty">還沒有可以顯示的牌組。</p>';
-  h+='<section class="homefoot" aria-label="'+(en?"Draw One":"抽一張")+'"><div class="hf-orb"><svg class="hf-ring" viewBox="0 0 120 120" aria-hidden="true"><circle cx="60" cy="60" r="56" fill="none" stroke="var(--gold)" stroke-opacity=".5" stroke-dasharray="1 6" stroke-linecap="round" stroke-width="2"/><circle cx="60" cy="60" r="46" fill="none" stroke="var(--skin)" stroke-opacity=".4"/></svg><svg class="hf-emb" viewBox="0 0 48 72" aria-hidden="true"><use href="#drawone"/></svg></div>'+
+  h+='<section class="hsec" aria-label="'+(en?"How it works":"怎麼玩")+'"><div class="sec-title"><div class="eyebrow">HOW IT WORKS</div><h2>'+(en?"Three steps to chat with a card":"三個步驟,和一張牌聊聊")+'</h2></div><div class="howto">'+
+   [["1",en?"Pause":"靜一靜",en?"Take a deep breath. Think of the one thing on your mind right now, or simply ask: “What do I need to hear today?”":"深呼吸一下,想著此刻最在意的一件事,或單純問自己:「我今天需要聽見什麼?」"],
+    ["2",en?"Draw one":"抽一張",en?"Choose a deck, shuffle and flip. A single card speaks to the moment; three cards show a flow of time.":"選一副牌,洗牌、翻開。單張看當下的指引,三張看一段時間的流動。"],
+    ["3",en?"Listen":"聽一聽",en?"Read the meaning, look at it from the angle you care about — work, love, money — or have it read aloud to you.":"讀牌意,也可以從工作、感情、金錢等你在意的面向來看,或讓它唸給你聽。"]].map(function(s){return '<div class="hstep"><div class="n">'+s[0]+'</div><h3>'+s[1]+'</h3><p>'+s[2]+'</p></div>'}).join("")+'</div></section>';
+  var shopU="";state.decks.forEach(function(d){if(!shopU&&d.settings&&/^https?:/i.test(d.settings.shop_url||""))shopU=d.settings.shop_url});
+  h+='<section class="hsec" aria-label="'+(en?"When to draw":"什麼時候抽")+'"><div class="sec-title"><div class="eyebrow">WHEN TO DRAW</div><h2>'+(en?"Little moments for a card":"什麼時候,來抽一張?")+'</h2></div><div class="scen">'+
+   [["☀️",en?"A morning ritual":"早晨的小儀式",en?"Start the day with one card and one intention. No pressure, just a gentle reminder.":"用一張牌開啟一天,替今天定個小小的方向,不需要答案,只要一點提醒。"],
+    ["🧭",en?"When you're torn":"猶豫不決的時候",en?"A card won't decide for you, but it can help you hear your own voice more clearly.":"牌不會替你做決定,但能幫你聽清楚自己心裡真正的聲音。"],
+    ["🌙",en?"Before bed":"睡前的沉澱",en?"Let the day settle. Draw one and let its words keep you company as you fall asleep.":"讓一天的情緒慢慢落地,抽一張牌,帶著它的一句話安心入睡。"],
+    ["🎲",en?"Play with friends":"和朋友一起玩",en?"Take turns drawing, read the meanings aloud and see what conversations open up.":"輪流抽牌、念牌意,看看會聊出什麼有趣的話題。"]].map(function(s){return '<div class="scen-c"><span class="em" aria-hidden="true">'+s[0]+'</span><h3>'+s[1]+'</h3><p>'+s[2]+'</p></div>'}).join("")+'</div>'+
+   '<p class="hnote">'+(en?"Cards are a tool for reflecting, not predictions or diagnoses — for big decisions, trust professional advice. Your draw stays on your own screen.":"牌卡是陪你自我對話的工具,不是預言或診斷;重大決定請以專業意見為準。你的抽牌結果只會留在自己的畫面上。")+(shopU?'<br>'+(en?"Fell for a deck? ":"喜歡哪一副牌?")+'<a href="'+esc(shopU)+'" target="_blank" rel="noopener">'+(en?"Find the physical deck in the Eight Auspicious shop ↗":"到八吉祥商城把實體牌卡帶回家 ↗")+'</a>':'')+'</p></section>';
+  h+='<section class="homefoot" aria-label="'+(en?"Draw One":"抽一張")+'"><div class="hf-orb"><svg class="hf-ring" viewBox="0 0 120 120" aria-hidden="true"><circle cx="60" cy="60" r="56" fill="none" stroke="var(--gold)" stroke-opacity=".5" stroke-dasharray="1 6" stroke-linecap="round" stroke-width="2"/><circle cx="60" cy="60" r="46" fill="none" stroke="var(--skin)" stroke-opacity=".4"/></svg>'+catLogo('hf-emb')+'</div>'+
    '<div class="hf-name">'+(en?"Draw One":"抽一張")+'</div>'+
    '<p class="hf-line">'+(en?"Every card is a mirror. Settle your mind, then draw one.":"每一張牌,都是一面鏡子。靜下心來,抽一張。")+'</p>'+
    '<p class="hf-small">'+(en?"Card artwork and content belong to each deck’s creators. This site is for self-reflection only and is not medical, legal or financial advice.":"牌卡圖像與內容版權屬各牌組的創作者所有。本站內容僅供自我探索與參考,不構成醫療、法律或投資建議。")+'</p><a class="hf-link" href="https://athenalee768.github.io/eight-auspicious/" target="_blank" rel="noopener">'+(en?"Back to Eight Auspicious Studio ↗":"回到八吉祥音樂工作室 ↗")+'</a></section>';
@@ -586,7 +655,7 @@ function header(){
   var inDeck=!!state.deck,tabs=inDeck?[["home","所有牌組"],["gallery","牌卡介紹"],["draw","線上抽牌"]]:[["home","首頁"]];
   if(state.admin&&inDeck)tabs.push(["admin","後台管理"]);
   var en=LANG==="en";
-  return '<header class="top"><div class="brand" data-act="home" role="link" tabindex="0" aria-label="'+(en?"Draw One home":"抽一張 首頁")+'"><svg class="eye" viewBox="0 0 48 72" aria-hidden="true"><use href="#drawone"/></svg><div><div class="nm'+(en?'':' zh')+'">'+(en?"Draw One":"抽一張")+'</div><div class="sub">'+(inDeck?esc(dn()):(en?"Online card draws, many decks":"多種牌卡的線上抽牌站"))+'</div></div></div>'+
+  return '<header class="top"><div class="brand" data-act="home" role="link" tabindex="0" aria-label="'+(en?"Draw One home":"抽一張 首頁")+'">'+catLogo('eye')+'<div><div class="nm'+(en?'':' zh')+'">'+(en?"Draw One":"抽一張")+'</div><div class="sub">'+(inDeck?esc(dn()):(en?"Online card draws, many decks":"多種牌卡的線上抽牌站"))+'</div></div></div>'+
    '<nav aria-label="主選單">'+tabs.map(function(t){return '<button data-act="tab" data-v="'+t[0]+'"'+((state.tab===t[0]&&!(t[0]==="home"&&inDeck))?' aria-current="page"':'')+'>'+t[1]+'</button>'}).join("")+'<button class="langbtn" data-act="lang" aria-label="Language">'+(LANG==="en"?"中文":"English")+'</button></nav></header>';
 }
 function artPortrait(){
@@ -614,9 +683,10 @@ function artSVG(){
   '<g class="iris"><circle cx="120" cy="232" r="25" fill="none" stroke="var(--gold)" stroke-width="3"/><circle cx="120" cy="232" r="9" fill="var(--gold)"/></g></g>'+
   '</svg></div>';
 }
+function pub(){var n=parseInt(state.settings.show_count,10)||0,p=pool();return n>0&&p.length>n?p.slice(0,n):p}
 function stripHTML(){
   if(!state.cards.length)return "";
-  var base=pool(),items=base.slice();while(items.length<10)items=items.concat(base);
+  var base=pub(),items=base.slice();while(items.length<10)items=items.concat(base);
   var one=items.map(function(c){return '<button data-act="open" data-id="'+esc(c.id)+'" aria-label="'+esc(c.name)+'">'+img(c)+'</button>'}).join("");
   return '<div class="strip" aria-label="牌卡一覽"><div class="track">'+one+one+'</div></div>';
 }
@@ -745,11 +815,11 @@ function overallHTML(){
 }
 function galleryView(){
   var q=state.q.trim().toLowerCase();
-  var list=pool().filter(function(c){return !q||[c.name,c.en,c.no,c.keywords,c.meaning,c.tag,c.tagZh].join(" ").toLowerCase().indexOf(q)>-1});
+  var allp=pool(),vis=pub(),hid=allp.length-vis.length,list=vis.filter(function(c){return !q||[c.name,c.en,c.no,c.keywords,c.meaning,c.tag,c.tagZh].join(" ").toLowerCase().indexOf(q)>-1});
   var h='<div class="sec-head"><div><div class="eyebrow">THE DECK</div><h1>牌卡介紹</h1></div>'+
    '<label class="field search" for="g-q"><span>搜尋牌名或關鍵字</span><input id="g-q" data-act="gq" value="'+esc(state.q)+'" placeholder="例如:耐心"></label></div>';
   h+=list.length?'<div class="grid">'+list.map(function(c){
-    return '<button class="tile'+(c.land?' land':'')+'" data-act="open" data-id="'+esc(c.id)+'"><span class="frame">'+img(c)+'</span>'+(c.no?'<span class="no">'+esc(c.no)+'</span>':'')+'<span class="nm">'+esc(c.name||"未命名牌卡")+'</span></button>'}).join("")+'</div>'
+    return '<button class="tile'+(c.land?' land':'')+'" data-act="open" data-id="'+esc(c.id)+'"><span class="frame">'+img(c)+'</span>'+(c.no?'<span class="no">'+esc(c.no)+'</span>':'')+'<span class="nm">'+esc(c.name||"未命名牌卡")+'</span></button>'}).join("")+(hid>0&&!q?Array(Math.min(hid,6)+1).join('<div class="tile locked" aria-hidden="true"><span class="frame cb">'+backHTML()+'</span><span class="nm">?</span></div>'):'')+'</div>'+(hid>0?'<p class="partial-note">'+(LANG==="en"?'Only some cards are shown here. '+hid+' more are revealed in the physical deck or when you draw.':'此處僅展示部分牌卡,另有 '+hid+' 張牌請至實體牌組或線上抽牌時揭曉。')+'</p>':'')
     :'<p class="empty">找不到符合的牌卡。</p>';
   return aboutHTML()+ornHTML()+h+ornHTML()+godsHTML()+shopHTML()+sampleNote();
 }
@@ -792,7 +862,7 @@ function updateBar(){
    '<button class="btn" data-act="publish"'+((!state.dirty||state.busy)?' disabled':'')+'>發布到網站</button>';
 }
 
-function render(){
+function render(){document.documentElement.setAttribute("data-page",state.deck?"deck":"home");
   applyBg();
   document.title=(state.deck?dn()+" ｜ ":"")+(LANG==="en"?"Draw One":"抽一張 Draw One");
   var v=!state.deck?homeView():state.tab==="gallery"?galleryView():state.tab==="admin"&&state.admin?adminView():drawView();
@@ -846,7 +916,7 @@ function showSpeakBtns(root){
 }
 var revIO=null;
 function revealInit(){
-  var sel=".homehero .hero-text,.fan,.deckcard,.about>div:last-child,.about .cvw,.feat,.ihow,.steps li,.intro .cta,.sec-head,.tile,.trinity .eyebrow,.trinity h2,.trinity .lead,.god";
+  var sel=".homehero .hero-text,.hstep,.scen-c,.fan,.deckcard,.about>div:last-child,.about .cvw,.feat,.ihow,.steps li,.intro .cta,.sec-head,.tile,.trinity .eyebrow,.trinity h2,.trinity .lead,.god";
   var els=Array.prototype.slice.call(document.querySelectorAll(sel));
   var still=window.matchMedia&&matchMedia("(prefers-reduced-motion: reduce)").matches;
   var all=els.concat(Array.prototype.slice.call(document.querySelectorAll(".orn")));
@@ -1078,7 +1148,7 @@ render();
       ds=state.decks.slice();var sh=ds.filter(function(d){return d.slug==="shiva"})[0];
       if(sh){if(rows.length)sh.cards=rows;(r[2]||[]).forEach(function(s){if(s.value)sh.settings[s.key]=s.value})}
     }
-    ds.forEach(function(d){if(d.slug==="shiva"&&!(d.settings&&d.settings.shop_url)){d.settings=d.settings||{};d.settings.shop_url="https://athenalee768.github.io/eight-auspicious/shop.html"}});
+    ds.forEach(function(d){if(d.slug!=="shiva")return;d.settings=d.settings||{};if(!d.settings.shop_url)d.settings.shop_url="https://athenalee768.github.io/eight-auspicious/shop.html";if(d.settings.show_count==null||d.settings.show_count==="")d.settings.show_count=8});
     var ae=document.activeElement;if(!(ae&&ae.matches&&ae.matches("input,textarea")))applyDecks(ds);else state.decks=ds;
   }).catch(function(){});
 })();
