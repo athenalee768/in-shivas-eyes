@@ -429,6 +429,17 @@ nav button:hover{color:var(--fg)}
 :root:lang(en) :is(h1,h2,h3,h4,.wordmark,.brand .nm,.hf-name,.deckcard b,.god b,.feat b,.ihow,.hstep .n){font-weight:400}
 .tile .nm{font-family:var(--f-body)}
 .lede2{color:var(--muted);max-width:34em;margin:10px 0 0;font-size:.98rem;line-height:1.9}
+/* 微笑小牌動態 */
+.cat .bkL,.cat .bkR{transform-box:fill-box;transform-origin:50% 100%}
+.cat .bkL{animation:lvbkL 3.6s ease-in-out infinite}.cat .bkR{animation:lvbkR 3.6s ease-in-out infinite}
+@keyframes lvbkL{0%,100%{transform:rotate(0)}50%{transform:rotate(-9deg)}}
+@keyframes lvbkR{0%,100%{transform:rotate(0)}50%{transform:rotate(9deg)}}
+.cat .smile{transform-box:fill-box;transform-origin:50% 0;animation:lvsmile 3.6s ease-in-out infinite}
+@keyframes lvsmile{0%,100%{transform:scale(1)}50%{transform:scale(1.18,1.3)}}
+.sdiv{display:flex;align-items:center;gap:14px;color:var(--gold);margin:4px 0}
+.sdiv span{display:inline-block;font-size:1.1rem;animation:lvtw2 2.6s ease-in-out infinite}
+.sdiv span:nth-child(2){font-size:1.6rem;color:var(--skin);animation-delay:.4s}.sdiv span:nth-child(3){animation-delay:.8s}
+@keyframes lvtw2{0%,100%{opacity:.35;transform:scale(.8) rotate(0)}50%{opacity:1;transform:scale(1.2) rotate(20deg)}}
 </style>
 <script src="config.js"></script>
 </head>
@@ -610,22 +621,24 @@ function homeFan(){
   var rot=n===1?[0]:n===2?[-8,8]:n===3?[-16,0,16]:n===4?[-24,-8,8,24]:[-28,-14,0,14,28];
   return '<div class="fan" aria-hidden="true">'+pick.map(function(im,i){return '<div class="fc" style="--r:'+rot[i]+'deg;--i:'+i+(im.back?';background:#2a2250 url(\''+esc(src(im.back))+'\') center/cover':';background:#2a2250')+'"><img src="'+esc(src(im.img))+'" alt="" decoding="async" onload="this.style.opacity=1" style="opacity:0;transition:opacity .5s"></div>'}).join("")+'</div>';
 }
+var LOGOID=0;
 function catLogo(cls){
-  return '<svg class="cat '+(cls||"")+'" viewBox="0 0 48 72" aria-hidden="true" overflow="visible"><g fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">'+
-  '<path class="earL" d="M11 24L10 7l12 9" fill="currentColor" fill-opacity=".2"/><path class="earR" d="M37 24l1-17-12 9" fill="currentColor" fill-opacity=".2"/>'+
-  '<rect x="10" y="14" width="28" height="46" rx="9" fill="currentColor" fill-opacity=".2"/>'+
-  '<path class="cstar" d="M24 20l1.2 2.6 2.8.3-2.1 1.9.6 2.8-2.5-1.4-2.5 1.4.6-2.8-2.1-1.9 2.8-.3z" fill="currentColor" stroke-width=".8"/>'+
-  '<g class="ceyes"><path d="M16.5 37q2.4-3.4 4.8 0M26.7 37q2.4-3.4 4.8 0" stroke-width="2"/></g>'+
-  '<path d="M22.6 41.5h2.8l-1.4 1.8z" fill="currentColor" stroke-width="1"/><path d="M20.5 45.5q1.7 2.4 3.5 0q1.8 2.4 3.5 0" stroke-width="1.8"/>'+
-  '<path class="whL" d="M6 40h7M6 45l7-1.5" stroke-width="1.5"/><path class="whR" d="M42 40h-7M42 45l-7-1.5" stroke-width="1.5"/>'+
-  '<circle class="chk" cx="16" cy="46.5" r="2.4" fill="#ff8f9c" stroke="none" opacity=".7"/><circle class="chk" cx="32" cy="46.5" r="2.4" fill="#ff8f9c" stroke="none" opacity=".7"/>'+
-  '<g class="lv-tw" stroke-width="1.8"><path d="M4 8v4M2 10h4"/><path d="M44 4v4M42 6h4"/></g></g></svg>';
+  var m="d1m"+(++LOGOID);
+  return '<svg class="cat '+(cls||"")+'" viewBox="0 0 48 72" aria-hidden="true" overflow="visible"><mask id="'+m+'" maskUnits="userSpaceOnUse" x="-10" y="0" width="68" height="72"><rect x="-10" width="68" height="72" fill="#fff"/><rect x="10.5" y="14" width="27" height="43" rx="7" fill="#000"/></mask>'+
+  '<g fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">'+
+  '<g mask="url(#'+m+')" opacity=".85"><g class="bkL"><rect x="8" y="22" width="20" height="34" rx="4.5" transform="rotate(-12 24 58)" fill="currentColor" fill-opacity=".12"/></g><g class="bkR"><rect x="20" y="22" width="20" height="34" rx="4.5" transform="rotate(12 24 58)" fill="currentColor" fill-opacity=".12"/></g></g>'+
+  '<rect x="10.5" y="14" width="27" height="43" rx="7" fill="currentColor" fill-opacity=".2"/>'+
+  '<path class="cstar" d="M24 19.5l1.7 3.6 3.9.5-2.9 2.7.8 3.9-3.5-2-3.5 2 .8-3.9-2.9-2.7 3.9-.5z" fill="currentColor" stroke-width="1"/>'+
+  '<g class="ceyes"><circle cx="18.6" cy="39" r="2" fill="currentColor" stroke="none"/><circle cx="29.4" cy="39" r="2" fill="currentColor" stroke="none"/></g>'+
+  '<path class="smile" d="M19.6 44.6q4.4 5 8.8 0" stroke-width="2.2"/>'+
+  '<circle class="chk" cx="15.2" cy="44" r="2.6" fill="#ff8f9c" stroke="none" opacity=".7"/><circle class="chk" cx="32.8" cy="44" r="2.6" fill="#ff8f9c" stroke="none" opacity=".7"/>'+
+  '<g class="lv-tw" stroke-width="1.8"><path d="M24 3v5M21.5 5.5h5"/><path d="M6 10v4M4 12h4"/><path d="M42 8v4M40 10h4"/></g><circle cx="12" cy="4" r="1" fill="currentColor" stroke="none"/><circle cx="37" cy="2.5" r="1" fill="currentColor" stroke="none"/></g></svg>';
 }
 function homeView(){
   var en=LANG==="en",ds=state.decks.filter(function(d){return d.published!==false});
   var h='<section class="hero homehero"><div class="hero-text"><div class="eyebrow">DRAW ONE ・ ORACLE &amp; CARDS</div>'+
    '<h1 class="wordmark">'+(en?"Draw One":"抽一張")+'<span>'+(en?"抽一張":"Draw One")+'</span></h1>'+
-   '<p class="lede">'+(en?"Pick a deck, settle your mind, draw one card — and hear what it wants to tell you.":"選一副牌,靜下心來,抽一張,聽聽它想對你說的話。")+'</p><p class="lede2">'+(en?"Here we gather oracle decks and card decks of all kinds. Whether you want to set a direction for the day, sort out a tangled mood, or simply have a quiet talk with yourself, there is a deck here to keep you company.":"這裡會陸續收錄各式各樣的神諭卡與牌卡。不論是想為一天定個方向、整理紛亂的心情,或只是想安靜地和自己聊聊,都能找到一副陪著你的牌。")+'</p><div class="hchips"><span>'+(en?"Online draws":"線上抽牌")+'</span><span>'+(en?"Chinese & English":"中英雙語")+'</span><span>'+(en?"Read aloud":"可朗讀")+'</span><span>'+(en?"Many decks":"多種牌組")+'</span></div><div class="tri" aria-hidden="true"><i></i><i></i><i></i></div>'+
+   '<p class="lede">'+(en?"Pick a deck, settle your mind, draw one card — and hear what it wants to tell you.":"選一副牌,靜下心來,抽一張,聽聽它想對你說的話。")+'</p><p class="lede2">'+(en?"Here we gather oracle decks and card decks of all kinds. Whether you want to set a direction for the day, sort out a tangled mood, or simply have a quiet talk with yourself, there is a deck here to keep you company.":"這裡會陸續收錄各式各樣的神諭卡與牌卡。不論是想為一天定個方向、整理紛亂的心情,或只是想安靜地和自己聊聊,都能找到一副陪著你的牌。")+'</p><div class="hchips"><span>'+(en?"Online draws":"線上抽牌")+'</span><span>'+(en?"Chinese & English":"中英雙語")+'</span><span>'+(en?"Read aloud":"可朗讀")+'</span><span>'+(en?"Many decks":"多種牌組")+'</span></div><div class="sdiv" aria-hidden="true"><span>✦</span><span>✧</span><span>✦</span></div>'+
    '<div class="cta"><button class="btn" data-act="gotodecks">選擇牌組</button></div></div>'+homeFan()+'</section>';
   h+='<div id="decks-anchor" class="sec-title"><div class="eyebrow">DECKS</div><h2>選擇牌組</h2></div>';
   h+=ds.length?'<div class="decks">'+ds.map(function(d){
@@ -750,7 +763,7 @@ function drawView(){
   var h='<section class="hero"><div class="hero-text"><div class="eyebrow">'+(state.deck==="shiva"?'DIVINYE STUDIO ・ ORACLE':'DRAW ONE ・ DECK')+'</div>'+
    '<h1 class="wordmark">'+esc(dn())+'<span>'+esc(dtx(curDeck()||{},"sub"))+'</span></h1>'+
    '<p class="lede">'+(state.deck==="shiva"?'以濕婆為意象的神諭卡。先靜下心來,想著此刻最在意的事,再抽一張牌,聽聽它想對你說的話。':'先靜下心來,想著此刻最在意的事,再抽一張牌,聽聽它想對你說的話。')+'</p>'+
-   '<div class="tri" aria-hidden="true"><i></i><i></i><i></i></div>'+
+   '<div class="sdiv" aria-hidden="true"><span>✦</span><span>✧</span><span>✦</span></div>'+
    '<div class="cta"><button class="btn" data-act="gotodraw">開始抽牌</button><button class="btn ghost" data-act="tab" data-v="gallery">瀏覽牌卡</button></div></div>'+artSVG()+'</section>'+stripHTML();
   h+='<div id="draw-anchor" class="sec-title"><div class="eyebrow">ONLINE DRAW</div><h2>線上抽牌</h2></div>';
   h+='<div class="controls"><div class="row"><div class="field"><span id="sp-l">牌陣</span><div class="seg" role="group" aria-labelledby="sp-l">'+
