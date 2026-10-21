@@ -428,6 +428,7 @@ nav button:hover{color:var(--fg)}
 .hsec{margin-top:56px}
 :root:lang(en) :is(h1,h2,h3,h4,.wordmark,.brand .nm,.hf-name,.deckcard b,.god b,.feat b,.ihow,.hstep .n){font-weight:400}
 .tile .nm{font-family:var(--f-body)}
+.lede2{color:var(--muted);max-width:34em;margin:10px 0 0;font-size:.98rem;line-height:1.9}
 </style>
 <script src="config.js"></script>
 </head>
@@ -623,7 +624,7 @@ function homeView(){
   var en=LANG==="en",ds=state.decks.filter(function(d){return d.published!==false});
   var h='<section class="hero homehero"><div class="hero-text"><div class="eyebrow">DRAW ONE ・ ORACLE &amp; CARDS</div>'+
    '<h1 class="wordmark">'+(en?"Draw One":"抽一張")+'<span>'+(en?"抽一張":"Draw One")+'</span></h1>'+
-   '<p class="lede">'+(en?"Pick a deck, settle your mind, draw one card — and hear what it wants to tell you.":"選一副牌,靜下心來,抽一張,聽聽它想對你說的話。")+'</p><div class="hchips"><span>'+(en?"Online draws":"線上抽牌")+'</span><span>'+(en?"Chinese & English":"中英雙語")+'</span><span>'+(en?"Read aloud":"可朗讀")+'</span><span>'+(en?"Many decks":"多種牌組")+'</span></div><div class="tri" aria-hidden="true"><i></i><i></i><i></i></div>'+
+   '<p class="lede">'+(en?"Pick a deck, settle your mind, draw one card — and hear what it wants to tell you.":"選一副牌,靜下心來,抽一張,聽聽它想對你說的話。")+'</p><p class="lede2">'+(en?"Here we gather oracle decks and card decks of all kinds. Whether you want to set a direction for the day, sort out a tangled mood, or simply have a quiet talk with yourself, there is a deck here to keep you company.":"這裡會陸續收錄各式各樣的神諭卡與牌卡。不論是想為一天定個方向、整理紛亂的心情,或只是想安靜地和自己聊聊,都能找到一副陪著你的牌。")+'</p><div class="hchips"><span>'+(en?"Online draws":"線上抽牌")+'</span><span>'+(en?"Chinese & English":"中英雙語")+'</span><span>'+(en?"Read aloud":"可朗讀")+'</span><span>'+(en?"Many decks":"多種牌組")+'</span></div><div class="tri" aria-hidden="true"><i></i><i></i><i></i></div>'+
    '<div class="cta"><button class="btn" data-act="gotodecks">選擇牌組</button></div></div>'+homeFan()+'</section>';
   h+='<div id="decks-anchor" class="sec-title"><div class="eyebrow">DECKS</div><h2>選擇牌組</h2></div>';
   h+=ds.length?'<div class="decks">'+ds.map(function(d){
