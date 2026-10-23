@@ -913,12 +913,18 @@ function pickVoice(lang){
   for(var i=0;i<pre.length;i++){var v=vs.filter(function(x){return x.lang&&x.lang.replace("_","-").indexOf(pre[i])===0})[0];if(v)return v}
   return null;
 }
+function audioFor(c,key){
+  var L=LANG==="en"?"en":"zh",o=(c.i18n&&c.i18n[L])||{};
+  if(!key||key==="all")return c.audio||"";
+  return (o.ca&&o.ca[key])||"";
+}
 function startSpeak(btn){
   var c=byId(btn.dataset.id);if(!c)return;
   var was=SPK.btn===btn;stopSpeak();if(was)return;
   SPK.btn=btn;btn.textContent=T("⏹ 停止");btn.classList.add("on");
-  if(c.audio){
-    var a=new Audio(src(c.audio));SPK.audio=a;a.onended=a.onerror=function(){if(SPK.audio===a)stopSpeak()};
+  var au=audioFor(c,btn.dataset.key);
+  if(au){
+    var a=new Audio(src(au));SPK.audio=a;a.onended=a.onerror=function(){if(SPK.audio===a)stopSpeak()};
     a.play().catch(function(){stopSpeak()});return;
   }
   if(!canSpeak()){stopSpeak();return}
@@ -935,7 +941,7 @@ function startSpeak(btn){
 }
 function showSpeakBtns(root){
   (root||document).querySelectorAll(".speak").forEach(function(b){
-    var c=byId(b.dataset.id);b.hidden=!(c&&(c.audio||canSpeak()))
+    var c=byId(b.dataset.id);b.hidden=!(c&&(audioFor(c,b.dataset.key)||canSpeak()))
   });
 }
 var revIO=null;
