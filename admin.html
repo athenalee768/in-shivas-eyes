@@ -97,6 +97,7 @@ function view(){
    '<h3 style="margin:18px 0 4px;font-size:1rem">外觀(選填)</h3><p class="muted" style="margin:0 0 8px">讓這副牌的介紹頁與抽牌頁有自己的配色與牌框形狀;不啟用就沿用預設的深藍加金色。</p>'+
    '<div class="grid2"><div><label>自訂配色</label><select data-shop="theme_on" id="thon"><option value="">不啟用(預設深藍＋金)</option><option value="1"'+(ds.theme_bg?' selected':'')+'>啟用</option></select></div><div><label>快速套用配色</label><select id="thpre"><option value="">— 選擇 —</option><option value="parchment">羊皮紙米色＋深棕</option><option value="stone">石頭灰＋冰藍</option><option value="ink">墨黑＋古銅</option><option value="moss">苔綠＋米白</option></select></div></div>'+
    '<div class="grid3" style="margin-top:10px"><div><label>底色</label><input type="color" data-shop="theme_bg" value="'+esc(ds.theme_bg||"#f3e6c8")+'"></div><div><label>文字色</label><input type="color" data-shop="theme_fg" value="'+esc(ds.theme_fg||"#3e2a14")+'"></div><div><label>點綴色(按鈕、邊框、標題)</label><input type="color" data-shop="theme_accent" value="'+esc(ds.theme_accent||"#6b4226")+'"></div></div>'+
+   '<div class="grid2" style="margin-top:10px"><div><label>正位／逆位(盧恩符文等有逆位牌意的牌組)</label><select data-shop="reversals"><option value="">不啟用</option><option value="1"'+(ds.reversals==="1"?' selected':'')+'>啟用:抽牌時隨機出現逆位</option></select></div></div>'+
    '<div class="grid2" style="margin-top:10px"><div><label>首頁抽牌圖的牌框形狀(圖片不變)</label><select data-shop="back_shape">'+[["","拱門(預設)"],["oval","橢圓"],["circle","圓形"],["round","圓角方形"],["leaf","葉形"]].map(function(o){return '<option value="'+o[0]+'"'+((ds.back_shape||"")===o[0]?' selected':'')+'>'+o[1]+'</option>'}).join("")+'</select></div></div>'+
    '<div class="row" style="margin-top:14px"><button id="savedeck">儲存牌組資訊</button></div></div>';
   var TP={parchment:["#f3e6c8","#3e2a14","#6b4226"],stone:["#e4e7ea","#1f2a33","#3b6f8f"],ink:["#14110f","#efe6d8","#c08a4a"],moss:["#1f2e24","#efe9d6","#b9c98a"]},tp;
@@ -110,7 +111,7 @@ function caRow(L,k,v){
   return '<div class="row"><input data-ca'+L+'="'+k+'" value="'+esc(v||"")+'" placeholder="'+(L==="zh"?"此面向的真人錄音網址(選填;沒填就用機器朗讀)":"Recording URL for this aspect (optional; if empty, browser voice is used)")+'"><label class="btn ghost" style="margin:0;white-space:nowrap">'+(L==="zh"?"上傳 mp3":"Upload mp3")+'<input type="file" accept="audio/*" data-auc="'+L+':'+k+'" hidden></label></div>';
 }
 function cardForm(c){
-  var cats=c.cats||{},en=(c.i18n&&c.i18n.en)||{},ec=en.cats||{};
+  var cats=c.cats||{},en=(c.i18n&&c.i18n.en)||{},ec=en.cats||{},zr=(c.i18n&&c.i18n.zh&&c.i18n.zh.rev)||{},er=en.rev||{};
   return '<details class="card" data-id="'+esc(c.id)+'"'+(st.open[c.id]?' open':'')+'><summary><img class="thumb" src="'+esc(src(c.img))+'" alt=""><div style="flex:1"><b>'+esc(c.no)+'. '+esc(c.name||"未命名")+'</b> <span class="muted">'+esc(c.en)+'</span><br>'+(c.published===false?'<span class="pill">已隱藏</span>':'<span class="pill">顯示中</span>')+'</div></summary>'+
   '<div class="grid3"><div><label>編號</label><input data-f="no" value="'+esc(c.no)+'"></div><div><label>中文牌名</label><input data-f="name" value="'+esc(c.name)+'"></div><div><label>英文牌名</label><input data-f="en" value="'+esc(c.en)+'"></div></div>'+
   '<div class="grid2"><div><label>牌上英文短語</label><input data-f="tag" value="'+esc(c.tag)+'"></div><div><label>短語中文翻譯</label><input data-f="tag_zh" value="'+esc(c.tag_zh)+'"></div></div>'+
@@ -119,12 +120,24 @@ function cardForm(c){
   '<label>中文牌意</label><textarea data-f="meaning">'+esc(c.meaning)+'</textarea>'+
   '<label>延伸牌意</label><textarea data-f="extended" style="min-height:150px">'+esc(c.extended)+'</textarea>'+
   CATS.map(function(k){return '<label>'+k[1]+'</label><textarea data-cat="'+k[0]+'">'+esc(cats[k[0]]||"")+'</textarea>'+caRow("zh",k[0],((c.i18n&&c.i18n.zh&&c.i18n.zh.ca)||{})[k[0]])}).join("")+
+  '<details style="margin-top:14px"><summary><b>逆位牌意</b>(選填;牌組啟用「正位／逆位」時,抽到逆位會顯示這裡的內容。沒填的牌不會出現逆位)</summary>'+
+  '<label>逆位關鍵字(選填,沒填沿用正位)</label><input data-rz="kw" value="'+esc(zr.kw||"")+'">'+
+  '<label>逆位牌意</label><textarea data-rz="m">'+esc(zr.m||"")+'</textarea>'+
+  '<label>逆位延伸牌意</label><textarea data-rz="e" style="min-height:130px">'+esc(zr.e||"")+'</textarea>'+
+  '<label>逆位中文語音檔網址(選填)</label><input data-rz="audio" value="'+esc(zr.audio||"")+'">'+
+  CATS.filter(function(k){return k[0]!=="all"}).map(function(k){return '<label>逆位・'+k[1]+'</label><textarea data-rzcat="'+k[0]+'">'+esc((zr.cats||{})[k[0]]||"")+'</textarea>'}).join("")+'</details>'+
   '<details style="margin-top:14px"><summary><b>English version 英文版</b>(英文牌意與各面向,給國外訪客看)</summary>'+
   '<label>English audio (optional; if empty, browser voice is used)</label><div class="row"><input data-en="audio" value="'+esc(en.audio||"")+'" placeholder="paste URL or upload mp3"><label class="btn ghost" style="margin:0;white-space:nowrap">Upload mp3<input type="file" accept="audio/*" data-aud="en" hidden></label></div>'+
   '<label>Keywords (comma-separated)</label><input data-en="kw" value="'+esc(en.kw||"")+'">'+
   '<label>Meaning</label><textarea data-en="m">'+esc(en.m||"")+'</textarea>'+
   '<label>Deeper meaning</label><textarea data-en="e" style="min-height:150px">'+esc(en.e||"")+'</textarea>'+
-  CATS.map(function(k){return '<label>'+k[1]+' (English)</label><textarea data-encat="'+k[0]+'">'+esc(ec[k[0]]||"")+'</textarea>'+caRow("en",k[0],(en.ca||{})[k[0]])}).join("")+'</details>'+
+  CATS.map(function(k){return '<label>'+k[1]+' (English)</label><textarea data-encat="'+k[0]+'">'+esc(ec[k[0]]||"")+'</textarea>'+caRow("en",k[0],(en.ca||{})[k[0]])}).join("")+''+
+  '<details style="margin-top:10px"><summary><b>Reversed meaning (English)</b></summary>'+
+  '<label>Reversed keywords</label><input data-re="kw" value="'+esc(er.kw||"")+'">'+
+  '<label>Reversed meaning</label><textarea data-re="m">'+esc(er.m||"")+'</textarea>'+
+  '<label>Reversed deeper meaning</label><textarea data-re="e" style="min-height:130px">'+esc(er.e||"")+'</textarea>'+
+  '<label>Reversed English audio URL (optional)</label><input data-re="audio" value="'+esc(er.audio||"")+'">'+
+  CATS.filter(function(k){return k[0]!=="all"}).map(function(k){return '<label>Reversed · '+k[1]+' (English)</label><textarea data-recat="'+k[0]+'">'+esc((er.cats||{})[k[0]]||"")+'</textarea>'}).join("")+'</details></details>'+
   '<div class="grid2"><div><label>排序(數字小的在前)</label><input data-f="sort" type="number" value="'+esc(c.sort==null?0:c.sort)+'"></div><div><label>是否顯示在網站</label><select data-f="published"><option value="true"'+(c.published!==false?' selected':'')+'>顯示</option><option value="false"'+(c.published===false?' selected':'')+'>隱藏</option></select></div></div>'+
   '<div class="row" style="margin-top:16px"><button data-act="save">儲存這張牌</button><label class="btn ghost" style="margin:0">更換圖片<input type="file" accept="image/*" data-img="'+esc(c.id)+'" hidden></label><span style="flex:1"></span><button class="danger" data-act="del">刪除</button></div></details>';
 }
@@ -145,7 +158,11 @@ function rowOf(el){
   var c=st.cards.filter(function(x){return x.id===el.dataset.id})[0],o={id:c.id,img:c.img,land:c.land,deck:c.deck||st.deck,cats:{}};
   el.querySelectorAll("[data-f]").forEach(function(i){var k=i.dataset.f,v=i.value;if(k==="sort")v=parseInt(v,10)||0;if(k==="published")v=v==="true";o[k]=v});
   el.querySelectorAll("[data-cat]").forEach(function(i){o.cats[i.dataset.cat]=i.value});
-  var en={cats:{}};el.querySelectorAll("[data-en]").forEach(function(i){en[i.dataset.en]=i.value});el.querySelectorAll("[data-encat]").forEach(function(i){en.cats[i.dataset.encat]=i.value});var zca={},eca={};el.querySelectorAll("[data-cazh]").forEach(function(i){if(i.value.trim())zca[i.dataset.cazh]=i.value.trim()});el.querySelectorAll("[data-caen]").forEach(function(i){if(i.value.trim())eca[i.dataset.caen]=i.value.trim()});en.ca=eca;o.i18n=Object.assign({},c.i18n||{},{en:en,zh:Object.assign({},(c.i18n&&c.i18n.zh)||{},{ca:zca})});
+  var en={cats:{}};el.querySelectorAll("[data-en]").forEach(function(i){en[i.dataset.en]=i.value});el.querySelectorAll("[data-encat]").forEach(function(i){en.cats[i.dataset.encat]=i.value});var zca={},eca={};el.querySelectorAll("[data-cazh]").forEach(function(i){if(i.value.trim())zca[i.dataset.cazh]=i.value.trim()});el.querySelectorAll("[data-caen]").forEach(function(i){if(i.value.trim())eca[i.dataset.caen]=i.value.trim()});en.ca=eca;
+  function revObj(sel,csel,dk,ck){var r={cats:{}},any=false;el.querySelectorAll(sel).forEach(function(i){var v=i.value.trim();r[i.dataset[dk]]=v;if(v)any=true});el.querySelectorAll(csel).forEach(function(i){var v=i.value.trim();if(v){r.cats[i.dataset[ck]]=v;any=true}});return any?r:null}
+  var zrv=revObj("[data-rz]","[data-rzcat]","rz","rzcat"),erv=revObj("[data-re]","[data-recat]","re","recat");if(erv)en.rev=erv;
+  var zz=Object.assign({},(c.i18n&&c.i18n.zh)||{},{ca:zca});if(zrv)zz.rev=zrv;else delete zz.rev;
+  o.i18n=Object.assign({},c.i18n||{},{en:en,zh:zz});
   return o;
 }
 function wire(){

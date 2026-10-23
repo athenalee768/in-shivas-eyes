@@ -455,6 +455,11 @@ nav .ddcaret{padding:8px 10px 8px 0;margin-left:-8px;font-size:.78rem}
 .ddmenu button:hover,.ddmenu button:focus-visible{background:var(--surface2)}
 .ddmenu .n{color:var(--gold);min-width:1.9em;font-variant-numeric:tabular-nums}
 .ddmenu .ddall{border-bottom:1px solid var(--line);border-radius:8px 8px 0 0;margin-bottom:4px;color:var(--gold)}
+
+.face.front.rev .cardimg,.face.front.rev .ph{transform:rotate(180deg)}
+.revtag{display:inline-block;margin:2px 0 6px;padding:2px 12px;border:1px solid var(--tilak);border-radius:999px;color:var(--tilak);font-size:.82rem;letter-spacing:.14em}
+.revtag.up{border-color:var(--line);color:var(--muted)}
+.revblk{border-top:1px dashed var(--line);padding-top:10px}
 </style>
 <script src="config.js"></script>
 </head>
@@ -530,8 +535,8 @@ function loc(c){
 applyLang();
 var state={cards:[],settings:{back:"",cover:"",bg:"",god1:"",god2:"",god3:""},tab:"gallery",admin:false,canUpload:false,dirty:false,busy:false,
   q:"",open:null,openTab:"all",delConfirm:null,focus:"all",
-  draw:{spread:1,phase:"idle",picks:[],flipped:[],question:""}};
-var SDEF={back:"",cover:"",bg:"",god1:"",god2:"",god3:"",shop_url:"",shop_label:"",show_count:0,help_url:"",back_shape:"",theme_bg:"",theme_fg:"",theme_accent:""};
+  draw:{spread:1,phase:"idle",picks:[],flipped:[],rev:[],question:""}};
+var SDEF={back:"",cover:"",bg:"",god1:"",god2:"",god3:"",shop_url:"",shop_label:"",show_count:0,help_url:"",reversals:"",back_shape:"",theme_bg:"",theme_fg:"",theme_accent:""};
 state.decks=[];state.deck=null;state.tab="home";
 function shivaDeck(cards,settings){
   return {slug:"shiva",name:"In Shiva's Eyes",name_en:"In Shiva's Eyes",sub:"神諭卡",sub_en:"Oracle Deck",
@@ -579,6 +584,16 @@ route();
 var pool=function(){var b=state.cards.length?state.cards:SAMPLES;return (LANG==="en"&&state.tab!=="admin")?b.map(loc):b};
 var byId=function(id){return pool().filter(function(c){return c.id===id})[0]};
 var kw=function(s){return String(s||"").split(LANG==="en"?/\s*[,，、]\s*/:/[,，、\s]+/).filter(Boolean)};
+function revOn(){return String((state.settings&&state.settings.reversals)||"")==="1"}
+function revOf(c){var L=LANG==="en"?"en":"zh",o=c&&c.i18n&&c.i18n[L];return (o&&o.rev&&(o.rev.m||o.rev.e))?o.rev:null}
+function revCan(c){var o=c&&c.i18n&&c.i18n.zh&&c.i18n.zh.rev;return !!(o&&(o.m||o.e))}
+function asRev(c){
+  if(!c||c.isRev)return c;var r=revOf(c),o=Object.assign({},c);o.isRev=true;o.tag="";o.tagZh="";
+  if(r){if(r.kw)o.keywords=r.kw;o.meaning=r.m||c.meaning;o.extended=r.e||"";o.cats=r.cats||{};o.audio=r.audio||""}
+  else{o.extended="";o.cats={};o.audio=""}
+  return o;
+}
+function rvAt(id,i){var c=byId(id);return c&&state.draw.rev&&state.draw.rev[i]?asRev(c):c}
 var catName=function(k){return (CATS.filter(function(c){return c[0]===k})[0]||[])[1]||""};
 
 function toast(msg,ms){var t=$("#toast");t.textContent=msg;clearTimeout(toast.t);toast.t=setTimeout(function(){t.textContent=""},ms||3200)}
@@ -606,12 +621,14 @@ function detailHTML(c,pos,tag,key,scope){
   return (pos?'<div class="pos">'+esc(pos)+'</div>':'')+
    '<'+tag+'>'+esc(c.name||"未命名牌卡")+'</'+tag+'>'+
    (c.en?'<div class="en">'+esc(c.en)+'</div>':'')+
+   (c.isRev?'<div class="revtag">'+(LANG==="en"?"Reversed":"逆位")+'</div>':(revOn()&&scope==="draw"&&revCan(c)?'<div class="revtag up">'+(LANG==="en"?"Upright":"正位")+'</div>':''))+
    (kw(c.keywords).length?'<div class="chips">'+kw(c.keywords).map(function(k){return '<span class="chip">'+esc(k)+'</span>'}).join("")+'</div>':'')+
    ((c.tag||c.tagZh)?'<p class="quote">'+esc(c.tag||"")+(c.tagZh?'<small>'+esc(c.tagZh)+'</small>':'')+'</p>':'')+
-   '<button class="speak" data-act="speak" data-id="'+esc(c.id)+'" data-key="'+esc(key)+'" hidden>🔊 朗讀</button>'+
+   '<button class="speak" data-act="speak" data-id="'+esc(c.id)+'" data-key="'+esc(key)+'"'+(c.isRev?' data-rev="1"':'')+' hidden>🔊 朗讀</button>'+
    tabsHTML(key,scope)+focusHTML(c,key)+
    '<div class="blk"><h4>牌意</h4><p class="txt">'+(c.meaning?esc(c.meaning):'牌意整理中')+'</p></div>'+
-   (c.extended?'<div class="blk"><h4>延伸意義</h4><p class="txt">'+esc(c.extended)+'</p></div>':'');
+   (c.extended?'<div class="blk"><h4>延伸意義</h4><p class="txt">'+esc(c.extended)+'</p></div>':'')+
+   ((scope==="open"&&revOn()&&!c.isRev&&revOf(c))?(function(r){return '<div class="blk revblk"><h4>'+(LANG==="en"?"Reversed meaning":"逆位牌意")+'</h4><p class="txt">'+esc(r.m||"")+'</p>'+(r.e?'<p class="txt" style="margin-top:8px">'+esc(r.e)+'</p>':'')+'</div>'})(revOf(c)):'');
 }
 function pilesHTML(){var b=backHTML();return '<div class="cb">'+b+'</div><div class="cb">'+b+'</div><div class="cb">'+b+'</div><div class="cb">'+b+'</div>'}
 
@@ -686,7 +703,7 @@ function header(){
   if(state.admin&&inDeck)tabs.push(["admin","後台管理"]);
   var en=LANG==="en";
   return '<header class="top"><div class="brand" data-act="home" role="link" tabindex="0" aria-label="'+(en?"Draw One home":"抽一張 首頁")+'">'+catLogo('eye')+'<div><div class="nm'+(en?'':' zh')+'">'+(en?"Draw One":"抽一張")+'</div><div class="sub">'+(inDeck?esc(dn()):(en?"Online card draws, many decks":"多種牌卡的線上抽牌站"))+'</div></div></div>'+
-   '<nav aria-label="主選單">'+tabs.map(function(t){return '<button data-act="tab" data-v="'+t[0]+'"'+((state.tab===t[0]&&!(t[0]==="home"&&inDeck))?' aria-current="page"':'')+'>'+t[1]+'</button>'+(t[0]==="gallery"?'<button class="ddcaret" data-act="ddtoggle" aria-haspopup="true" aria-label="牌卡清單">▾</button>':'')}).join("")+'<button class="langbtn" data-act="lang" aria-label="Language">'+(LANG==="en"?"中文":"English")+'</button></nav></header>';
+   '<nav aria-label="主選單">'+tabs.map(function(t){return '<button data-act="tab" data-v="'+t[0]+'"'+((state.tab===t[0]&&!(t[0]==="home"&&inDeck))?' aria-current="page"':'')+'>'+t[1]+'</button>'}).join("")+'<button class="langbtn" data-act="lang" aria-label="Language">'+(LANG==="en"?"中文":"English")+'</button></nav></header>';
 }
 function artPortrait(){
   var SHP=({oval:1,circle:1,round:1,leaf:1})[state.settings.back_shape]?state.settings.back_shape:"arch";
@@ -816,9 +833,9 @@ function drawView(){
       var c=byId(id)||{name:"",id:id};
       return '<div class="slot"><div class="lbl">'+esc(pos[i])+'</div>'+
        '<button class="flip'+(c.land?' land':'')+(d.flipped[i]?' flipped':'')+'" data-act="flip" data-i="'+i+'" aria-label="翻開第 '+(i+1)+' 張牌"><div class="flip-in">'+
-       '<div class="face cb">'+backHTML()+'</div><div class="face front">'+img(c)+'</div></div></button></div>'}).join("")+'</div>'+
+       '<div class="face cb">'+backHTML()+'</div><div class="face front'+(state.draw.rev&&state.draw.rev[i]?' rev':'')+'">'+img(c)+'</div></div></button></div>'}).join("")+'</div>'+
      '<div class="stage-actions"><button class="btn ghost" data-act="flipall">全部翻開</button><button class="btn" data-act="start">重新抽牌</button></div>'+
-     '<p class="hint" style="text-align:center;margin-top:10px">點一下牌背即可翻開</p></div>';
+     '<p class="hint" style="text-align:center;margin-top:10px">點一下牌背即可翻開'+(revOn()?'。牌可能以逆位(倒置)出現':'')+'</p></div>';
   }
   h+='</div><div class="reading" id="reading"></div>'+sampleNote()+coverHTML();
   return h;
@@ -828,7 +845,7 @@ function readingHTML(){
   if(d.question&&d.flipped.some(Boolean))out+='<p class="muted">'+(LANG==="en"?'Your question: ':'你的問題:')+esc(d.question)+'</p>';
   d.picks.forEach(function(id,i){
     if(!d.flipped[i])return;
-    var c=byId(id);if(!c)return;
+    var c=rvAt(id,i);if(!c)return;
     out+='<article class="rd">'+detailHTML(c,pos[i],"h3",state.focus,"draw")+'</article>';
   });
   return trHTML(out+overallHTML()+(d.picks.some(function(_,i){return d.flipped[i]})?shopHTML()+helpHTML():''));
@@ -836,7 +853,7 @@ function readingHTML(){
 function firstS(s){s=String(s||"").replace(/\s+/g," ").trim();var m=s.match(LANG==="en"?/^[^.!?]*[.!?]/:/^[^。!?!?]*[。!?!?]/);return m?m[0]:s}
 function overallHTML(){
   var d=state.draw;if(d.spread!==3)return "";
-  var cs=d.picks.map(byId);
+  var cs=d.picks.map(function(id,i){return rvAt(id,i)});
   if(cs.length<3||cs.some(function(c){return !c})||!d.flipped.every(Boolean))return "";
   var f=state.focus,pos=SPREADS[3];
   var k=function(c){var w=kw(c.keywords).slice(0,3).join("、");return w?"("+esc(w)+")":""};
@@ -948,11 +965,12 @@ function pickVoice(lang){
 }
 function audioFor(c,key){
   var L=LANG==="en"?"en":"zh",o=(c.i18n&&c.i18n[L])||{};
+  if(c.isRev)return (!key||key==="all")?(c.audio||""):"";
   if(!key||key==="all")return c.audio||"";
   return (o.ca&&o.ca[key])||"";
 }
 function startSpeak(btn){
-  var c=byId(btn.dataset.id);if(!c)return;
+  var c=byId(btn.dataset.id);if(!c)return;if(btn.dataset.rev==="1")c=asRev(c);
   var was=SPK.btn===btn;stopSpeak();if(was)return;
   SPK.btn=btn;btn.textContent=T("⏹ 停止");btn.classList.add("on");
   var au=audioFor(c,btn.dataset.key);
@@ -974,7 +992,7 @@ function startSpeak(btn){
 }
 function showSpeakBtns(root){
   (root||document).querySelectorAll(".speak").forEach(function(b){
-    var c=byId(b.dataset.id);b.hidden=!(c&&(audioFor(c,b.dataset.key)||canSpeak()))
+    var c=byId(b.dataset.id);if(c&&b.dataset.rev==="1")c=asRev(c);b.hidden=!(c&&(audioFor(c,b.dataset.key)||canSpeak()))
   });
 }
 var revIO=null;
@@ -1016,6 +1034,7 @@ function start(){
   setTimeout(function(){
     d.picks=shuffleSecure(pool().map(function(c){return c.id})).slice(0,n);
     d.flipped=d.picks.map(function(){return false});
+    d.rev=d.picks.map(function(id){var c=byId(id),r=new Uint32Array(1);crypto.getRandomValues(r);return !!(revOn()&&c&&revCan(c)&&(r[0]&1))});
     d.phase="dealt";render();
     var s=$(".stage");if(s&&s.scrollIntoView)s.scrollIntoView({block:"center",behavior:"smooth"});
   },1300);
