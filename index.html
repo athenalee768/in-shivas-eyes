@@ -121,7 +121,7 @@ nav button:hover{color:var(--fg)}
 .arch{position:absolute;left:24%;right:24%;top:14%;bottom:12%;border-radius:999px 999px 10px 10px;overflow:hidden;
   box-shadow:0 0 0 1px var(--gold),0 0 0 7px var(--bg),0 0 0 8px var(--line),0 24px 60px rgba(0,0,0,.5),0 0 70px var(--neb1);animation:rise 1.2s .3s both}
 .arch img{width:100%;height:100%;object-fit:cover;object-position:50% 30%;display:block;animation:kb2 28s ease-in-out infinite alternate;transform-origin:50% 35%}
-.arch::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,transparent 60%,rgba(12,10,31,.55)),linear-gradient(105deg,transparent 40%,rgba(255,255,255,.16) 50%,transparent 60%);background-size:100% 100%,250% 100%;animation:glint 9s 2s ease-in-out infinite}
+.arch::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,transparent 60%,color-mix(in srgb,var(--bg) 55%,transparent)),linear-gradient(105deg,transparent 40%,rgba(255,255,255,.16) 50%,transparent 60%);background-size:100% 100%,250% 100%;animation:glint 9s 2s ease-in-out infinite}
 @keyframes kb2{to{transform:scale(1.1)}}
 @keyframes glint{0%{background-position:0 0,150% 0}60%,100%{background-position:0 0,-50% 0}}
 .art.v2 .crescent{left:50%;top:-1%;width:21%;height:auto;transform:translateX(-50%);animation:rise 1.2s .9s both}
@@ -443,6 +443,18 @@ nav button:hover{color:var(--fg)}
 .helpcta{width:100%;max-width:980px;margin:18px auto 10px;padding:16px 28px;border:1px solid var(--line);border-radius:14px;display:flex;align-items:center;justify-content:space-between;gap:22px;flex-wrap:wrap;background:var(--surface)}
 .helpcta .sc-t{flex:1 1 320px}.helpcta h3{margin:0 0 4px;font-size:1.15rem}.helpcta p{margin:0;color:var(--muted)}.helpcta h3 small{font-size:.8rem;font-weight:400;color:var(--muted);margin-left:8px}.helpcta .btn{white-space:nowrap;text-decoration:none}
 @media(max-width:640px){.helpcta{padding:20px;text-align:center}}
+
+/* per-deck shapes + card dropdown */
+.arch.s-oval{border-radius:50%}
+.arch.s-circle{top:24%;bottom:24%;border-radius:50%}
+.arch.s-round{border-radius:28px}
+.arch.s-leaf{border-radius:72% 0 72% 0}
+nav .ddcaret{padding:8px 10px 8px 0;margin-left:-8px;font-size:.78rem}
+.ddmenu{position:fixed;z-index:60;min-width:210px;max-width:min(92vw,330px);max-height:60vh;overflow:auto;background:var(--surface-solid);border:1px solid var(--line);border-radius:12px;padding:6px;box-shadow:0 16px 40px rgba(0,0,0,.35)}
+.ddmenu button{display:flex;gap:10px;align-items:baseline;width:100%;text-align:left;background:none;border:0;border-radius:8px;padding:8px 10px;color:var(--fg)}
+.ddmenu button:hover,.ddmenu button:focus-visible{background:var(--surface2)}
+.ddmenu .n{color:var(--gold);min-width:1.9em;font-variant-numeric:tabular-nums}
+.ddmenu .ddall{border-bottom:1px solid var(--line);border-radius:8px 8px 0 0;margin-bottom:4px;color:var(--gold)}
 </style>
 <script src="config.js"></script>
 </head>
@@ -519,7 +531,7 @@ applyLang();
 var state={cards:[],settings:{back:"",cover:"",bg:"",god1:"",god2:"",god3:""},tab:"gallery",admin:false,canUpload:false,dirty:false,busy:false,
   q:"",open:null,openTab:"all",delConfirm:null,focus:"all",
   draw:{spread:1,phase:"idle",picks:[],flipped:[],question:""}};
-var SDEF={back:"",cover:"",bg:"",god1:"",god2:"",god3:"",shop_url:"",shop_label:"",show_count:0,help_url:""};
+var SDEF={back:"",cover:"",bg:"",god1:"",god2:"",god3:"",shop_url:"",shop_label:"",show_count:0,help_url:"",back_shape:"",theme_bg:"",theme_fg:"",theme_accent:""};
 state.decks=[];state.deck=null;state.tab="home";
 function shivaDeck(cards,settings){
   return {slug:"shiva",name:"In Shiva's Eyes",name_en:"In Shiva's Eyes",sub:"神諭卡",sub_en:"Oracle Deck",
@@ -674,9 +686,10 @@ function header(){
   if(state.admin&&inDeck)tabs.push(["admin","後台管理"]);
   var en=LANG==="en";
   return '<header class="top"><div class="brand" data-act="home" role="link" tabindex="0" aria-label="'+(en?"Draw One home":"抽一張 首頁")+'">'+catLogo('eye')+'<div><div class="nm'+(en?'':' zh')+'">'+(en?"Draw One":"抽一張")+'</div><div class="sub">'+(inDeck?esc(dn()):(en?"Online card draws, many decks":"多種牌卡的線上抽牌站"))+'</div></div></div>'+
-   '<nav aria-label="主選單">'+tabs.map(function(t){return '<button data-act="tab" data-v="'+t[0]+'"'+((state.tab===t[0]&&!(t[0]==="home"&&inDeck))?' aria-current="page"':'')+'>'+t[1]+'</button>'}).join("")+'<button class="langbtn" data-act="lang" aria-label="Language">'+(LANG==="en"?"中文":"English")+'</button></nav></header>';
+   '<nav aria-label="主選單">'+tabs.map(function(t){return '<button data-act="tab" data-v="'+t[0]+'"'+((state.tab===t[0]&&!(t[0]==="home"&&inDeck))?' aria-current="page"':'')+'>'+t[1]+'</button>'+(t[0]==="gallery"?'<button class="ddcaret" data-act="ddtoggle" aria-haspopup="true" aria-label="牌卡清單">▾</button>':'')}).join("")+'<button class="langbtn" data-act="lang" aria-label="Language">'+(LANG==="en"?"中文":"English")+'</button></nav></header>';
 }
 function artPortrait(){
+  var SHP=({oval:1,circle:1,round:1,leaf:1})[state.settings.back_shape]?state.settings.back_shape:"arch";
   var beads="";
   for(var i=0;i<108;i++){var a=i/108*Math.PI*2-Math.PI/2,x=170+Math.cos(a)*158,y=170+Math.sin(a)*158,big=i%27===0;
     beads+='<circle cx="'+x.toFixed(1)+'" cy="'+y.toFixed(1)+'" r="'+(big?4.4:2.5)+'"/>'}
@@ -687,8 +700,8 @@ function artPortrait(){
   return '<div class="art v2" aria-hidden="true">'+
    '<svg class="mala" viewBox="0 0 340 340"><g fill="var(--gold)" fill-opacity=".8">'+beads+'</g><circle cx="170" cy="170" r="158" fill="none" stroke="var(--gold)" stroke-opacity=".25"/></svg>'+
    '<svg class="rings" viewBox="0 0 340 340"><circle cx="170" cy="170" r="140" fill="none" stroke="var(--skin)" stroke-opacity=".5" stroke-width="2" stroke-dasharray="1 7" stroke-linecap="round"/></svg>'+
-   '<div class="arch"><img src="'+esc(src(state.settings.back))+'" alt=""></div>'+
-   '<svg class="crescent" viewBox="80 6 80 80"><path class="moon" d="M139 13.1A38 38 0 1 0 152.9 65A31 31 0 0 1 139 13.1Z" fill="var(--moon)"/></svg>'+
+   '<div class="arch'+(SHP==="arch"?"":" s-"+SHP)+'"><img src="'+esc(src(state.settings.back))+'" alt=""></div>'+
+   (SHP!=="arch"?'':'<svg class="crescent" viewBox="80 6 80 80"><path class="moon" d="M139 13.1A38 38 0 1 0 152.9 65A31 31 0 0 1 139 13.1Z" fill="var(--moon)"/></svg>')+
    (state.deck==="shiva"?'<svg class="trident" viewBox="0 0 60 300" fill="none" stroke="var(--gold)" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">'+tri+'</svg>':'')+'</div>';
 }
 function artSVG(){
@@ -765,6 +778,18 @@ function godsHTML(){
   var s=state.settings;if(!GODS.some(function(g){return s[g[0]]}))return "";
   return '<section class="trinity" aria-label="三大神卡"><div class="eyebrow">THE TRINITY</div><h2>三大神卡</h2><p class="lead">牌組附贈的三張神明卡:創造、守護、轉化,是生命運行的三個面向。</p><div class="gods">'+
    GODS.filter(function(g){return s[g[0]]}).map(function(g){return '<figure class="god"><img src="'+esc(src(s[g[0]]))+'" alt="'+esc(g[1])+'" loading="lazy"><figcaption><b>'+g[1]+'</b><span class="rl">'+g[2]+'</span><p>'+g[3]+'</p></figcaption></figure>'}).join("")+'</div></section>';
+}
+function applyTheme(){
+  var R=document.documentElement,st=R.style,K=["--bg","--fg","--gold","--tilak","--skin","--moon","--star","--surface-solid","--surface","--surface2","--line","--muted","--on-accent","--danger","--neb1","--neb2","--veil","color-scheme"];
+  var S=state.deck?state.settings:{},hx=/^#[0-9a-f]{6}$/i;
+  if(!S.theme_bg||!hx.test(S.theme_bg)){K.forEach(function(k){st.removeProperty(k)});return}
+  var B=S.theme_bg,F=hx.test(S.theme_fg||"")?S.theme_fg:"#1c1540",A=hx.test(S.theme_accent||"")?S.theme_accent:"#8c5810";
+  var lum=(parseInt(B.slice(1,3),16)*299+parseInt(B.slice(3,5),16)*587+parseInt(B.slice(5,7),16)*114)/1000,light=lum>140;
+  var m={"--bg":B,"--fg":F,"--gold":A,"--tilak":A,"--skin":A,"--moon":F,"--star":A,
+   "--surface-solid":"color-mix(in srgb,"+B+" 88%,"+F+")","--surface":"color-mix(in srgb,"+B+" 90%,"+F+" 10%)","--surface2":"color-mix(in srgb,"+B+" 80%,"+F+")",
+   "--line":"color-mix(in srgb,"+F+" 24%,transparent)","--muted":"color-mix(in srgb,"+F+" 70%,"+B+")","--on-accent":B,"--danger":light?"#b3392b":"#ff9d89",
+   "--neb1":"color-mix(in srgb,"+A+" 28%,transparent)","--neb2":"color-mix(in srgb,"+A+" 14%,transparent)","--veil":"color-mix(in srgb,"+B+" 84%,transparent)","color-scheme":light?"light":"dark"};
+  Object.keys(m).forEach(function(k){st.setProperty(k,m[k])});
 }
 function applyBg(){var e=$("#bgimg");if(!e)return;var b=state.settings.bg;e.style.backgroundImage=b?'url("'+src(b)+'")':"";e.style.display=b?"":"none"}
 function drawView(){
@@ -886,8 +911,16 @@ function updateBar(){
    '<button class="btn" data-act="publish"'+((!state.dirty||state.busy)?' disabled':'')+'>發布到網站</button>';
 }
 
+function closeDD(){var m=document.getElementById("ddmenu");if(m)m.remove()}
+function openDD(btn){
+  closeDD();var en=LANG==="en",list=pub();if(!list.length)return;
+  var m=document.createElement("div");m.id="ddmenu";m.className="ddmenu";m.setAttribute("role","menu");
+  m.innerHTML='<button class="ddall" data-act="tab" data-v="gallery">'+(en?"All cards":"全部牌卡")+'</button>'+list.map(function(c){var nm=en?(c.en||c.name):c.name;return '<button role="menuitem" data-act="open" data-id="'+esc(c.id)+'"><span class="n">'+esc(c.no||"")+'</span><span>'+esc(nm||"")+'</span></button>'}).join("");
+  document.body.appendChild(m);var r=btn.getBoundingClientRect(),w=m.offsetWidth;
+  m.style.top=Math.round(r.bottom+4)+"px";m.style.left=Math.max(8,Math.min(Math.round(r.left-70),window.innerWidth-w-8))+"px";
+}
 function render(){document.documentElement.setAttribute("data-page",state.deck?"deck":"home");
-  applyBg();
+  applyTheme();applyBg();closeDD();
   document.title=(state.deck?dn()+" ｜ ":"")+(LANG==="en"?"Draw One":"抽一張 Draw One");
   var v=!state.deck?homeView():state.tab==="gallery"?galleryView():state.tab==="admin"&&state.admin?adminView():drawView();
   $("#app").innerHTML=trHTML(header()+'<main>'+v+'</main>');
@@ -995,8 +1028,11 @@ function flip(i){
 }
 
 /* ---------- events ---------- */
+document.addEventListener("keydown",function(e){if(e.key==="Escape")closeDD()});
 document.addEventListener("click",function(e){
   var t=e.target.closest("[data-act]");
+  if(!e.target.closest(".ddcaret"))closeDD();
+  if(t&&t.dataset.act==="ddtoggle"){var had=document.getElementById("ddmenu");if(had)closeDD();else openDD(t);return}
   if(!t){if(e.target.id==="overlay"){state.open=null;renderOverlay()}return}
   var a=t.dataset.act;
   if(a==="speak"){startSpeak(t)}
