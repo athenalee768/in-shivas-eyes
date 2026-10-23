@@ -626,9 +626,10 @@ function detailHTML(c,pos,tag,key,scope){
    ((c.tag||c.tagZh)?'<p class="quote">'+esc(c.tag||"")+(c.tagZh?'<small>'+esc(c.tagZh)+'</small>':'')+'</p>':'')+
    '<button class="speak" data-act="speak" data-id="'+esc(c.id)+'" data-key="'+esc(key)+'"'+(c.isRev?' data-rev="1"':'')+' hidden>🔊 朗讀</button>'+
    tabsHTML(key,scope)+focusHTML(c,key)+
-   '<div class="blk"><h4>牌意</h4><p class="txt">'+(c.meaning?esc(c.meaning):'牌意整理中')+'</p></div>'+
-   (c.extended?'<div class="blk"><h4>延伸意義</h4><p class="txt">'+esc(c.extended)+'</p></div>':'')+
-   ((scope==="open"&&revOn()&&!c.isRev&&revOf(c))?(function(r){return '<div class="blk revblk"><h4>'+(LANG==="en"?"Reversed meaning":"逆位牌意")+'</h4><p class="txt">'+esc(r.m||"")+'</p>'+(r.e?'<p class="txt" style="margin-top:8px">'+esc(r.e)+'</p>':'')+'</div>'})(revOf(c)):'');
+   ((scope==="open"&&key!=="all"&&revOn()&&!c.isRev&&revOf(c)&&(revOf(c).cats||{})[key])?'<section class="focus revblk"><h4>'+(LANG==="en"?"Reversed · ":"逆位・")+esc(catName(key))+(LANG==="en"?" Reading":"解讀")+'</h4><p class="txt">'+esc(revOf(c).cats[key])+'</p></section>':'')+
+   (key!=="all"?'':'<div class="blk"><h4>牌意</h4><p class="txt">'+(c.meaning?esc(c.meaning):'牌意整理中')+'</p></div>')+
+   ((key==="all"&&c.extended)?'<div class="blk"><h4>延伸意義</h4><p class="txt">'+esc(c.extended)+'</p></div>':'')+
+   ((scope==="open"&&key==="all"&&revOn()&&!c.isRev&&revOf(c))?(function(r){return '<div class="blk revblk"><h4>'+(LANG==="en"?"Reversed meaning":"逆位牌意")+'</h4><p class="txt">'+esc(r.m||"")+'</p>'+(r.e?'<p class="txt" style="margin-top:8px">'+esc(r.e)+'</p>':'')+'</div>'})(revOf(c)):'');
 }
 function pilesHTML(){var b=backHTML();return '<div class="cb">'+b+'</div><div class="cb">'+b+'</div><div class="cb">'+b+'</div><div class="cb">'+b+'</div>'}
 
